@@ -9,7 +9,7 @@ namespace UnityUI.Binding
     /// Base interface for all adapters. Combine with AdapterAttribute to specify 
     /// the types it supports converting to and from.
     /// </summary>
-    interface IAdapter
+    public interface IAdapter
     {
         /// <summary>
         /// Convert from the source type to the output type. This should throw an exception 
