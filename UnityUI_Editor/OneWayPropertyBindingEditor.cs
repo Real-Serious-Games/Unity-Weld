@@ -34,7 +34,6 @@ namespace UnityUI_Editor
             {
                 // Selected UI property
                 targetScript.uiPropertyName = uiProperties[selectedPropertyIndex].PropertyInfo.Name;
-                targetScript.boundComponentType = uiProperties[selectedPropertyIndex].Object.GetType().Name;
 
                 viewPropertyType = uiProperties[selectedPropertyIndex].PropertyInfo.PropertyType;
             }

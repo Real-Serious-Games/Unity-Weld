@@ -33,7 +33,7 @@ namespace UnityUI.Binding
         /// </summary>
         private BindablePropertyInfo boundUiProperty;
 
-        private string boundComponentType;
+        private IAdapter adapter;
 
         private object boundViewModel;
 
@@ -75,22 +75,22 @@ namespace UnityUI.Binding
         /// Set up the property binder for a specified property in the bound view model and
         /// a specified property in a component on our game object.
         /// </summary>
-        public PropertyBinder(GameObject gameObject, string viewModelPropertyName, string uiPropertyName, string boundComponentType, object boundViewModel)
+        public PropertyBinder(GameObject gameObject, string viewModelPropertyName, string uiPropertyName, IAdapter adapter, object boundViewModel)
         {
             this.gameObject = gameObject;
             this.viewModelPropertyName = viewModelPropertyName;
             this.uiPropertyName = uiPropertyName;
-            this.boundComponentType = boundComponentType;
+            this.adapter = adapter;
             this.boundViewModel = boundViewModel;
 
             // Find bound UI property
             var matchingProperties = GetBindableProperties()
-                .Where(property => property.PropertyInfo.Name == uiPropertyName && property.Object.GetType().Name == boundComponentType);
+                .Where(property => property.PropertyInfo.Name == uiPropertyName);
 
             if (!matchingProperties.Any())
             { 
                 throw new ApplicationException(
-                    string.Format("Could not find property {0} on {1} component on object {2}", uiPropertyName, boundComponentType, gameObject.name)
+                    string.Format("Could not find property {0} on {1} component on object {2}", uiPropertyName, this.adapter, gameObject.name)
                 );
             }
 
@@ -161,7 +161,7 @@ namespace UnityUI.Binding
             else
             {
                 boundUiProperty.PropertyInfo.GetSetMethod()
-                    .Invoke(boundUiProperty.Object, new object[] { widgetValue });
+                    .Invoke(boundUiProperty.Object, new object[] { adapter.Convert(widgetValue) });
             }
         }
 
