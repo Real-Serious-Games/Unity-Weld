@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\AdapterAttribute.cs" />
+    <Compile Include="Binding\Adapters\FloatToStringAdapter.cs" />
     <Compile Include="Binding\BindingAttribute.cs" />
     <Compile Include="Binding\BindingRoot.cs" />
     <Compile Include="Binding\BoundObservableList.cs" />
