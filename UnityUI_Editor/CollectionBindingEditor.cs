@@ -27,7 +27,7 @@ namespace UnityTools.UnityUI_Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Collection template");
 
-            EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true);
+            targetScript.template = (TemplateBinding)EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true);
 
             EditorGUILayout.EndHorizontal();
         }
