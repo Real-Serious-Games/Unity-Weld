@@ -160,8 +160,10 @@ namespace UnityUI.Binding
             }
             else
             {
+                var value = adapter == null ? widgetValue : adapter.Convert(widgetValue);
+
                 boundUiProperty.PropertyInfo.GetSetMethod()
-                    .Invoke(boundUiProperty.Object, new object[] { adapter.Convert(widgetValue) });
+                    .Invoke(boundUiProperty.Object, new object[] { value });
             }
         }
 

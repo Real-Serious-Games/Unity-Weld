@@ -85,6 +85,11 @@ namespace UnityUI.Binding
         /// </summary>
         protected IAdapter CreateAdapter()
         {
+            if (string.IsNullOrEmpty(adapterTypeName))
+            {
+                return null;
+            }
+
             var adapterType = ReflectionUtils.FindTypesMarkedByAttribute(typeof(AdapterAttribute))
                 .Where(type => typeof(IAdapter).IsAssignableFrom(type))
                 .Where(type => type.Name == adapterTypeName)
