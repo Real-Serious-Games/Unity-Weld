@@ -166,17 +166,6 @@ namespace UnityUI.Binding
         }
 
         /// <summary>
-        /// Updates the bound view model when the value is changed by the widget.
-        /// </summary>
-        public void UpdateViewModel(object newValue)
-        {
-            if (boundViewModel != null && boundViewModelProperty != null)
-            {
-                boundViewModelProperty.SetValue(boundViewModel, newValue, null);
-            }
-        }
-
-        /// <summary>
         /// Use reflection to find all components with properties we can bind to.
         /// </summary>
         public static IEnumerable<BindablePropertyInfo> GetBindableProperties(GameObject gameObject)
