@@ -5,7 +5,7 @@ using System.Text;
 
 namespace UnityUI.Binding
 {
-    internal class ReflectionUtils
+    public static class ReflectionUtils
     {
         /// <summary>
         /// Helper function for invoking a named method via reflection.
@@ -31,6 +31,68 @@ namespace UnityUI.Binding
             }
 
             method.Invoke(obj, arguments);
+        }
+
+        public static Type[] FindTypesMarkedByAttribute(Type attributeType)
+        {
+            if (!attributeType.IsAssignableFrom(typeof(Attribute)))
+            {
+                throw new ArgumentException("Specified attributeType is not an attribute.", "attributeType");
+            }
+
+            var typesFound = new List<Type>();
+
+            foreach (var type in GetAllTypes())
+            {
+                try
+                {
+                    if (type.GetCustomAttributes(attributeType, false).Any())
+                    {
+                        typesFound.Add(type);
+                    }
+                }
+                catch (Exception)
+                {
+                    continue; // Some tyupes throw an exception when we try to use reflection on them.
+                }
+            }
+
+            return typesFound.ToArray();
+        }
+
+        /// <summary>
+        /// Returns an enumerable of all known types.
+        /// </summary>
+        private static IEnumerable<Type> GetAllTypes()
+        {
+            // TODO Rory 09/09/16: Cache types for faster lookup rather than scanning assemblies each time.
+
+            var assemblies =
+                AppDomain.CurrentDomain.GetAssemblies()
+                    // Automatically exclude the Unity assemblies, which throw exceptions when we try to access them.
+                    .Where(a =>
+                        !a.FullName.StartsWith("UnityEngine") &&
+                        !a.FullName.StartsWith("UnityEditor"));
+
+            foreach (var assembly in assemblies)
+            {
+                Type[] types;
+
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch (Exception)
+                {
+                    // Ignore assemblies that can't be loaded.
+                    continue;
+                }
+
+                foreach (var type in types)
+                {
+                    yield return type;
+                }
+            }
         }
     }
 }
