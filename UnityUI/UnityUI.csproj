@@ -58,6 +58,7 @@
     <Compile Include="Binding\IMemberBinding.cs" />
     <Compile Include="Binding\INotifyCollectionChanged.cs" />
     <Compile Include="Binding\MonoBehaviourBinding.cs" />
+    <Compile Include="Binding\NoAdapter.cs" />
     <Compile Include="Binding\NotifyCollectionChangedEventArgs.cs" />
     <Compile Include="Binding\ObservableList.cs" />
     <Compile Include="Binding\OneWayPropertyBinding.cs" />
