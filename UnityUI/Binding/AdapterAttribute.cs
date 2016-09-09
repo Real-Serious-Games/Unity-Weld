@@ -11,10 +11,10 @@ namespace UnityUI.Binding
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class AdapterAttribute : Attribute
     {
-        public AdapterAttribute(Type inputType, Type outputType)
+        public AdapterAttribute(Type fromType, Type toType)
         {
-            InputType = inputType;
-            OutputType = outputType;
+            InputType = fromType;
+            OutputType = toType;
         }
 
         public Type InputType { get; private set; }
