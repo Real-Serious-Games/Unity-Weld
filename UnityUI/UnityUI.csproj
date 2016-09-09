@@ -47,11 +47,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding\AdapterAttribute.cs" />
     <Compile Include="Binding\BindingAttribute.cs" />
     <Compile Include="Binding\BindingRoot.cs" />
     <Compile Include="Binding\BoundObservableList.cs" />
     <Compile Include="Binding\CollectionBinding.cs" />
     <Compile Include="Binding\DropdownBinding.cs" />
+    <Compile Include="Binding\IAdapter.cs" />
     <Compile Include="Binding\Internal\EventBinder.cs" />
     <Compile Include="Binding\IMemberBinding.cs" />
     <Compile Include="Binding\INotifyCollectionChanged.cs" />
