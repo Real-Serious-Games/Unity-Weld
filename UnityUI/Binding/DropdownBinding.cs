@@ -44,12 +44,14 @@ namespace UnityUI.Binding
             selectionPropertyBinder = new PropertyBinder(this.gameObject,
                 viewModelSelectionPropertyName,
                 uiSelectionPropertyName,
+                boundComponentType,
                 CreateAdapter(),
                 viewModelBinding.BoundViewModel);
 
             optionsPropertyBinder = new PropertyBinder(this.gameObject,
                 viewModelOptionsPropertyName,
                 uiOptionsPropertyName,
+                boundComponentType,
                 CreateAdapter(),
                 viewModelBinding.BoundViewModel);
 

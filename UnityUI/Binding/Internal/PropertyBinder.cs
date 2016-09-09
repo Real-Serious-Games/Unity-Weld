@@ -33,9 +33,16 @@ namespace UnityUI.Binding
         /// </summary>
         private BindablePropertyInfo boundUiProperty;
 
+        /// <summary>
+        /// Optional adapter for converting between types if the property in the UI
+        /// is a different type to the one in the view model, or performing validation
+        /// on the value before it gets set.
+        /// </summary>
         private IAdapter adapter;
 
         private object boundViewModel;
+
+        private string boundComponentTypeName;
 
         private GameObject gameObject;
 
@@ -75,22 +82,24 @@ namespace UnityUI.Binding
         /// Set up the property binder for a specified property in the bound view model and
         /// a specified property in a component on our game object.
         /// </summary>
-        public PropertyBinder(GameObject gameObject, string viewModelPropertyName, string uiPropertyName, IAdapter adapter, object boundViewModel)
+        public PropertyBinder(GameObject gameObject, string viewModelPropertyName, string uiPropertyName, string boundComponentTypeName, IAdapter adapter, object boundViewModel)
         {
             this.gameObject = gameObject;
             this.viewModelPropertyName = viewModelPropertyName;
             this.uiPropertyName = uiPropertyName;
             this.adapter = adapter;
             this.boundViewModel = boundViewModel;
+            this.boundComponentTypeName = boundComponentTypeName;
 
             // Find bound UI property
             var matchingProperties = GetBindableProperties()
+                .Where(property => property.Object.GetType().Name == boundComponentTypeName)
                 .Where(property => property.PropertyInfo.Name == uiPropertyName);
 
             if (!matchingProperties.Any())
             { 
                 throw new ApplicationException(
-                    string.Format("Could not find property {0} on {1} component on object {2}", uiPropertyName, this.adapter, gameObject.name)
+                    string.Format("Could not find property {0} on {1} component on object {2}", uiPropertyName, boundComponentTypeName, gameObject.name)
                 );
             }
 

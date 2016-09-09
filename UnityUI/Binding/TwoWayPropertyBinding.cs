@@ -43,6 +43,7 @@ namespace UnityUI.Binding
             propertyBinder = new PropertyBinder(this.gameObject,
                 viewModelPropertyName,
                 uiPropertyName,
+                boundComponentType,
                 CreateAdapter(),
                 viewModelBinding.BoundViewModel);
 
