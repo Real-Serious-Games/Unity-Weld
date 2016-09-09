@@ -35,9 +35,9 @@ namespace UnityUI.Binding
 
         public static Type[] FindTypesMarkedByAttribute(Type attributeType)
         {
-            if (!attributeType.IsAssignableFrom(typeof(Attribute)))
+            if (!typeof(Attribute).IsAssignableFrom(attributeType))
             {
-                throw new ArgumentException("Specified attributeType is not an attribute.", "attributeType");
+                throw new ArgumentException("Specified attributeType '" + attributeType.Name + "' is not an attribute. Attributes must inherit from System.Attribute.", "attributeType");
             }
 
             var typesFound = new List<Type>();
