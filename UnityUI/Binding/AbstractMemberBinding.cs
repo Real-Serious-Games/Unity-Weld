@@ -90,10 +90,17 @@ namespace UnityUI.Binding
                 return null;
             }
 
-            var adapterType = ReflectionUtils.FindTypesMarkedByAttribute(typeof(AdapterAttribute))
-                .Where(type => typeof(IAdapter).IsAssignableFrom(type))
-                .Where(type => type.Name == adapterTypeName)
-                .Single();
+            var adapterType = Type.GetType(adapterTypeName);
+            if (adapterType == null)
+            {
+                throw new ApplicationException("Could not find adapter type '" + adapterTypeName + "'.");
+            }
+
+            if (!typeof(IAdapter).IsAssignableFrom(adapterType))
+            {
+                throw new ApplicationException("Type '" + adapterTypeName + "' does not implement IAdapter and " +
+                    "cannot be used as an adapter.");
+            }
 
             return (IAdapter)Activator.CreateInstance(adapterType);
         }
