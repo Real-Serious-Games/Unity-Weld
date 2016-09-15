@@ -65,6 +65,7 @@
     <Compile Include="Binding\Internal\PropertyBinder.cs" />
     <Compile Include="Binding\Internal\ReflectionUtils.cs" />
     <Compile Include="Binding\SubViewModelBinding.cs" />
+    <Compile Include="Binding\TemplateSelector.cs" />
     <Compile Include="Binding\TwoWayPropertyBinding.cs" />
     <Compile Include="Binding\AbstractMemberBinding.cs" />
     <Compile Include="Binding\Internal\UnityEventBinder.cs" />

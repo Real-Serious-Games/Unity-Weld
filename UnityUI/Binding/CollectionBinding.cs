@@ -116,7 +116,7 @@ namespace UnityUI.Binding
             }
 
             // Set bound view.
-            newObject.SetViewModel(viewModel);
+            newObject.ConnectChildBindings(viewModel);
         }
 
         public override void Disconnect()

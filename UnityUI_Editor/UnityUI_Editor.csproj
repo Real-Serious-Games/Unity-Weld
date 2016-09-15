@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionBindingEditor.cs" />
+    <Compile Include="TemplateSelectorEditor.cs" />
     <Compile Include="TwoWayPropertyBindingEditor.cs" />
     <Compile Include="TypeResolver.cs" />
     <Compile Include="EventBindingEditor.cs" />
