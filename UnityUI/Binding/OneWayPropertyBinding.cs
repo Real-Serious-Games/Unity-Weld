@@ -14,6 +14,11 @@ namespace UnityUI.Binding
     public class OneWayPropertyBinding : AbstractMemberBinding
     {
         /// <summary>
+        /// Type of the adapter we're using to adapt between the view model property and UI property.
+        /// </summary>
+        public string adapterTypeName;
+
+        /// <summary>
         /// Name of the property in the view model to bind.
         /// </summary>
         public string viewModelPropertyName;
@@ -37,7 +42,7 @@ namespace UnityUI.Binding
                 viewModelPropertyName,
                 uiPropertyName,
                 boundComponentType,
-                CreateAdapter(),
+                CreateAdapter(adapterTypeName),
                 GetViewModel());
         }
 

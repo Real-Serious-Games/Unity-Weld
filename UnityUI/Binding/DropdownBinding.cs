@@ -37,6 +37,25 @@ namespace UnityUI.Binding
 
         private EventBinder selectionChangedEventBinder;
 
+        /// <summary>
+        /// Type name of the adapter for converting a selection value in the 
+        /// view model to what the UI expects (which should be a string).
+        /// </summary>
+        public string selectionViewModelToUIAdapter;
+
+        /// <summary>
+        /// Type name of the adapter for converting a selection value in the 
+        /// UI back to the type needed by the view model.
+        /// </summary>
+        public string selectionUIToViewModelAdapter;
+        // TODO Rory 15/09/2016: Make the selection changed event use adapter
+
+        /// <summary>
+        /// Adapter for converting the options list in the view model 
+        /// to the correct format to display in the UI.
+        /// </summary>
+        public string optionsAdapter;
+
         public override void Connect()
         {
             var viewModelBinding = GetViewModelBinding();
@@ -45,14 +64,14 @@ namespace UnityUI.Binding
                 viewModelSelectionPropertyName,
                 uiSelectionPropertyName,
                 boundComponentType,
-                CreateAdapter(),
+                CreateAdapter(selectionViewModelToUIAdapter),
                 viewModelBinding.BoundViewModel);
 
             optionsPropertyBinder = new PropertyBinder(this.gameObject,
                 viewModelOptionsPropertyName,
                 uiOptionsPropertyName,
                 boundComponentType,
-                CreateAdapter(),
+                CreateAdapter(optionsAdapter),
                 viewModelBinding.BoundViewModel);
 
             selectionChangedEventBinder = new EventBinder(this.gameObject,

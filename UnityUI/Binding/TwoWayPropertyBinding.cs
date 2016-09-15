@@ -28,6 +28,12 @@ namespace UnityUI.Binding
         public string uiPropertyName;
 
         /// <summary>
+        /// Name of the type of the adapter we're using to convert values from the 
+        /// view model to the UI. Can be empty for no adapter.
+        /// </summary>
+        public string viewModelToUIAdapterName;
+
+        /// <summary>
         /// Type of the component we're binding to.
         /// Must be a string so because Types can't be serialised in the scene.
         /// </summary>
@@ -44,7 +50,7 @@ namespace UnityUI.Binding
                 viewModelPropertyName,
                 uiPropertyName,
                 boundComponentType,
-                CreateAdapter(),
+                CreateAdapter(viewModelToUIAdapterName),
                 viewModelBinding.BoundViewModel);
 
             eventBinder = new EventBinder(this.gameObject,
