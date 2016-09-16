@@ -34,7 +34,14 @@ namespace UnityUI.Binding
             this.boundComponentType = boundComponentType;
 
             var boundEvent = GetBoundEvent();
-            unityEventBinder = new UnityEventBinderFactory().Create(boundEvent.UnityEvent, viewModel, methodName);
+            if (adapter == null)
+            {
+                unityEventBinder = new UnityEventBinderFactory().Create(boundEvent.UnityEvent, viewModel, methodName);
+            }
+            else
+            {
+                unityEventBinder = new UnityEventBinderFactory().Create(boundEvent.UnityEvent, viewModel, methodName, adapter);
+            }
         }
 
         /// <summary>
