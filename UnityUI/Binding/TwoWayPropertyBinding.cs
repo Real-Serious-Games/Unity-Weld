@@ -34,6 +34,12 @@ namespace UnityUI.Binding
         public string viewModelToUIAdapterName;
 
         /// <summary>
+        /// Name of the type of the adapter we're using to conver values from the
+        /// UI back to the view model. Can be empty for no adapter.
+        /// </summary>
+        public string uiToViewModelAdapterName;
+
+        /// <summary>
         /// Type of the component we're binding to.
         /// Must be a string so because Types can't be serialised in the scene.
         /// </summary>
@@ -57,6 +63,7 @@ namespace UnityUI.Binding
                 "set_" + viewModelPropertyName, // Call the setter on the bound property
                 uiEventName,
                 boundComponentType,
+                CreateAdapter(uiToViewModelAdapterName),
                 viewModelBinding);
         }
 

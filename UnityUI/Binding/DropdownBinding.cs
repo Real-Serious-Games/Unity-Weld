@@ -48,7 +48,6 @@ namespace UnityUI.Binding
         /// UI back to the type needed by the view model.
         /// </summary>
         public string selectionUIToViewModelAdapter;
-        // TODO Rory 15/09/2016: Make the selection changed event use adapter
 
         /// <summary>
         /// Adapter for converting the options list in the view model 
@@ -78,6 +77,7 @@ namespace UnityUI.Binding
                 "set_" + viewModelSelectionPropertyName,
                 uiEventName,
                 boundComponentType,
+                CreateAdapter(selectionUIToViewModelAdapter),
                 viewModelBinding);
         }
 
