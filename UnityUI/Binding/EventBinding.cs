@@ -26,6 +26,12 @@ namespace UnityUI.Binding
         /// </summary>
         public string uiEventName;
 
+        /// <summary>
+        /// Adapter to convert the type passed in via the event to the type our 
+        /// view model expects. Can be empty string for no adapter.
+        /// </summary>
+        public string adapterTypeName;
+
         private EventBinder eventBinder;
 
         public override void Connect()
@@ -35,6 +41,7 @@ namespace UnityUI.Binding
                 viewModelMethodName, 
                 uiEventName, 
                 boundComponentType, 
+                CreateAdapter(adapterTypeName),
                 GetViewModelBinding());
         }
 

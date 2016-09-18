@@ -39,6 +39,36 @@ namespace UnityUI.Binding
             }
             
         }
+
+        /// <summary>
+        /// Set up and bind a given UnityEvent with a list of types matching its generic type arguments
+        /// and an adapter.
+        /// </summary>
+        public UnityEventBinderBase Create(UnityEventBase unityEvent,
+            IViewModelBinding viewModel,
+            string methodName,
+            IAdapter adapter)
+        {
+            // TODO Rory (16/09/2016): Add argument checking
+
+            // Note that to find the paramaters of events on the UI, we need to see what 
+            // generic arguments were passed to the UnityEvent they inherit from.
+            var eventArgumentTypes = unityEvent.GetType().BaseType.GetGenericArguments();
+            if (eventArgumentTypes.Count() != 1)
+            {
+                throw new ApplicationException("Adapters can only be used on events with a single argument");
+            }
+
+            var adapterType = adapter.GetType().GetCustomAttributes(false)
+                .Where(attribute => attribute.GetType() == typeof(AdapterAttribute))
+                .Select(attribute => (AdapterAttribute)attribute)
+                .Single()
+                .OutputType;
+
+            var genericType = typeof(UnityEventBinder<>).MakeGenericType(eventArgumentTypes);
+            return (UnityEventBinderBase)Activator
+                .CreateInstance(genericType, unityEvent, viewModel, methodName, adapter);
+        }
     }
 
     /// <summary>
@@ -83,6 +113,7 @@ namespace UnityUI.Binding
         private string methodName;
         private UnityEvent<T0> unityEvent;
         private IViewModelBinding viewModel;
+        private IAdapter adapter = null;
 
         public UnityEventBinder(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName)
         {
@@ -90,6 +121,15 @@ namespace UnityUI.Binding
             this.viewModel = viewModel;
             this.methodName = methodName;
             this.unityEvent.AddListener(EventHandler);
+        }
+
+        public UnityEventBinder(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName, IAdapter adapter)
+        {
+            this.unityEvent = (UnityEvent<T0>)unityEvent;
+            this.viewModel = viewModel;
+            this.methodName = methodName;
+            this.adapter = adapter;
+            this.unityEvent.AddListener(EventHandlerWithAdapter);
         }
 
         public override void Dispose()
@@ -104,6 +144,12 @@ namespace UnityUI.Binding
         private void EventHandler(T0 arg0)
         {
             viewModel.SendEvent(methodName, arg0);
+        }
+
+        private void EventHandlerWithAdapter(T0 arg0)
+        {
+            var value = adapter.Convert(arg0);
+            viewModel.SendEvent(methodName, value);
         }
     }
 

@@ -27,14 +27,21 @@ namespace UnityUI.Binding
         /// <summary>
         /// Create a new EventBinder
         /// </summary>
-        public EventBinder(GameObject gameObject, string methodName, string eventName, string boundComponentType, IViewModelBinding viewModel)
+        public EventBinder(GameObject gameObject, string methodName, string eventName, string boundComponentType, IAdapter adapter, IViewModelBinding viewModel)
         {
             this.gameObject = gameObject;
             this.boundEventName = eventName;
             this.boundComponentType = boundComponentType;
 
             var boundEvent = GetBoundEvent();
-            unityEventBinder = new UnityEventBinderFactory().Create(boundEvent.UnityEvent, viewModel, methodName);
+            if (adapter == null)
+            {
+                unityEventBinder = new UnityEventBinderFactory().Create(boundEvent.UnityEvent, viewModel, methodName);
+            }
+            else
+            {
+                unityEventBinder = new UnityEventBinderFactory().Create(boundEvent.UnityEvent, viewModel, methodName, adapter);
+            }
         }
 
         /// <summary>

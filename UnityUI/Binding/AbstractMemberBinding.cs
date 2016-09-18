@@ -15,11 +15,6 @@ namespace UnityUI.Binding
         public string viewModelName;
 
         /// <summary>
-        /// Type of the adapter we're using to adapt between the view model property and UI property.
-        /// </summary>
-        public string adapterTypeName;
-
-        /// <summary>
         /// Initialise this binding. Used when we first start the scene.
         /// Detaches any attached view models, finds available view models afresh and then connects the binding.
         /// </summary>
@@ -81,9 +76,9 @@ namespace UnityUI.Binding
         }
 
         /// <summary>
-        /// Find the type of the adapter we want and create it.
+        /// Find the type of the adapter with the specified name and create it.
         /// </summary>
-        protected IAdapter CreateAdapter()
+        protected IAdapter CreateAdapter(string adapterTypeName)
         {
             if (string.IsNullOrEmpty(adapterTypeName))
             {
