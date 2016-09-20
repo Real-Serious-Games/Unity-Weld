@@ -121,17 +121,8 @@ namespace UnityUI.Binding
             // Setup selected template.
             initalizedTemplate = Instantiate(selectedTemplate);
 
-            initalizedTemplate.transform.SetParent(transform);
+            initalizedTemplate.transform.SetParent(transform, false);
             initalizedTemplate.gameObject.SetActive(true);
-
-            var templateRectTransform = selectedTemplate.GetComponent<RectTransform>();
-            var newRectTransform = this.initalizedTemplate.GetComponent<RectTransform>();
-            if (newRectTransform != null && templateRectTransform != null)
-            {
-                newRectTransform.localPosition = templateRectTransform.localPosition;
-                newRectTransform.localScale = templateRectTransform.localScale;
-                newRectTransform.sizeDelta = templateRectTransform.sizeDelta;
-            }
 
             initalizedTemplate.ConnectChildBindings(viewModelPropertyValue);
         }
