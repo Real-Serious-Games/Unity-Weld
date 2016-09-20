@@ -45,6 +45,8 @@ namespace UnityUI.Binding
 
         public override void Connect()
         {
+            Disconnect();
+
             // Cache available templates.
             var templatesInScene = templates.GetComponentsInChildren<TemplateBinding>();
             foreach (var template in templatesInScene)
@@ -76,6 +78,7 @@ namespace UnityUI.Binding
         public override void Disconnect()
         {
             DestroyTemplate();
+            availableTemplates.Clear();
 
             if (viewModelBinding != null)
             {
@@ -86,6 +89,7 @@ namespace UnityUI.Binding
                     notifyPropertyChanged.PropertyChanged -= NotifyPropertyChanged_PropertyChanged;
                 }
             }
+            viewModelBinding = null;
         }
 
         private void NotifyPropertyChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
