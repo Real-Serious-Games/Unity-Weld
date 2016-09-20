@@ -43,6 +43,9 @@ namespace UnityUI.Binding
         /// </summary>
         private PropertyInfo viewModelProperty = null;
 
+        /// <summary>
+        /// Connect to the attached view model.
+        /// </summary>
         public override void Connect()
         {
             Disconnect();
@@ -75,6 +78,10 @@ namespace UnityUI.Binding
             InitalizeTemplate();
         }
 
+
+        /// <summary>
+        /// Disconnect from the attached view model.
+        /// </summary>
         public override void Disconnect()
         {
             DestroyTemplate();
