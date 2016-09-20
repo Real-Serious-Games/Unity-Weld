@@ -67,11 +67,6 @@ namespace UnityUI.Binding
                 viewModelBinding);
         }
 
-        void OnDestroy()
-        {
-            Disconnect();
-        }
-
         public override void Disconnect()
         {
             if (propertyBinder != null)

@@ -54,10 +54,5 @@ namespace UnityUI.Binding
                 propertyBinder = null;
             }
         }
-
-        void OnDestroy()
-        {
-            Disconnect();
-        }
     }
 }

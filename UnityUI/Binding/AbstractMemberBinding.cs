@@ -109,5 +109,13 @@ namespace UnityUI.Binding
         /// Disconnect from all attached view models.
         /// </summary>
         public abstract void Disconnect();
+
+        /// <summary>
+        /// Clean up when the game object is destroyed.
+        /// </summary>
+        public void OnDestroy()
+        {
+            Disconnect();
+        }
     }
 }

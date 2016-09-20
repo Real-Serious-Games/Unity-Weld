@@ -38,16 +38,5 @@
                 binding.Init();
             }
         }
-
-        /// <summary>
-        /// Disconnect all binding objects down the hierarchy.
-        /// </summary>
-        public void DisconnectChildBindings()
-        {
-            foreach (var binding in GetComponentsInChildren<AbstractMemberBinding>())
-            {
-                binding.Disconnect();
-            }
-        }
     }
 }

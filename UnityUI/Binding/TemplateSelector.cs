@@ -146,7 +146,6 @@ namespace UnityUI.Binding
                 return;
             }
 
-            initalizedTemplate.DisconnectChildBindings();
             Destroy(initalizedTemplate.gameObject);
             initalizedTemplate = null;
         }

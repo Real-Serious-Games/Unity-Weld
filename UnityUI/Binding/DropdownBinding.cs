@@ -102,11 +102,6 @@ namespace UnityUI.Binding
             }
         }
 
-        void OnDestroy()
-        {
-            Disconnect();
-        }
-
         private Dropdown dropdown;
         private Dropdown Dropdown
         {

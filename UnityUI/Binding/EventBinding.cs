@@ -53,10 +53,5 @@ namespace UnityUI.Binding
                 eventBinder = null;
             }
         }
-
-        void OnDestroy()
-        {
-            Disconnect();
-        }
     }
 }
