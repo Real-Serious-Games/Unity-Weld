@@ -8,7 +8,7 @@
         /// <summary>
         /// Set the view model and initialise all binding objects down the hierarchy.
         /// </summary>
-        void ConnectChildBindings(object viewModel);
+        void InitChildBindings(object viewModel);
     }
 
     /// <summary>
@@ -28,7 +28,7 @@
         /// <summary>
         /// Set the view model and initialise all binding objects down the hierarchy.
         /// </summary>
-        public void ConnectChildBindings(object viewModel)
+        public void InitChildBindings(object viewModel)
         {
             // Set the bound view to the new view model.
             boundViewModel = viewModel;

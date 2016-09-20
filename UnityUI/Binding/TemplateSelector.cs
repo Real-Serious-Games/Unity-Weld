@@ -124,7 +124,7 @@ namespace UnityUI.Binding
             initalizedTemplate.transform.SetParent(transform, false);
             initalizedTemplate.gameObject.SetActive(true);
 
-            initalizedTemplate.ConnectChildBindings(viewModelPropertyValue);
+            initalizedTemplate.InitChildBindings(viewModelPropertyValue);
         }
 
         /// <summary>
