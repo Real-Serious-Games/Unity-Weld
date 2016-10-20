@@ -15,7 +15,7 @@ namespace UnityUI.Binding
         /// <summary>
         /// Set up and bind a given UnityEvent with a list of types matching its generic type arguments.
         /// </summary>
-        public UnityEventBinderBase Create(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName)
+        public UnityEventBinderBase Create(UnityEventBase unityEvent, Action action)
         {
             // Note that to find the paramaters of events on the UI, we need to see what 
             // generic arguments were passed to the UnityEvent they inherit from.
@@ -23,13 +23,13 @@ namespace UnityUI.Binding
 
             if (!eventArgumentTypes.Any())
             {
-                return new UnityEventBinder(unityEvent, viewModel, methodName);
+                return new UnityEventBinder(unityEvent, action);
             }
 
             try
             {
                 var genericType = typeof(UnityEventBinder<>).MakeGenericType(eventArgumentTypes);
-                return (UnityEventBinderBase)Activator.CreateInstance(genericType, unityEvent, viewModel, methodName);
+                return (UnityEventBinderBase)Activator.CreateInstance(genericType, unityEvent, action);
             }
             catch (ArgumentException ex)
             {
@@ -38,36 +38,6 @@ namespace UnityUI.Binding
                 throw new ApplicationException("Cannot bind event with more than 5 arguments", ex);
             }
             
-        }
-
-        /// <summary>
-        /// Set up and bind a given UnityEvent with a list of types matching its generic type arguments
-        /// and an adapter.
-        /// </summary>
-        public UnityEventBinderBase Create(UnityEventBase unityEvent,
-            IViewModelBinding viewModel,
-            string methodName,
-            IAdapter adapter)
-        {
-            // TODO Rory (16/09/2016): Add argument checking
-
-            // Note that to find the paramaters of events on the UI, we need to see what 
-            // generic arguments were passed to the UnityEvent they inherit from.
-            var eventArgumentTypes = unityEvent.GetType().BaseType.GetGenericArguments();
-            if (eventArgumentTypes.Count() != 1)
-            {
-                throw new ApplicationException("Adapters can only be used on events with a single argument");
-            }
-
-            var adapterType = adapter.GetType().GetCustomAttributes(false)
-                .Where(attribute => attribute.GetType() == typeof(AdapterAttribute))
-                .Select(attribute => (AdapterAttribute)attribute)
-                .Single()
-                .OutputType;
-
-            var genericType = typeof(UnityEventBinder<>).MakeGenericType(eventArgumentTypes);
-            return (UnityEventBinderBase)Activator
-                .CreateInstance(genericType, unityEvent, viewModel, methodName, adapter);
         }
     }
 
@@ -81,15 +51,13 @@ namespace UnityUI.Binding
 
     internal class UnityEventBinder : UnityEventBinderBase
     {
-        private string methodName;
         private UnityEvent unityEvent;
-        private IViewModelBinding viewModel;
+        private Action action;
 
-        public UnityEventBinder(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName)
+        public UnityEventBinder(UnityEventBase unityEvent, Action action)
         {
             this.unityEvent = (UnityEvent)unityEvent;
-            this.viewModel = viewModel;
-            this.methodName = methodName;
+            this.action = action;
             this.unityEvent.AddListener(EventHandler);
         }
 
@@ -104,32 +72,20 @@ namespace UnityUI.Binding
 
         private void EventHandler()
         {
-            viewModel.SendEvent(methodName);
+            action();
         }
     }
 
     internal class UnityEventBinder<T0> : UnityEventBinderBase
     {
-        private string methodName;
         private UnityEvent<T0> unityEvent;
-        private IViewModelBinding viewModel;
-        private IAdapter adapter = null;
+        private Action action;
 
-        public UnityEventBinder(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName)
+        public UnityEventBinder(UnityEventBase unityEvent, Action action)
         {
             this.unityEvent = (UnityEvent<T0>)unityEvent;
-            this.viewModel = viewModel;
-            this.methodName = methodName;
+            this.action = action;
             this.unityEvent.AddListener(EventHandler);
-        }
-
-        public UnityEventBinder(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName, IAdapter adapter)
-        {
-            this.unityEvent = (UnityEvent<T0>)unityEvent;
-            this.viewModel = viewModel;
-            this.methodName = methodName;
-            this.adapter = adapter;
-            this.unityEvent.AddListener(EventHandlerWithAdapter);
         }
 
         public override void Dispose()
@@ -143,27 +99,19 @@ namespace UnityUI.Binding
 
         private void EventHandler(T0 arg0)
         {
-            viewModel.SendEvent(methodName, arg0);
-        }
-
-        private void EventHandlerWithAdapter(T0 arg0)
-        {
-            var value = adapter.Convert(arg0);
-            viewModel.SendEvent(methodName, value);
+            action();
         }
     }
 
     internal class UnityEventBinder<T0, T1> : UnityEventBinderBase
     {
-        private string methodName;
         private UnityEvent<T0, T1> unityEvent;
-        private IViewModelBinding viewModel;
+        private Action action;
 
-        public UnityEventBinder(UnityEventBase unityEvent, IViewModelBinding viewModel, string methodName)
+        public UnityEventBinder(UnityEventBase unityEvent, Action action)
         {
             this.unityEvent = (UnityEvent<T0, T1>)unityEvent;
-            this.viewModel = viewModel;
-            this.methodName = methodName;
+            this.action = action;
             this.unityEvent.AddListener(EventHandler);
         }
 
@@ -178,7 +126,7 @@ namespace UnityUI.Binding
 
         private void EventHandler(T0 arg0, T1 arg1)
         {
-            viewModel.SendEvent(methodName, arg0, arg1);
+            action();
         }
     }
 }

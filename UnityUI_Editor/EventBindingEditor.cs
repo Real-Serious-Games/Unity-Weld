@@ -15,14 +15,14 @@ namespace UnityTools.Unity_Editor
     [CustomEditor(typeof(EventBinding))]
     public class EventBindingEditor : Editor
     {
-        EventBinder.BindableEvent[] events;
+        UnityEventWatcher.BindableEvent[] events;
 
         public override void OnInspectorGUI()
         {
             var targetScript = (EventBinding)target;
 
             // Get list of events we can bind to.
-            events = EventBinder.GetBindableEvents(targetScript.gameObject)
+            events = UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                 .OrderBy(evt => evt.Name)
                 .ToArray();
 

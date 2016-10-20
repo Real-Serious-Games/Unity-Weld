@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityUI.Binding;
 
@@ -27,31 +28,40 @@ namespace UnityUI.Binding
         public string uiEventName;
 
         /// <summary>
-        /// Adapter to convert the type passed in via the event to the type our 
-        /// view model expects. Can be empty string for no adapter.
+        /// Watches a Unity event for updates.
         /// </summary>
-        public string adapterTypeName;
+        private UnityEventWatcher eventWatcher;
 
-        private EventBinder eventBinder;
+        /// <summary>
+        /// Cached view-model, after connection.
+        /// </summary>
+        private object viewModel;
+
+        /// <summary>
+        /// Cached method to call on the view-model.
+        /// </summary>
+        private MethodInfo viewModelMethod;
 
         public override void Connect()
         {
-            // Add self to event listener
-            eventBinder = new EventBinder(this.gameObject, 
-                viewModelMethodName, 
-                uiEventName, 
-                boundComponentType, 
-                CreateAdapter(adapterTypeName),
-                GetViewModelBinding());
+            viewModel = GetViewModelBinding().BoundViewModel;
+            viewModelMethod = viewModel.GetType().GetMethod(viewModelMethodName, new Type[0]);
+
+            eventWatcher = new UnityEventWatcher(GetComponent(boundComponentType), uiEventName, 
+                () => viewModelMethod.Invoke(viewModel, new object[0])
+            );
         }
 
         public override void Disconnect()
         {
-            if (eventBinder != null)
+            if (eventWatcher != null)
             {
-                eventBinder.Dispose();
-                eventBinder = null;
+                eventWatcher.Dispose();
+                eventWatcher = null;
             }
+
+            viewModel = null;
+            viewModelMethod = null;
         }
     }
 }

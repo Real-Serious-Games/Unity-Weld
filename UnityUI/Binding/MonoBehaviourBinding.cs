@@ -30,10 +30,5 @@ namespace UnityUI.Binding
                 return BoundViewModel.GetType().Name;
             }
         }
-
-        public void SendEvent(string methodName, params object[] arguments)
-        {
-            ReflectionUtils.InvokeMethod(BoundViewModel, methodName, arguments);
-        }
     }
 }

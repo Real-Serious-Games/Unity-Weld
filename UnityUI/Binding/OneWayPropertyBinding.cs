@@ -34,24 +34,63 @@ namespace UnityUI.Binding
         /// </summary> 
         public string boundComponentType;
 
-        private PropertyBinder propertyBinder;
+        /// <summary>
+        /// Syncronizes the property in the view-model with the property in the view.
+        /// </summary>
+        private PropertySync propertySync;
+
+        /// <summary>
+        /// Watches the view-model for changes that must be propagated to the view.
+        /// </summary>
+        private PropertyWatcher viewModelWatcher;
 
         public override void Connect()
         {
-            propertyBinder = new PropertyBinder(this.gameObject,
+            var viewModelBinding = GetViewModelBinding();
+            var viewModel = viewModelBinding.BoundViewModel;
+            var view = GetComponent(boundComponentType);
+
+            propertySync = new PropertySync(
+                // Source
+                new PropertyEndPoint(
+                    viewModel,
                 viewModelPropertyName,
+                    null, // One-way only. No dest-to source adapter required.
+                    "view-model",
+                    this
+                ),
+
+                // Dest
+                new PropertyEndPoint(
+                    view,
                 uiPropertyName,
-                boundComponentType,
                 CreateAdapter(adapterTypeName),
-                GetViewModel());
+                    "view",
+                    this
+                ),
+
+                // Errors, exceptions and validation.
+                null, // Validation not needed
+
+                this
+            );
+
+            viewModelWatcher = new PropertyWatcher(
+                viewModel,
+                viewModelPropertyName,
+                () => propertySync.SyncFromSource()
+            );
+
+            // Copy the initial value over from the view-model.
+            propertySync.SyncFromSource();
         }
 
         public override void Disconnect()
         {
-            if (propertyBinder != null)
+            if (viewModelWatcher != null)
             {
-                propertyBinder.Dispose();
-                propertyBinder = null;
+                viewModelWatcher.Dispose();
+                viewModelWatcher = null;
             }
         }
     }

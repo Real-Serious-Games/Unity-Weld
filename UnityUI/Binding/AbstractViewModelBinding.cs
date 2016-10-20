@@ -5,11 +5,6 @@ namespace UnityUI.Binding
     public interface IViewModelBinding
     {
         /// <summary>
-        /// Calls a method matching the specified string in the underlying view.
-        /// </summary>
-        void SendEvent(string methodName, params object[] arguments);
-
-        /// <summary>
         /// The view model we have bound.
         /// </summary>
         object BoundViewModel { get; }
@@ -42,13 +37,5 @@ namespace UnityUI.Binding
         private string viewModelTypeName;
 
         public abstract object BoundViewModel { get; }
-
-        /// <summary>
-        /// Calls a method matching the specified string in the underlying view.
-        /// </summary>
-        public void SendEvent(string methodName, params object[] arguments)
-        {
-            ReflectionUtils.InvokeMethod(BoundViewModel, methodName, arguments);
-        }
     }
 }

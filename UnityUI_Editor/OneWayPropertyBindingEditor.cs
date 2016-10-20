@@ -12,14 +12,14 @@ namespace UnityUI_Editor
     [CustomEditor(typeof(OneWayPropertyBinding))]
     class OneWayPropertyBindingEditor : Editor
     {
-        PropertyBinder.BindablePropertyInfo[] uiProperties;
+        PropertyFinder.BindablePropertyInfo[] uiProperties;
 
         public override void OnInspectorGUI()
         {
             // Initialise reference to target script
             var targetScript = (OneWayPropertyBinding)target;
 
-            uiProperties = PropertyBinder
+            uiProperties = PropertyFinder
                 .GetBindableProperties(targetScript.gameObject)
                 .OrderBy(property => property.PropertyInfo.Name)
                 .ToArray();

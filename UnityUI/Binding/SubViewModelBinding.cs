@@ -110,13 +110,5 @@ namespace UnityUI.Binding
                 memberBinding.Init();
             }
         }
-
-        /// <summary>
-        /// Calls a method matching the specified string in the underlying view.
-        /// </summary>
-        public void SendEvent(string methodName, params object[] arguments)
-        {
-            ReflectionUtils.InvokeMethod(BoundViewModel, methodName, arguments);
-        }
     }
 }

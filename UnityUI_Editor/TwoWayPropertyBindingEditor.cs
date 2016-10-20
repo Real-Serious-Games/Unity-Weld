@@ -14,22 +14,22 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TwoWayPropertyBinding))]
     class PropertyBindingEditor : Editor
     {
-        EventBinder.BindableEvent[] events;
+        UnityEventWatcher.BindableEvent[] events;
 
-        PropertyBinder.BindablePropertyInfo[] properties;
+        PropertyFinder.BindablePropertyInfo[] properties;
 
         public override void OnInspectorGUI()
         {
             // Initialise everything
             var targetScript = (TwoWayPropertyBinding)target;
 
-            events = EventBinder
+            events = UnityEventWatcher
                 .GetBindableEvents(targetScript.gameObject)
                 .Where(evt => evt.GetEventTypes().Length == 1) // Only select events that can be bound directly to properties
                 .OrderBy(evt => evt.Name)
                 .ToArray();
 
-            properties = PropertyBinder
+            properties = PropertyFinder
                 .GetBindableProperties(targetScript.gameObject)
                 .OrderBy(property => property.PropertyInfo.Name)
                 .ToArray();

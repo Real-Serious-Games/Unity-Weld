@@ -31,13 +31,23 @@ namespace UnityUI.Binding
         /// Name of the type of the adapter we're using to convert values from the 
         /// view model to the UI. Can be empty for no adapter.
         /// </summary>
-        public string viewModelToUIAdapterName;
+        public string destAdapterTypeName;
 
         /// <summary>
         /// Name of the type of the adapter we're using to conver values from the
         /// UI back to the view model. Can be empty for no adapter.
         /// </summary>
-        public string uiToViewModelAdapterName;
+        public string sourceAdapterTypeName;
+
+        /// <summary>
+        /// The name of the property to assign an exception to when adapter/validation fails.
+        /// </summary>
+        public string exceptionPropertyName;
+
+        /// <summary>
+        /// Adapter to apply to any adapter/validation exception that is assigned to the view model.
+        /// </summary>
+        public string exceptionAdapterTypeName;
 
         /// <summary>
         /// Type of the component we're binding to.
@@ -45,40 +55,89 @@ namespace UnityUI.Binding
         /// </summary>
         public string boundComponentType;
 
-        private PropertyBinder propertyBinder;
-        private EventBinder eventBinder;
+        /// <summary>
+        /// Syncronizes the property in the view-model with the property in the view.
+        /// </summary>
+        private PropertySync propertySync;
+
+        /// <summary>
+        /// Watches the view-model for changes that must be propagated to the view.
+        /// </summary>
+        private PropertyWatcher viewModelWatcher;
+
+        /// <summary>
+        /// Watches the view for changes that must be propagated to the view-model.
+        /// </summary>
+        private UnityEventWatcher unityEventWatcher;
 
         public override void Connect()
         {
             var viewModelBinding = GetViewModelBinding();
+            var viewModel = viewModelBinding.BoundViewModel;
+            var view = GetComponent(boundComponentType);
 
-            propertyBinder = new PropertyBinder(this.gameObject,
+            propertySync = new PropertySync(
+                // Source
+                new PropertyEndPoint(
+                    viewModel,
                 viewModelPropertyName,
-                uiPropertyName,
-                boundComponentType,
-                CreateAdapter(viewModelToUIAdapterName),
-                viewModelBinding.BoundViewModel);
+                    CreateAdapter(sourceAdapterTypeName),
+                    "view-model",
+                    this
+                ),
 
-            eventBinder = new EventBinder(this.gameObject,
-                "set_" + viewModelPropertyName, // Call the setter on the bound property
+                // Dest
+                new PropertyEndPoint(
+                    view,
+                uiPropertyName,
+                    CreateAdapter(destAdapterTypeName),
+                    "view",
+                    this
+                ),
+
+                // Errors, exceptions and validation.
+                !string.IsNullOrEmpty(exceptionPropertyName)
+                    ? new PropertyEndPoint(
+                        viewModel,
+                        exceptionPropertyName,
+                        CreateAdapter(exceptionAdapterTypeName),
+                        "view-model",
+                        this
+                    )
+                    : null
+                    ,
+                
+                this
+            );
+
+            viewModelWatcher = new PropertyWatcher(
+                viewModel,
+                viewModelPropertyName,
+                () => propertySync.SyncFromSource()
+            );
+
+            unityEventWatcher = new UnityEventWatcher(
+                view,
                 uiEventName,
-                boundComponentType,
-                CreateAdapter(uiToViewModelAdapterName),
-                viewModelBinding);
+                () => propertySync.SyncFromDest()
+            );
+
+            // Copy the initial value over from the view-model.
+            propertySync.SyncFromSource();
         }
 
         public override void Disconnect()
         {
-            if (propertyBinder != null)
+            if (viewModelWatcher != null)
             {
-                propertyBinder.Dispose();
-                propertyBinder = null;
+                viewModelWatcher.Dispose();
+                viewModelWatcher = null;
             }
 
-            if (eventBinder != null)
+            if (unityEventWatcher != null)
             {
-                eventBinder.Dispose();
-                eventBinder = null;
+                unityEventWatcher.Dispose();
+                unityEventWatcher = null;
             }
         }
     }
