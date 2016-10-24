@@ -14,76 +14,114 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TwoWayPropertyBinding))]
     class PropertyBindingEditor : Editor
     {
-        UnityEventWatcher.BindableEvent[] events;
-
-        PropertyFinder.BindablePropertyInfo[] properties;
-
         public override void OnInspectorGUI()
         {
-            // Initialise everything
             var targetScript = (TwoWayPropertyBinding)target;
 
-            events = UnityEventWatcher
+            var events = UnityEventWatcher
                 .GetBindableEvents(targetScript.gameObject)
                 .Where(evt => evt.GetEventTypes().Length == 1) // Only select events that can be bound directly to properties
                 .OrderBy(evt => evt.Name)
                 .ToArray();
 
-            properties = PropertyFinder
+            var properties = PropertyFinder
                 .GetBindableProperties(targetScript.gameObject)
                 .OrderBy(property => property.PropertyInfo.Name)
                 .ToArray();
 
-            Type selectedEventType = null;
-            var selectedEventIndex = ShowEventSelector(targetScript);
+            var selectedEventIndex = ShowEventSelector(targetScript, events);
             if (selectedEventIndex >= 0)
             {
-                selectedEventType = events[selectedEventIndex].GetEventTypes().Single(); ;
-
                 targetScript.uiEventName = events[selectedEventIndex].Name;
                 targetScript.boundComponentType = events[selectedEventIndex].ComponentType.Name;
             }
 
-            var selectedPropertyIndex = ShowUIPropertySelector(targetScript);
-
+            Type viewPropertyType = null;
+            var selectedPropertyIndex = ShowUIPropertySelector(targetScript, properties);
             if (selectedPropertyIndex >= 0)
             {
                 targetScript.uiPropertyName = properties[selectedPropertyIndex].PropertyInfo.Name;
+                viewPropertyType = properties[selectedPropertyIndex].PropertyInfo.PropertyType;
+            }
+
+            var adapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+                .Select(type => type.Name)
+                .ToArray();
+
+            ShowAdapterMenu(
+                "View adaptor", 
+                adapterTypeNames, 
+                targetScript.viewAdapterTypeName,
+                (newValue) => targetScript.viewAdapterTypeName = newValue
+            );
+
+            Type adaptedViewPropertyType = viewPropertyType;
+            if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
+            {
+                var adapterType = Type.GetType(targetScript.viewAdapterTypeName);
+                if (adapterType != null)
+                {
+                    var adapterAttribute = adapterType
+                        .GetCustomAttributes(typeof(AdapterAttribute), false)
+                        .Cast<AdapterAttribute>()
+                        .FirstOrDefault();
+                    if (adapterAttribute != null)
+                    {
+                        adaptedViewPropertyType = adapterAttribute.InputType;
+                    }
+                }
             }
 
             var bindableViewModelProperties = GetBindableViewModelProperties(targetScript);
-            ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, selectedEventType);
+            ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, adaptedViewPropertyType);
+
+            ShowAdapterMenu(
+                "View-model adaptor", 
+                adapterTypeNames, 
+                targetScript.viewModelAdapterTypeName,
+                (newValue) => targetScript.viewModelAdapterTypeName = newValue
+            );
         }
 
         /// <summary>
         /// Show dropdown for selecting a UnityEvent to bind to.
         /// </summary>
-        private int ShowEventSelector(TwoWayPropertyBinding targetScript)
+        private int ShowEventSelector(TwoWayPropertyBinding targetScript, UnityEventWatcher.BindableEvent[] events)
         {
+            var eventNames = events
+                .Select(evt => evt.Name)
+                .ToArray();
+
             return EditorGUILayout.Popup(
-                new GUIContent("Event to bind to"),
-                events.Select(evt => evt.Name)
-                    .ToList()
-                    .IndexOf(targetScript.uiEventName),
-                events.Select(evt => 
-                    new GUIContent(evt.DeclaringType + "." + evt.Name + 
-                        "(" + evt.GetEventTypes()[0].ToString() + ")")).ToArray());
+                new GUIContent("View event"),
+                Array.IndexOf(eventNames, targetScript.uiEventName),
+                events.Select(evt => new GUIContent(
+                    evt.DeclaringType + "." + evt.Name + 
+                    "(" + evt.GetEventTypes()[0].ToString() + ")")
+                )
+                .ToArray()
+            );
         }
 
         /// <summary>
         /// Shows a dropdown for selecting a property in the UI to bind to.
         /// </summary>
-        private int ShowUIPropertySelector(TwoWayPropertyBinding targetScript)
+        private int ShowUIPropertySelector(TwoWayPropertyBinding targetScript, PropertyFinder.BindablePropertyInfo[] properties)
         {
+            var propertyNames = properties
+                .Select(prop => prop.PropertyInfo.Name)
+                .ToArray();
+
             return EditorGUILayout.Popup(
-                new GUIContent("Property to bind to"),
-                properties.Select(prop => prop.PropertyInfo.Name)
-                    .ToList()
-                    .IndexOf(targetScript.uiPropertyName),
-                properties.Select(prop =>
-                    new GUIContent(prop.PropertyInfo.ReflectedType.Name + "/" +
+                new GUIContent("View property"),
+                Array.IndexOf(propertyNames, targetScript.uiPropertyName),
+                properties.Select(prop => new GUIContent(
+                        prop.PropertyInfo.ReflectedType.Name + "/" +
                         prop.PropertyInfo.Name + " : " +
-                        prop.PropertyInfo.PropertyType.Name)).ToArray());
+                        prop.PropertyInfo.PropertyType.Name
+                    ))
+                    .ToArray()
+            );
         }
 
         /// <summary>
@@ -99,7 +137,7 @@ namespace UnityTools.UnityUI_Editor
         private void ShowViewModelPropertySelector(TwoWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("View model property");
+            EditorGUILayout.PrefixLabel("View-model property");
 
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
@@ -122,15 +160,19 @@ namespace UnityTools.UnityUI_Editor
                 target.viewModelName + target.viewModelPropertyName
             );
 
-            var options = bindableProperties.Select(p =>
-                new InspectorUtils.MenuItem(
+            var options = bindableProperties
+                .Select(p => new InspectorUtils.MenuItem(
                     new GUIContent(p.ReflectedType + "/" + p.Name + " : " + p.PropertyType.Name),
                     p.PropertyType == viewPropertyType
-                )
-            ).ToArray();
+                ))
+                .ToArray();
 
-            InspectorUtils.ShowCustomSelectionMenu(index =>
-                SetViewModelProperty(target, bindableProperties[index]), options, selectedIndex, position);
+            InspectorUtils.ShowCustomSelectionMenu(
+                index => SetViewModelProperty(target, bindableProperties[index]), 
+                options, 
+                selectedIndex, 
+                position
+            );
         }
 
         /// <summary>
@@ -140,6 +182,41 @@ namespace UnityTools.UnityUI_Editor
         {
             target.viewModelName = propertyInfo.ReflectedType.Name;
             target.viewModelPropertyName = propertyInfo.Name;
+        }
+
+        /// <summary>
+        /// Display the adapters popup menu.
+        /// </summary>
+        private static void ShowAdapterMenu(
+            string label,
+            string[] adapterTypeNames,
+            string curValue,
+            Action<string> valueUpdated
+        )
+        {
+            var adapterMenu = new string[] { "None" }
+                .Concat(adapterTypeNames)
+                .Select(typeName => new GUIContent(typeName))
+                .ToArray();
+
+            var curSelectionIndex = Array.IndexOf(adapterTypeNames, curValue) + 1; // +1 to account for 'None'.
+            var newSelectionIndex = EditorGUILayout.Popup(
+                    new GUIContent(label),
+                    curSelectionIndex,
+                    adapterMenu
+                );
+
+            if (newSelectionIndex != curSelectionIndex)
+            {
+                if (newSelectionIndex == 0)
+                {
+                    valueUpdated(null); // No adapter selected.
+                }
+                else
+                {
+                    valueUpdated(adapterTypeNames[newSelectionIndex - 1]); // -1 to account for 'None'.
+                }
+            }
         }
     }
 }

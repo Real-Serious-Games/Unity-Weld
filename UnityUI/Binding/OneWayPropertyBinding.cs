@@ -16,7 +16,7 @@ namespace UnityUI.Binding
         /// <summary>
         /// Type of the adapter we're using to adapt between the view model property and UI property.
         /// </summary>
-        public string adapterTypeName;
+        public string viewAdapterTypeName;
 
         /// <summary>
         /// Name of the property in the view model to bind.
@@ -44,7 +44,7 @@ namespace UnityUI.Binding
         /// </summary>
         private PropertyWatcher viewModelWatcher;
 
-        public override void Connect()
+        public override void Connect()        
         {
             var viewModelBinding = GetViewModelBinding();
             var viewModel = viewModelBinding.BoundViewModel;
@@ -54,7 +54,7 @@ namespace UnityUI.Binding
                 // Source
                 new PropertyEndPoint(
                     viewModel,
-                viewModelPropertyName,
+                    viewModelPropertyName,
                     null, // One-way only. No dest-to source adapter required.
                     "view-model",
                     this
@@ -63,8 +63,8 @@ namespace UnityUI.Binding
                 // Dest
                 new PropertyEndPoint(
                     view,
-                uiPropertyName,
-                CreateAdapter(adapterTypeName),
+                    uiPropertyName,
+                    CreateAdapter(viewAdapterTypeName),
                     "view",
                     this
                 ),

@@ -19,17 +19,32 @@ namespace UnityUI_Editor
             {
                 if (typesWithBindingAttribute == null)
                 {
-                    typesWithBindingAttribute = FindTypesMarkedByBindingAttribute();
+                    typesWithBindingAttribute = FindTypesMarkedByAttribute(typeof(BindingAttribute));
                 }
 
                 return typesWithBindingAttribute;
             }
         }
 
+        private static Type[] typesWithAdapterAttribute;
+
+        internal static Type[] TypesWithAdapterAttribute
+        {
+            get
+            {
+                if (typesWithAdapterAttribute == null)
+                {
+                    typesWithAdapterAttribute = FindTypesMarkedByAttribute(typeof(AdapterAttribute));
+                }
+
+                return typesWithAdapterAttribute;
+            }
+        }
+
         /// <summary>
         /// Find all types marked with the [Binding] attribute.
         /// </summary>
-        private static Type[] FindTypesMarkedByBindingAttribute()
+        private static Type[] FindTypesMarkedByAttribute(Type attributeType)
         {
             var typesFound = new List<Type>();
 
@@ -37,7 +52,7 @@ namespace UnityUI_Editor
             {
                 try
                 {
-                    if (type.GetCustomAttributes(typeof(BindingAttribute), false).Any())
+                    if (type.GetCustomAttributes(attributeType, false).Any())
                     {
                         typesFound.Add(type);
                     }

@@ -12,22 +12,17 @@ namespace UnityUI_Editor
     [CustomEditor(typeof(OneWayPropertyBinding))]
     class OneWayPropertyBindingEditor : Editor
     {
-        PropertyFinder.BindablePropertyInfo[] uiProperties;
-
         public override void OnInspectorGUI()
         {
             // Initialise reference to target script
             var targetScript = (OneWayPropertyBinding)target;
 
-            uiProperties = PropertyFinder
+            var uiProperties = PropertyFinder
                 .GetBindableProperties(targetScript.gameObject)
                 .OrderBy(property => property.PropertyInfo.Name)
                 .ToArray();
 
-            var selectedPropertyIndex = -1;
-
-            selectedPropertyIndex = ShowUIPropertySelector(targetScript);
-
+            var selectedPropertyIndex = ShowUIPropertySelector(targetScript, uiProperties);
             Type viewPropertyType = null;
 
             if (selectedPropertyIndex >= 0)
@@ -39,25 +34,59 @@ namespace UnityUI_Editor
                 viewPropertyType = uiProperties[selectedPropertyIndex].PropertyInfo.PropertyType;
             }
 
+            var adapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+                .Select(type => type.Name)
+                .ToArray();
+
+            ShowAdapterMenu(
+                "View adaptor",
+                adapterTypeNames,
+                targetScript.viewAdapterTypeName,
+                newValue => targetScript.viewAdapterTypeName = newValue
+            );
+
+            Type adaptedViewPropertyType = viewPropertyType;
+            if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
+            {
+                var adapterType = Type.GetType(targetScript.viewAdapterTypeName);
+                if (adapterType != null)
+                {
+                    var adapterAttribute = adapterType
+                        .GetCustomAttributes(typeof(AdapterAttribute), false)
+                        .Cast<AdapterAttribute>()
+                        .FirstOrDefault();
+                    if (adapterAttribute != null)
+                    {
+                        adaptedViewPropertyType = adapterAttribute.InputType;
+                    }
+                }               
+            }
+
             // Show selector for property in the view model.
             var bindableViewModelProperties = GetBindableViewModelProperties(targetScript);
-            ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, viewPropertyType);
+            ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, adaptedViewPropertyType);
         }
 
         /// <summary>
         /// Draws the dropdown menu for selectng a property in the UI to bind to.
         /// </summary>
-        private int ShowUIPropertySelector(OneWayPropertyBinding targetScript)
+        private int ShowUIPropertySelector(OneWayPropertyBinding targetScript, PropertyFinder.BindablePropertyInfo[] uiProperties)
         {
+            var propertyNames = uiProperties
+                .Select(prop => prop.PropertyInfo.Name)
+                .ToArray();
+
             return EditorGUILayout.Popup(
                 new GUIContent("View property"),
-                uiProperties.Select(prop => prop.PropertyInfo.Name)
-                    .ToList()
-                    .IndexOf(targetScript.uiPropertyName),
-                uiProperties.Select(prop =>
-                    new GUIContent(prop.PropertyInfo.ReflectedType.Name + "/" + 
+                Array.IndexOf(propertyNames, targetScript.uiPropertyName),
+                uiProperties
+                    .Select(prop => new GUIContent(
+                        prop.PropertyInfo.ReflectedType.Name + "/" + 
                         prop.PropertyInfo.Name + " : " +
-                        prop.PropertyInfo.PropertyType.Name)).ToArray());
+                        prop.PropertyInfo.PropertyType.Name
+                    ))
+                    .ToArray()
+            );
         }
 
         private void ShowViewModelPropertySelector(OneWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType)
@@ -65,7 +94,7 @@ namespace UnityUI_Editor
             var buttonContent = new GUIContent(target.viewModelPropertyName);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("View model property");
+            EditorGUILayout.PrefixLabel("View-model property");
 
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
@@ -88,15 +117,19 @@ namespace UnityUI_Editor
                 target.viewModelName + target.viewModelPropertyName
             );
 
-            var options = bindableProperties.Select(p =>
-                new InspectorUtils.MenuItem(
+            var options = bindableProperties
+                .Select(p => new InspectorUtils.MenuItem(
                     new GUIContent(p.ReflectedType.Name + "/" + p.Name + " : " + p.PropertyType.Name),
                     p.PropertyType == viewPropertyType
-                )
-            ).ToArray();
+                ))
+                .ToArray();
 
-            InspectorUtils.ShowCustomSelectionMenu(index =>
-                SetViewModelProperty(target, bindableProperties[index]), options, selectedIndex, position);
+            InspectorUtils.ShowCustomSelectionMenu(
+                index => SetViewModelProperty(target, bindableProperties[index]), 
+                options, 
+                selectedIndex, 
+                position
+            );
         }
 
         /// <summary>
@@ -104,7 +137,6 @@ namespace UnityUI_Editor
         /// </summary>
         private PropertyInfo[] GetBindableViewModelProperties(OneWayPropertyBinding target)
         {
-            // TODO Rory 29/06/16: make sure we're not using an outdated list of available views
             return target.GetAvailableViewModelTypes()
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .ToArray();
@@ -117,6 +149,41 @@ namespace UnityUI_Editor
         {
             target.viewModelName = property.ReflectedType.Name;
             target.viewModelPropertyName = property.Name;
+        }
+
+        /// <summary>
+        /// Display the adapters popup menu.
+        /// </summary>
+        private static void ShowAdapterMenu(
+            string label,
+            string[] adapterTypeNames,
+            string curValue,
+            Action<string> valueUpdated
+        )
+        {
+            var adapterMenu = new string[] { "None" }
+                .Concat(adapterTypeNames)
+                .Select(typeName => new GUIContent(typeName))
+                .ToArray();
+
+            var curSelectionIndex = Array.IndexOf(adapterTypeNames, curValue) + 1; // +1 to account for 'None'.
+            var newSelectionIndex = EditorGUILayout.Popup(
+                    new GUIContent(label),
+                    curSelectionIndex,
+                    adapterMenu
+                );
+
+            if (newSelectionIndex != curSelectionIndex)
+            {
+                if (newSelectionIndex == 0)
+                {
+                    valueUpdated(null); // No adapter selected.
+                }
+                else
+                {
+                    valueUpdated(adapterTypeNames[newSelectionIndex - 1]); // -1 to account for 'None'.
+                }
+            }
         }
     }
 }
