@@ -11,17 +11,12 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TemplateSelector))]
     class TemplateSelectorEditor : Editor
     {
-        /// <summary>
-        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
-        /// </summary>
-        private bool dirty;
-
         public override void OnInspectorGUI()
         {
             // Initialise everything
             var targetScript = (TemplateSelector)target;
 
-            dirty = false;
+            var dirty = false;
 
             var bindableViews = GetBindableViews(targetScript);
             ShowPropertySelector(targetScript, bindableViews);
@@ -99,6 +94,8 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(TemplateSelector target, PropertyInfo property)
         {
+            var dirty = false;
+
             var newViewModelTypeName = property.ReflectedType.Name;
             if (target.viewModelName != newViewModelTypeName)
             { 
@@ -111,6 +108,11 @@ namespace UnityTools.UnityUI_Editor
             {
                 target.viewModelPropertyName = newViewModelPropertyName;
                 dirty = true;
+            }
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(target.gameObject);
             }
         }
     }

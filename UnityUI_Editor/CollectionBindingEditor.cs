@@ -15,7 +15,6 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(CollectionBinding))]
     class CollectionBindingEditor : Editor
     {
-
         public override void OnInspectorGUI()
         {
             // Initialise everything

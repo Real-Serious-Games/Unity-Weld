@@ -16,16 +16,11 @@ namespace UnityTools.Unity_Editor
     [CustomEditor(typeof(EventBinding))]
     public class EventBindingEditor : Editor
     {
-        /// <summary>
-        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
-        /// </summary>
-        private bool dirty;
-
         public override void OnInspectorGUI()
         {
             var targetScript = (EventBinding)target;
 
-            dirty = false;
+            var dirty = false;
 
             // Get list of events we can bind to.
             var events = UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
@@ -160,6 +155,8 @@ namespace UnityTools.Unity_Editor
         /// </summary>
         private void SetBoundMethod(EventBinding target, MethodInfo method)
         {
+            var dirty = false;
+
             var newViewModelTypeName = method.ReflectedType.Name;
             if (target.viewModelName != newViewModelTypeName)
             {
@@ -172,6 +169,11 @@ namespace UnityTools.Unity_Editor
             {
                 target.viewModelMethodName = newViewModelTypeName;
                 dirty = true;
+            }
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(target.gameObject);
             }
         }
     }

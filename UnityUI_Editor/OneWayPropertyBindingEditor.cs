@@ -12,17 +12,12 @@ namespace UnityUI_Editor
     [CustomEditor(typeof(OneWayPropertyBinding))]
     class OneWayPropertyBindingEditor : Editor
     {
-        /// <summary>
-        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
-        /// </summary>
-        private bool dirty;
-
         public override void OnInspectorGUI()
         {
             // Initialise reference to target script
             var targetScript = (OneWayPropertyBinding)target;
 
-            dirty = false;
+            var dirty = false;
 
             var uiProperties = PropertyFinder
                 .GetBindableProperties(targetScript.gameObject)
@@ -177,6 +172,8 @@ namespace UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(OneWayPropertyBinding target, PropertyInfo property)
         {
+            var dirty = false;
+
             var newViewModelTypeName = property.ReflectedType.Name;
             if (target.viewModelName != newViewModelTypeName)
             { 
@@ -189,6 +186,11 @@ namespace UnityUI_Editor
             {
                 target.viewModelPropertyName = newViewModelPropertyName;
                 dirty = true;
+            }
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(target.gameObject);
             }
         }
 

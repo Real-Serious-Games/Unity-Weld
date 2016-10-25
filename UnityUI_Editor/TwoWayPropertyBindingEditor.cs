@@ -210,6 +210,8 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(TwoWayPropertyBinding target, PropertyInfo propertyInfo)
         {
+            var dirty = false;
+
             var newViewModelTypeName = propertyInfo.ReflectedType.Name;
             if (target.viewModelName != newViewModelTypeName)
             { 
@@ -222,6 +224,11 @@ namespace UnityTools.UnityUI_Editor
             {
                 target.viewModelPropertyName = newViewModelPropertyName;
                 dirty = true;
+            }
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(target.gameObject);
             }
         }
 
