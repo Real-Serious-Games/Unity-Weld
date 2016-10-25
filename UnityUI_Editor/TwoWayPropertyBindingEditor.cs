@@ -40,13 +40,13 @@ namespace UnityTools.UnityUI_Editor
             var selectedEventIndex = ShowEventSelector(targetScript, events);
             if (selectedEventIndex >= 0)
             {
-                SetValueAndMarkSceneDirty(
+                UpdateProperty(
                     () => targetScript.uiEventName,
                     updatedValue => targetScript.uiEventName = updatedValue,
                     events[selectedEventIndex].Name
                 );
 
-                SetValueAndMarkSceneDirty(
+                UpdateProperty(
                     () => targetScript.boundComponentType,
                     updatedValue => targetScript.boundComponentType = updatedValue,
                     events[selectedEventIndex].ComponentType.Name
@@ -57,7 +57,7 @@ namespace UnityTools.UnityUI_Editor
             var selectedPropertyIndex = ShowUIPropertySelector(targetScript, properties);
             if (selectedPropertyIndex >= 0)
             {
-                SetValueAndMarkSceneDirty(
+                UpdateProperty(
                     () => targetScript.uiPropertyName,
                     updatedValue => targetScript.uiPropertyName = updatedValue,
                     properties[selectedPropertyIndex].PropertyInfo.Name
@@ -73,7 +73,7 @@ namespace UnityTools.UnityUI_Editor
                 "View adaptor", 
                 adapterTypeNames, 
                 targetScript.viewAdapterTypeName,
-                newValue => SetValueAndMarkSceneDirty(
+                newValue => UpdateProperty(
                     () => targetScript.viewAdapterTypeName, 
                     updatedValue => targetScript.viewAdapterTypeName = updatedValue,
                     newValue
@@ -153,6 +153,7 @@ namespace UnityTools.UnityUI_Editor
                     .ToArray()
             );
         }
+
 
         /// <summary>
         /// Get a list of all the methods in the bound view model of a specific type that we can bind to.
@@ -270,7 +271,8 @@ namespace UnityTools.UnityUI_Editor
         /// <summary>
         /// Sets the specified value and sets dirty to true if it doesn't match the old value.
         /// </summary>
-        private void SetValueAndMarkSceneDirty<TValue>(Func<TValue> getter, Action<TValue> setter, TValue newValue) where TValue : class
+        private void UpdateProperty<TValue>(Func<TValue> getter, Action<TValue> setter, TValue newValue) 
+            where TValue : class
         {
             var oldValue = getter();
             if (newValue != oldValue)
