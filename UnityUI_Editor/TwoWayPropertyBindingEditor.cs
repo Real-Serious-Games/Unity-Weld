@@ -15,16 +15,11 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TwoWayPropertyBinding))]
     class PropertyBindingEditor : Editor
     {
-        /// <summary>
-        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
-        /// </summary>
-        private bool dirty;
-
         public override void OnInspectorGUI()
         {
             var targetScript = (TwoWayPropertyBinding)target;
 
-            dirty = false;
+            var dirty = false;
 
             var events = UnityEventWatcher
                 .GetBindableEvents(targetScript.gameObject)
@@ -278,7 +273,7 @@ namespace UnityTools.UnityUI_Editor
             if (newValue != oldValue)
             {
                 setter(newValue);
-                dirty = true;
+                InspectorUtils.MarkSceneDirty(((Component)target).gameObject);
             }
         }
     }
