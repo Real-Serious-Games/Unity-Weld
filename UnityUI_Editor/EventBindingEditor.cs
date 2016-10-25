@@ -9,25 +9,24 @@ using UnityEngine.Events;
 using UnityUI;
 using UnityUI.Binding;
 using UnityUI_Editor;
+using static UnityUI.Binding.UnityEventWatcher;
 
 namespace UnityTools.Unity_Editor
 {
     [CustomEditor(typeof(EventBinding))]
     public class EventBindingEditor : Editor
     {
-        UnityEventWatcher.BindableEvent[] events;
-
         public override void OnInspectorGUI()
         {
             var targetScript = (EventBinding)target;
 
             // Get list of events we can bind to.
-            events = UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
+            var events = UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                 .OrderBy(evt => evt.Name)
                 .ToArray();
 
             // Popup for the user to pick a UnityEvent on the UI to bind to.
-            var selectedEventIndex = ShowEventSelector(targetScript);
+            var selectedEventIndex = ShowEventSelector(targetScript, events);
 
             Type[] eventType = null;
             if (selectedEventIndex >= 0)
@@ -48,7 +47,7 @@ namespace UnityTools.Unity_Editor
         /// <summary>
         /// Draws the dropdown menu for selecting an event, returns the inxed of the selected event.
         /// </summary>
-        private int ShowEventSelector(EventBinding targetScript)
+        private int ShowEventSelector(EventBinding targetScript, BindableEvent[] events)
         {
             return EditorGUILayout.Popup(
                 new GUIContent("Event to bind to"),
