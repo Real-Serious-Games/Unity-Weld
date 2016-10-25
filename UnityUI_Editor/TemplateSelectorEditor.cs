@@ -11,11 +11,17 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TemplateSelector))]
     class TemplateSelectorEditor : Editor
     {
+        /// <summary>
+        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
+        /// </summary>
+        private bool dirty;
 
         public override void OnInspectorGUI()
         {
             // Initialise everything
             var targetScript = (TemplateSelector)target;
+
+            dirty = false;
 
             var bindableViews = GetBindableViews(targetScript);
             ShowPropertySelector(targetScript, bindableViews);
@@ -23,9 +29,19 @@ namespace UnityTools.UnityUI_Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Templates root object");
 
-            targetScript.templates = (GameObject)EditorGUILayout.ObjectField(targetScript.templates, typeof(GameObject), true);
+            var newTemplates = (GameObject)EditorGUILayout.ObjectField(targetScript.templates, typeof(GameObject), true);
+            if (targetScript.templates != newTemplates)
+            {
+                targetScript.templates = newTemplates;
+                dirty = true;
+            }
 
             EditorGUILayout.EndHorizontal();
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(targetScript.gameObject);
+            }
         }
 
         private PropertyInfo[] GetBindableViews(TemplateSelector target)
@@ -83,8 +99,19 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(TemplateSelector target, PropertyInfo property)
         {
-            target.viewModelName = property.ReflectedType.Name;
-            target.viewModelPropertyName = property.Name;
+            var newViewModelTypeName = property.ReflectedType.Name;
+            if (target.viewModelName != newViewModelTypeName)
+            { 
+                target.viewModelName = newViewModelTypeName;
+                dirty = true;
+            }
+
+            var newViewModelPropertyName = property.Name;
+            if (target.viewModelPropertyName != newViewModelPropertyName)
+            {
+                target.viewModelPropertyName = newViewModelPropertyName;
+                dirty = true;
+            }
         }
     }
 }

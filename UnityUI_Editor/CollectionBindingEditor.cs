@@ -27,7 +27,12 @@ namespace UnityTools.UnityUI_Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Collection template");
 
-            targetScript.template = (TemplateBinding)EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true);
+            var newTemplate = (TemplateBinding)EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true);
+            if (targetScript.template != newTemplate)
+            {
+                targetScript.template = newTemplate;
+                InspectorUtils.MarkSceneDirty(targetScript.gameObject);
+            }
 
             EditorGUILayout.EndHorizontal();
         }
@@ -89,8 +94,25 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(CollectionBinding target, PropertyInfo property)
         {
-            target.viewModelName = property.ReflectedType.Name;
-            target.viewModelPropertyName = property.Name;
+            var viewModelName = property.ReflectedType.Name;
+            var viewModelPropertyName = property.Name;
+            var dirty = false;
+
+            if (target.viewModelName != viewModelName)
+            {
+                dirty = true;
+                target.viewModelName = viewModelName;
+            }
+            if (target.viewModelPropertyName != viewModelPropertyName)
+            {
+                dirty = true;
+                target.viewModelPropertyName = viewModelPropertyName;
+            }
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(target.gameObject);
+            }
         }
     }
 }

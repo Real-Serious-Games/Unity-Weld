@@ -16,9 +16,16 @@ namespace UnityTools.Unity_Editor
     [CustomEditor(typeof(EventBinding))]
     public class EventBindingEditor : Editor
     {
+        /// <summary>
+        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
+        /// </summary>
+        private bool dirty;
+
         public override void OnInspectorGUI()
         {
             var targetScript = (EventBinding)target;
+
+            dirty = false;
 
             // Get list of events we can bind to.
             var events = UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
@@ -34,14 +41,30 @@ namespace UnityTools.Unity_Editor
                 eventType = events[selectedEventIndex].GetEventTypes();
 
                 // Save properties on the target script so they'll be serialised into the scene
-                targetScript.uiEventName = events[selectedEventIndex].Name;
-                targetScript.boundComponentType = events[selectedEventIndex].ComponentType.Name;
+                var newViewEventName = events[selectedEventIndex].Name;
+                if (targetScript.uiEventName != newViewEventName)
+                {
+                    targetScript.uiEventName = newViewEventName;
+                    dirty = true;
+                }
+
+                var newBoundComponentType = events[selectedEventIndex].ComponentType.Name;
+                if (targetScript.boundComponentType != newBoundComponentType)
+                {
+                    targetScript.boundComponentType = newBoundComponentType;
+                    dirty = true;
+                }
             }
 
             var bindableViewModelMethods = GetBindableViewModelMethods(targetScript);
 
             // Show a popup for selecting which method to bind to.
             ShowMethodSelector(targetScript, bindableViewModelMethods, eventType);
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(targetScript.gameObject);
+            }
         }
 
         /// <summary>
@@ -137,8 +160,19 @@ namespace UnityTools.Unity_Editor
         /// </summary>
         private void SetBoundMethod(EventBinding target, MethodInfo method)
         {
-            target.viewModelName = method.ReflectedType.Name;
-            target.viewModelMethodName = method.Name;
+            var newViewModelTypeName = method.ReflectedType.Name;
+            if (target.viewModelName != newViewModelTypeName)
+            {
+                target.viewModelName = newViewModelTypeName;
+                dirty = true;
+            }
+
+            var newViewModelMethodName = method.Name;
+            if (target.viewModelMethodName != newViewModelMethodName)
+            {
+                target.viewModelMethodName = newViewModelTypeName;
+                dirty = true;
+            }
         }
     }
 }

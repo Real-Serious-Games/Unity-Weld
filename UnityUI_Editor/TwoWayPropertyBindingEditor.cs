@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
@@ -14,9 +15,16 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TwoWayPropertyBinding))]
     class PropertyBindingEditor : Editor
     {
+        /// <summary>
+        /// Whether or not we've made a change to the target script in the current OnInspectorGUI.
+        /// </summary>
+        private bool dirty;
+
         public override void OnInspectorGUI()
         {
             var targetScript = (TwoWayPropertyBinding)target;
+
+            dirty = false;
 
             var events = UnityEventWatcher
                 .GetBindableEvents(targetScript.gameObject)
@@ -32,15 +40,28 @@ namespace UnityTools.UnityUI_Editor
             var selectedEventIndex = ShowEventSelector(targetScript, events);
             if (selectedEventIndex >= 0)
             {
-                targetScript.uiEventName = events[selectedEventIndex].Name;
-                targetScript.boundComponentType = events[selectedEventIndex].ComponentType.Name;
+                SetValueAndMarkSceneDirty(
+                    () => targetScript.uiEventName,
+                    updatedValue => targetScript.uiEventName = updatedValue,
+                    events[selectedEventIndex].Name
+                );
+
+                SetValueAndMarkSceneDirty(
+                    () => targetScript.boundComponentType,
+                    updatedValue => targetScript.boundComponentType = updatedValue,
+                    events[selectedEventIndex].ComponentType.Name
+                );
             }
 
             Type viewPropertyType = null;
             var selectedPropertyIndex = ShowUIPropertySelector(targetScript, properties);
             if (selectedPropertyIndex >= 0)
             {
-                targetScript.uiPropertyName = properties[selectedPropertyIndex].PropertyInfo.Name;
+                SetValueAndMarkSceneDirty(
+                    () => targetScript.uiPropertyName,
+                    updatedValue => targetScript.uiPropertyName = updatedValue,
+                    properties[selectedPropertyIndex].PropertyInfo.Name
+                );
                 viewPropertyType = properties[selectedPropertyIndex].PropertyInfo.PropertyType;
             }
 
@@ -52,7 +73,11 @@ namespace UnityTools.UnityUI_Editor
                 "View adaptor", 
                 adapterTypeNames, 
                 targetScript.viewAdapterTypeName,
-                (newValue) => targetScript.viewAdapterTypeName = newValue
+                newValue => SetValueAndMarkSceneDirty(
+                    () => targetScript.viewAdapterTypeName, 
+                    updatedValue => targetScript.viewAdapterTypeName = updatedValue,
+                    newValue
+                )
             );
 
             Type adaptedViewPropertyType = viewPropertyType;
@@ -81,6 +106,11 @@ namespace UnityTools.UnityUI_Editor
                 targetScript.viewModelAdapterTypeName,
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
             );
+
+            if (dirty)
+            {
+                InspectorUtils.MarkSceneDirty(targetScript.gameObject);
+            }
         }
 
         /// <summary>
@@ -180,8 +210,19 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(TwoWayPropertyBinding target, PropertyInfo propertyInfo)
         {
-            target.viewModelName = propertyInfo.ReflectedType.Name;
-            target.viewModelPropertyName = propertyInfo.Name;
+            var newViewModelTypeName = propertyInfo.ReflectedType.Name;
+            if (target.viewModelName != newViewModelTypeName)
+            { 
+                target.viewModelName = newViewModelTypeName;
+                dirty = true;
+            }
+
+            var newViewModelPropertyName = propertyInfo.Name;
+            if (target.viewModelPropertyName != newViewModelPropertyName)
+            {
+                target.viewModelPropertyName = newViewModelPropertyName;
+                dirty = true;
+            }
         }
 
         /// <summary>
@@ -216,6 +257,19 @@ namespace UnityTools.UnityUI_Editor
                 {
                     valueUpdated(adapterTypeNames[newSelectionIndex - 1]); // -1 to account for 'None'.
                 }
+            }
+        }
+
+        /// <summary>
+        /// Sets the specified value and sets dirty to true if it doesn't match the old value.
+        /// </summary>
+        private void SetValueAndMarkSceneDirty<TValue>(Func<TValue> getter, Action<TValue> setter, TValue newValue) where TValue : class
+        {
+            var oldValue = getter();
+            if (newValue != oldValue)
+            {
+                setter(newValue);
+                dirty = true;
             }
         }
     }

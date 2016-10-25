@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace UnityUI_Editor
@@ -52,6 +53,15 @@ namespace UnityUI_Editor
                 }
             }
             menu.DropDown(position);
+        }
+
+        /// <summary>
+        /// Tell Unity that a change has been made to a specified object and we have to save the scene.
+        /// </summary>
+        public static void MarkSceneDirty(GameObject gameObject)
+        {
+            // TODO: Undo.RecordObject also marks the scene dirty, so this will no longer be necessary once undo support is added.
+            EditorSceneManager.MarkSceneDirty(gameObject.scene);
         }
     }
 }
