@@ -9,7 +9,6 @@ using UnityEngine.Events;
 using UnityUI;
 using UnityUI.Binding;
 using UnityUI_Editor;
-using static UnityUI.Binding.UnityEventWatcher;
 
 namespace UnityTools.Unity_Editor
 {
@@ -65,7 +64,7 @@ namespace UnityTools.Unity_Editor
         /// <summary>
         /// Draws the dropdown menu for selecting an event, returns the inxed of the selected event.
         /// </summary>
-        private int ShowEventSelector(EventBinding targetScript, BindableEvent[] events)
+        private int ShowEventSelector(EventBinding targetScript, UnityEventWatcher.BindableEvent[] events)
         {
             return EditorGUILayout.Popup(
                 new GUIContent("Event to bind to"),
