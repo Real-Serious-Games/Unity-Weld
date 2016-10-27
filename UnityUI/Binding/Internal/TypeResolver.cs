@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityUI.Binding;
 
-namespace UnityUI_Editor
+namespace UnityUI.Internal
 {
     /// <summary>
     /// Helper class for setting up the factory for use in the editor.
@@ -100,6 +100,25 @@ namespace UnityUI_Editor
         }
 
         /// <summary>
+        /// Find a particular type by its short name.
+        /// </summary>
+        public static Type FindType(string typeName)
+        {
+            var matchingTypes = GetAllTypes().Where(type => type.Name == typeName);
+            if (!matchingTypes.Any())
+            {
+                return null;
+            }
+
+            if (matchingTypes.Skip(1).Any())
+            {
+                throw new ApplicationException("Multiple types match: " + typeName);
+            }
+
+            return matchingTypes.First();               
+        }
+
+        /// <summary>
         /// Return the type of a view model bound by an IViewModelBinding
         /// </summary>
         private static Type GetBoundViewType(IViewModelBinding binding)
@@ -120,7 +139,7 @@ namespace UnityUI_Editor
         /// Scan up the hierarchy and find all the types that can be bound to 
         /// a specified MemberBinding.
         /// </summary>
-        public static IEnumerable<Type> GetAvailableViewModelTypes(this AbstractMemberBinding memberBinding)
+        public static IEnumerable<Type> GetAvailableViewModelTypes(AbstractMemberBinding memberBinding)
         {
             bool foundAtLeastOneBinding = false;
 

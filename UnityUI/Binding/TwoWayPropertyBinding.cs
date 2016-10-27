@@ -40,6 +40,11 @@ namespace UnityUI.Binding
         public string viewModelAdapterTypeName;
 
         /// <summary>
+        /// The name of the view-model that owns the exceeption property for when adapter/validation fails.
+        /// </summary>
+        public string exceptionViewModelName;
+
+        /// <summary>
         /// The name of the property to assign an exception to when adapter/validation fails.
         /// </summary>
         public string exceptionPropertyName;

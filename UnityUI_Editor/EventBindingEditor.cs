@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityUI;
 using UnityUI.Binding;
+using UnityUI.Internal;
 
 namespace UnityUI_Editor
 {
@@ -111,7 +112,7 @@ namespace UnityUI_Editor
         /// </summary>
         private MethodInfo[] GetBindableViewModelMethods(EventBinding targetScript)
         {
-            return targetScript.GetAvailableViewModelTypes()
+            return TypeResolver.GetAvailableViewModelTypes(targetScript)
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                 .Where(m => m.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !m.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
                 .ToArray();

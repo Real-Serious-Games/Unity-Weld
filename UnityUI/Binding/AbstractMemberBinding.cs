@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityUI.Internal;
 
 namespace UnityUI.Binding
 {
@@ -85,7 +86,8 @@ namespace UnityUI.Binding
                 return null;
             }
 
-            var adapterType = Type.GetType(adapterTypeName);
+            //todo: Need to cache adapter types.
+            var adapterType = TypeResolver.FindType(adapterTypeName);
             if (adapterType == null)
             {
                 throw new ApplicationException("Could not find adapter type '" + adapterTypeName + "'.");

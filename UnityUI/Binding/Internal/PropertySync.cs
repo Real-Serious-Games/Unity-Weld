@@ -47,6 +47,23 @@ namespace UnityUI.Binding
             try
             {
                 dest.SetValue(source.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Failed to convert value from " + source.ToString() + " to " + dest.ToString(), context);
+                Debug.LogException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Syncrhonise the value from the destination to the source.
+        /// </summary>
+        public void SyncFromDest()
+        {
+
+            try
+            {
+                source.SetValue(dest.GetValue());
 
                 if (exception != null)
                 {
@@ -61,25 +78,9 @@ namespace UnityUI.Binding
                 }
                 else
                 {
-                    Debug.LogError("Failed to convert value from " + dest.ToString() + " to " + source.ToString(), context);
+                    Debug.LogError("Failed to convert value from " + source.ToString() + " to " + dest.ToString(), context);
                     Debug.LogException(ex);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Syncrhonise the value from the destination to the source.
-        /// </summary>
-        public void SyncFromDest()
-        {
-            try
-            {
-                source.SetValue(dest.GetValue());
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Failed to convert value from " + dest.ToString() + " to " + source.ToString(), context);
-                Debug.LogException(ex);
             }
         }
     }

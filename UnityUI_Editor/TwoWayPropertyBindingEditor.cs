@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUI;
 using UnityUI.Binding;
+using UnityUI.Internal;
 using UnityUI_Editor;
 
 namespace UnityUI_Editor
@@ -76,7 +77,7 @@ namespace UnityUI_Editor
             Type adaptedViewPropertyType = viewPropertyType;
             if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
             {
-                var adapterType = Type.GetType(targetScript.viewAdapterTypeName);
+                var adapterType = TypeResolver.FindType(targetScript.viewAdapterTypeName);
                 if (adapterType != null)
                 {
                     var adapterAttribute = adapterType
@@ -91,7 +92,16 @@ namespace UnityUI_Editor
             }
 
             var bindableViewModelProperties = GetBindableViewModelProperties(targetScript);
-            ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, adaptedViewPropertyType);
+            ShowViewModelPropertySelector(
+                "View-model property",
+                targetScript, 
+                bindableViewModelProperties,
+                updatedValue => targetScript.viewModelName = updatedValue,
+                targetScript.viewModelName,
+                updatedValue => targetScript.viewModelPropertyName = updatedValue,
+                targetScript.viewModelPropertyName,
+                adaptedViewPropertyType
+            );
 
             ShowAdapterMenu(
                 "View-model adaptor", 
@@ -99,6 +109,43 @@ namespace UnityUI_Editor
                 targetScript.viewModelAdapterTypeName,
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
             );
+
+            ShowAdapterMenu(
+                "Exception adaptor",
+                adapterTypeNames,
+                targetScript.exceptionAdapterTypeName,
+                (newValue) => targetScript.exceptionAdapterTypeName = newValue
+            );
+
+            var adaptedExceptionPropertyType = typeof(Exception);
+            if (!string.IsNullOrEmpty(targetScript.exceptionAdapterTypeName))
+            {
+                var adapterType = TypeResolver.FindType(targetScript.exceptionAdapterTypeName);
+                if (adapterType != null)
+                {
+                    var adapterAttribute = adapterType
+                        .GetCustomAttributes(typeof(AdapterAttribute), false)
+                        .Cast<AdapterAttribute>()
+                        .FirstOrDefault();
+                    if (adapterAttribute != null)
+                    {
+                        adaptedExceptionPropertyType = adapterAttribute.OutputType;
+                    }
+                }
+            }
+
+            var exceptionViewModelProperties = GetBindableViewModelProperties(targetScript);
+            ShowViewModelPropertySelector(
+                "Exception property",
+                targetScript, 
+                exceptionViewModelProperties,
+                updatedValue => targetScript.exceptionViewModelName = updatedValue,
+                targetScript.exceptionViewModelName,
+                updatedValue => targetScript.exceptionPropertyName = updatedValue,
+                targetScript.exceptionPropertyName,
+                adaptedExceptionPropertyType
+            );
+
         }
 
         /// <summary>
@@ -142,28 +189,45 @@ namespace UnityUI_Editor
             );
         }
 
-
         /// <summary>
         /// Get a list of all the methods in the bound view model of a specific type that we can bind to.
         /// </summary>
         private PropertyInfo[] GetBindableViewModelProperties(TwoWayPropertyBinding target)
         {
-            return target.GetAvailableViewModelTypes()
+            return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .ToArray();
         }
 
-        private void ShowViewModelPropertySelector(TwoWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType)
+        private void ShowViewModelPropertySelector(
+            string label,
+            TwoWayPropertyBinding target, 
+            PropertyInfo[] bindableProperties,
+            Action<string> viewModelNameSetter,
+            string viewModelName,
+            Action<string> propertyNameSetter,
+            string propertyName,
+            Type viewPropertyType
+            )
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("View-model property");
+            EditorGUILayout.PrefixLabel(label);
 
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
 
             if (GUILayout.Button(new GUIContent(target.viewModelPropertyName), EditorStyles.popup))
             {
-                ShowViewModelPropertyMenu(target, bindableProperties, viewPropertyType, dropdownPosition);
+                ShowViewModelPropertyMenu(
+                    target, 
+                    bindableProperties,
+                    viewModelNameSetter,
+                    viewModelName,
+                    propertyNameSetter,
+                    propertyName,
+                    viewPropertyType, 
+                    dropdownPosition
+                );
             }
 
             EditorGUILayout.EndHorizontal();
@@ -172,7 +236,16 @@ namespace UnityUI_Editor
         /// <summary>
         /// Draws the dropdown menu for picking a property in the view model to bind to.
         /// </summary>
-        private void ShowViewModelPropertyMenu(TwoWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType, Rect position)
+        private void ShowViewModelPropertyMenu(
+            TwoWayPropertyBinding target, 
+            PropertyInfo[] bindableProperties,
+            Action<string> viewModelNameSetter,
+            string viewModelName,
+            Action<string> propertyNameSetter,
+            string propertyName,
+            Type viewPropertyType, 
+            Rect position
+        )
         {
             var selectedIndex = Array.IndexOf(
                 bindableProperties.Select(p => p.ReflectedType + p.Name).ToArray(),
@@ -187,7 +260,14 @@ namespace UnityUI_Editor
                 .ToArray();
 
             InspectorUtils.ShowCustomSelectionMenu(
-                index => SetViewModelProperty(target, bindableProperties[index]), 
+                index => SetViewModelProperty(
+                    target, 
+                    bindableProperties[index], 
+                    viewModelNameSetter, 
+                    viewModelName,
+                    propertyNameSetter,
+                    propertyName
+                ), 
                 options, 
                 selectedIndex, 
                 position
@@ -197,19 +277,26 @@ namespace UnityUI_Editor
         /// <summary>
         /// Set up the viewModelName and viewModelPropertyname in the TwoWayPropertyBinding we're editing.
         /// </summary>
-        private void SetViewModelProperty(TwoWayPropertyBinding target, PropertyInfo propertyInfo)
+        private void SetViewModelProperty(
+            TwoWayPropertyBinding target, 
+            PropertyInfo propertyInfo,
+            Action<string> viewModelNameSetter,
+            string viewModelName,
+            Action<string> propertyNameSetter,
+            string propertyName
+        )
         {
             UpdateProperty(
-                updatedValue => target.viewModelName = updatedValue,
-                target.viewModelName,
+                viewModelNameSetter,
+                viewModelName,
                 propertyInfo.ReflectedType.Name
             );
 
             UpdateProperty(
-                updatedValue => target.viewModelPropertyName = updatedValue,
-                target.viewModelPropertyName,
+                propertyNameSetter,
+                propertyName,
                 propertyInfo.Name
-                );
+            );
         }
     }
 }

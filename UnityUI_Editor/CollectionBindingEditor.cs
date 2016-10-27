@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityUI;
 using UnityUI.Binding;
+using UnityUI.Internal;
 using UnityUI_Editor;
 
 namespace UnityUI_Editor
@@ -37,7 +38,7 @@ namespace UnityUI_Editor
 
         private PropertyInfo[] GetBindableViewModelCollections(CollectionBinding target)
         {
-            return target.GetAvailableViewModelTypes()
+            return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .Where(property => typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 .Where(property => !typeof(string).IsAssignableFrom(property.PropertyType))

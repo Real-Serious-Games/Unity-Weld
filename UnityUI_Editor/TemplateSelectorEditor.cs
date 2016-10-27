@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityUI.Binding;
+using UnityUI.Internal;
 using UnityUI_Editor;
 
 namespace UnityTools.UnityUI_Editor
@@ -11,6 +12,7 @@ namespace UnityTools.UnityUI_Editor
     [CustomEditor(typeof(TemplateSelector))]
     class TemplateSelectorEditor : BaseBindingEditor
     {
+
         public override void OnInspectorGUI()
         {
             // Initialise everything
@@ -33,7 +35,7 @@ namespace UnityTools.UnityUI_Editor
 
         private PropertyInfo[] GetBindableViews(TemplateSelector target)
         {
-            return target.GetAvailableViewModelTypes()
+            return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .ToArray();
         }

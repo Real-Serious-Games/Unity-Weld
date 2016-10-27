@@ -6,6 +6,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUI.Binding;
+using UnityUI.Internal;
 
 namespace UnityUI_Editor
 {
@@ -64,7 +65,7 @@ namespace UnityUI_Editor
             Type adaptedViewPropertyType = viewPropertyType;
             if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
             {
-                var adapterType = Type.GetType(targetScript.viewAdapterTypeName);
+                var adapterType = TypeResolver.FindType(targetScript.viewAdapterTypeName);
                 if (adapterType != null)
                 {
                     var adapterAttribute = adapterType
@@ -153,7 +154,7 @@ namespace UnityUI_Editor
         /// </summary>
         private PropertyInfo[] GetBindableViewModelProperties(OneWayPropertyBinding target)
         {
-            return target.GetAvailableViewModelTypes()
+            return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .ToArray();
         }
@@ -173,7 +174,7 @@ namespace UnityUI_Editor
                 updatedValue => target.viewModelPropertyName = updatedValue,
                 target.viewModelPropertyName,
                 property.Name
-                );
+            );
         }
     }
 }
