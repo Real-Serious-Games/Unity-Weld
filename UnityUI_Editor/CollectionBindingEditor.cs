@@ -10,10 +10,10 @@ using UnityUI;
 using UnityUI.Binding;
 using UnityUI_Editor;
 
-namespace UnityTools.UnityUI_Editor
+namespace UnityUI_Editor
 {
     [CustomEditor(typeof(CollectionBinding))]
-    class CollectionBindingEditor : Editor
+    class CollectionBindingEditor : BaseBindingEditor
     {
         public override void OnInspectorGUI()
         {
@@ -26,12 +26,11 @@ namespace UnityTools.UnityUI_Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Collection template");
 
-            var newTemplate = (TemplateBinding)EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true);
-            if (targetScript.template != newTemplate)
-            {
-                targetScript.template = newTemplate;
-                InspectorUtils.MarkSceneDirty(targetScript.gameObject);
-            }
+            UpdateProperty(
+                updatedValue => targetScript.template = updatedValue,
+                targetScript.template,
+                (TemplateBinding)EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true)
+            );
 
             EditorGUILayout.EndHorizontal();
         }
@@ -93,25 +92,17 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(CollectionBinding target, PropertyInfo property)
         {
-            var viewModelName = property.ReflectedType.Name;
-            var viewModelPropertyName = property.Name;
-            var dirty = false;
+            UpdateProperty(
+                updatedValue => target.viewModelName = updatedValue,
+                target.viewModelName,
+                property.ReflectedType.Name
+            );
 
-            if (target.viewModelName != viewModelName)
-            {
-                dirty = true;
-                target.viewModelName = viewModelName;
-            }
-            if (target.viewModelPropertyName != viewModelPropertyName)
-            {
-                dirty = true;
-                target.viewModelPropertyName = viewModelPropertyName;
-            }
-
-            if (dirty)
-            {
-                InspectorUtils.MarkSceneDirty(target.gameObject);
-            }
+            UpdateProperty(
+                updatedValue => target.viewModelPropertyName = updatedValue,
+                target.viewModelPropertyName,
+                property.Name
+            );
         }
     }
 }

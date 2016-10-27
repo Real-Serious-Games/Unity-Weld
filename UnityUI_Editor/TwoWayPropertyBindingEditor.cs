@@ -10,16 +10,14 @@ using UnityUI;
 using UnityUI.Binding;
 using UnityUI_Editor;
 
-namespace UnityTools.UnityUI_Editor
+namespace UnityUI_Editor
 {
     [CustomEditor(typeof(TwoWayPropertyBinding))]
-    class PropertyBindingEditor : Editor
+    class PropertyBindingEditor : BaseBindingEditor
     {
         public override void OnInspectorGUI()
         {
             var targetScript = (TwoWayPropertyBinding)target;
-
-            var dirty = false;
 
             var events = UnityEventWatcher
                 .GetBindableEvents(targetScript.gameObject)
@@ -36,14 +34,14 @@ namespace UnityTools.UnityUI_Editor
             if (selectedEventIndex >= 0)
             {
                 UpdateProperty(
-                    () => targetScript.uiEventName,
                     updatedValue => targetScript.uiEventName = updatedValue,
+                    targetScript.uiEventName,
                     events[selectedEventIndex].Name
                 );
 
                 UpdateProperty(
-                    () => targetScript.boundComponentType,
                     updatedValue => targetScript.boundComponentType = updatedValue,
+                    targetScript.boundComponentType,
                     events[selectedEventIndex].ComponentType.Name
                 );
             }
@@ -53,8 +51,8 @@ namespace UnityTools.UnityUI_Editor
             if (selectedPropertyIndex >= 0)
             {
                 UpdateProperty(
-                    () => targetScript.uiPropertyName,
                     updatedValue => targetScript.uiPropertyName = updatedValue,
+                    targetScript.uiPropertyName,
                     properties[selectedPropertyIndex].PropertyInfo.Name
                 );
                 viewPropertyType = properties[selectedPropertyIndex].PropertyInfo.PropertyType;
@@ -69,8 +67,8 @@ namespace UnityTools.UnityUI_Editor
                 adapterTypeNames, 
                 targetScript.viewAdapterTypeName,
                 newValue => UpdateProperty(
-                    () => targetScript.viewAdapterTypeName, 
                     updatedValue => targetScript.viewAdapterTypeName = updatedValue,
+                    targetScript.viewAdapterTypeName,
                     newValue
                 )
             );
@@ -101,11 +99,6 @@ namespace UnityTools.UnityUI_Editor
                 targetScript.viewModelAdapterTypeName,
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
             );
-
-            if (dirty)
-            {
-                InspectorUtils.MarkSceneDirty(targetScript.gameObject);
-            }
         }
 
         /// <summary>
@@ -206,75 +199,17 @@ namespace UnityTools.UnityUI_Editor
         /// </summary>
         private void SetViewModelProperty(TwoWayPropertyBinding target, PropertyInfo propertyInfo)
         {
-            var dirty = false;
+            UpdateProperty(
+                updatedValue => target.viewModelName = updatedValue,
+                target.viewModelName,
+                propertyInfo.ReflectedType.Name
+            );
 
-            var newViewModelTypeName = propertyInfo.ReflectedType.Name;
-            if (target.viewModelName != newViewModelTypeName)
-            { 
-                target.viewModelName = newViewModelTypeName;
-                dirty = true;
-            }
-
-            var newViewModelPropertyName = propertyInfo.Name;
-            if (target.viewModelPropertyName != newViewModelPropertyName)
-            {
-                target.viewModelPropertyName = newViewModelPropertyName;
-                dirty = true;
-            }
-
-            if (dirty)
-            {
-                InspectorUtils.MarkSceneDirty(target.gameObject);
-            }
-        }
-
-        /// <summary>
-        /// Display the adapters popup menu.
-        /// </summary>
-        private static void ShowAdapterMenu(
-            string label,
-            string[] adapterTypeNames,
-            string curValue,
-            Action<string> valueUpdated
-        )
-        {
-            var adapterMenu = new string[] { "None" }
-                .Concat(adapterTypeNames)
-                .Select(typeName => new GUIContent(typeName))
-                .ToArray();
-
-            var curSelectionIndex = Array.IndexOf(adapterTypeNames, curValue) + 1; // +1 to account for 'None'.
-            var newSelectionIndex = EditorGUILayout.Popup(
-                    new GUIContent(label),
-                    curSelectionIndex,
-                    adapterMenu
+            UpdateProperty(
+                updatedValue => target.viewModelPropertyName = updatedValue,
+                target.viewModelPropertyName,
+                propertyInfo.Name
                 );
-
-            if (newSelectionIndex != curSelectionIndex)
-            {
-                if (newSelectionIndex == 0)
-                {
-                    valueUpdated(null); // No adapter selected.
-                }
-                else
-                {
-                    valueUpdated(adapterTypeNames[newSelectionIndex - 1]); // -1 to account for 'None'.
-                }
-            }
-        }
-
-        /// <summary>
-        /// Sets the specified value and sets dirty to true if it doesn't match the old value.
-        /// </summary>
-        private void UpdateProperty<TValue>(Func<TValue> getter, Action<TValue> setter, TValue newValue) 
-            where TValue : class
-        {
-            var oldValue = getter();
-            if (newValue != oldValue)
-            {
-                setter(newValue);
-                InspectorUtils.MarkSceneDirty(((Component)target).gameObject);
-            }
         }
     }
 }
