@@ -216,7 +216,7 @@ namespace UnityUI_Editor
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
 
-            if (GUILayout.Button(new GUIContent(target.viewModelPropertyName), EditorStyles.popup))
+            if (GUILayout.Button(new GUIContent(propertyName), EditorStyles.popup))
             {
                 ShowViewModelPropertyMenu(
                     target, 
