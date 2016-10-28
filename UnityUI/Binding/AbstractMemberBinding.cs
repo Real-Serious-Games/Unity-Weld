@@ -87,7 +87,7 @@ namespace UnityUI.Binding
             }
 
             //todo: Need to cache adapter types.
-            var adapterType = TypeResolver.FindType(adapterTypeName);
+            var adapterType = TypeResolver.FindAdapterType(adapterTypeName);
             if (adapterType == null)
             {
                 throw new ApplicationException("Could not find adapter type '" + adapterTypeName + "'.");

@@ -102,9 +102,9 @@ namespace UnityUI.Internal
         /// <summary>
         /// Find a particular type by its short name.
         /// </summary>
-        public static Type FindType(string typeName)
+        public static Type FindAdapterType(string typeName)
         {
-            var matchingTypes = GetAllTypes().Where(type => type.Name == typeName);
+            var matchingTypes = TypesWithAdapterAttribute.Where(type => type.Name == typeName);
             if (!matchingTypes.Any())
             {
                 return null;
