@@ -47,6 +47,11 @@ namespace UnityUI.Binding
             try
             {
                 dest.SetValue(source.GetValue());
+
+                if (exception != null)
+                {
+                    exception.SetValue(null);
+                }
             }
             catch (Exception ex)
             {
