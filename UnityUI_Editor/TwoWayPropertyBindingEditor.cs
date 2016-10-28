@@ -59,13 +59,14 @@ namespace UnityUI_Editor
                 viewPropertyType = properties[selectedPropertyIndex].PropertyInfo.PropertyType;
             }
 
-            var adapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+            var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+                .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
                 .Select(type => type.Name)
                 .ToArray();
 
             ShowAdapterMenu(
                 "View adaptor", 
-                adapterTypeNames, 
+                viewAdapterTypeNames, 
                 targetScript.viewAdapterTypeName,
                 newValue => UpdateProperty(
                     updatedValue => targetScript.viewAdapterTypeName = updatedValue,
@@ -80,10 +81,7 @@ namespace UnityUI_Editor
                 var adapterType = TypeResolver.FindAdapterType(targetScript.viewAdapterTypeName);
                 if (adapterType != null)
                 {
-                    var adapterAttribute = adapterType
-                        .GetCustomAttributes(typeof(AdapterAttribute), false)
-                        .Cast<AdapterAttribute>()
-                        .FirstOrDefault();
+                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
                     if (adapterAttribute != null)
                     {
                         adaptedViewPropertyType = adapterAttribute.InputType;
@@ -103,16 +101,26 @@ namespace UnityUI_Editor
                 adaptedViewPropertyType
             );
 
+            var viewModelAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+                .Where(type => adaptedViewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType)
+                .Select(type => type.Name)
+                .ToArray();
+
             ShowAdapterMenu(
                 "View-model adaptor", 
-                adapterTypeNames, 
+                viewModelAdapterTypeNames, 
                 targetScript.viewModelAdapterTypeName,
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
             );
 
+            var expectionAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+                .Where(type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception))
+                .Select(type => type.Name)
+                .ToArray();
+
             ShowAdapterMenu(
                 "Exception adaptor",
-                adapterTypeNames,
+                expectionAdapterTypeNames,
                 targetScript.exceptionAdapterTypeName,
                 (newValue) => targetScript.exceptionAdapterTypeName = newValue
             );
@@ -120,13 +128,10 @@ namespace UnityUI_Editor
             var adaptedExceptionPropertyType = typeof(Exception);
             if (!string.IsNullOrEmpty(targetScript.exceptionAdapterTypeName))
             {
-                var adapterType = TypeResolver.FindType(targetScript.exceptionAdapterTypeName);
+                var adapterType = TypeResolver.FindAdapterType(targetScript.exceptionAdapterTypeName);
                 if (adapterType != null)
                 {
-                    var adapterAttribute = adapterType
-                        .GetCustomAttributes(typeof(AdapterAttribute), false)
-                        .Cast<AdapterAttribute>()
-                        .FirstOrDefault();
+                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
                     if (adapterAttribute != null)
                     {
                         adaptedExceptionPropertyType = adapterAttribute.OutputType;

@@ -119,6 +119,18 @@ namespace UnityUI.Internal
         }
 
         /// <summary>
+        /// Find the [Adapter] attribute for a particular type.
+        /// Returns null if there is no such attribute.
+        /// </summary>
+        public static AdapterAttribute FindAdapterAttribute(Type adapterType)
+        {
+            return adapterType
+                .GetCustomAttributes(typeof(AdapterAttribute), false)
+                .Cast<AdapterAttribute>()
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// Return the type of a view model bound by an IViewModelBinding
         /// </summary>
         private static Type GetBoundViewType(IViewModelBinding binding)

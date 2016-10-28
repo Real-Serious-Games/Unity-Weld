@@ -44,13 +44,14 @@ namespace UnityUI_Editor
                 viewPropertyType = uiProperties[selectedPropertyIndex].PropertyInfo.PropertyType;
             }
 
-            var adapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+            var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
+                .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
                 .Select(type => type.Name)
                 .ToArray();
 
             ShowAdapterMenu(
                 "View adaptor",
-                adapterTypeNames,
+                viewAdapterTypeNames,
                 targetScript.viewAdapterTypeName,
                 newValue =>
                 {
@@ -68,10 +69,7 @@ namespace UnityUI_Editor
                 var adapterType = TypeResolver.FindAdapterType(targetScript.viewAdapterTypeName);
                 if (adapterType != null)
                 {
-                    var adapterAttribute = adapterType
-                        .GetCustomAttributes(typeof(AdapterAttribute), false)
-                        .Cast<AdapterAttribute>()
-                        .FirstOrDefault();
+                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
                     if (adapterAttribute != null)
                     {
                         adaptedViewPropertyType = adapterAttribute.InputType;
