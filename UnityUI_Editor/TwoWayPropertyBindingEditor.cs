@@ -249,7 +249,7 @@ namespace UnityUI_Editor
         {
             var selectedIndex = Array.IndexOf(
                 bindableProperties.Select(p => p.ReflectedType + p.Name).ToArray(),
-                target.viewModelName + target.viewModelPropertyName
+                viewModelName + propertyName
             );
 
             var options = bindableProperties
