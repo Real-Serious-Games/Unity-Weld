@@ -105,6 +105,11 @@ namespace UnityUI.Binding
         /// </summary>
         public abstract void Disconnect();
 
+        public void Awake()
+        {
+            Connect();
+        }
+
         /// <summary>
         /// Clean up when the game object is destroyed.
         /// </summary>
