@@ -60,13 +60,6 @@ namespace UnityUI.Binding
                     return newViewModelBinding;
                 }
 
-
-                // Stop if we found what we're looking for or have reached the top level.
-                if (trans.GetComponent<BindingRoot>() != null)
-                {
-                    break;
-                }
-
                 trans = trans.parent;
             }
 

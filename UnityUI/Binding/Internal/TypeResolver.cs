@@ -9,11 +9,11 @@ namespace UnityUI.Internal
     /// <summary>
     /// Helper class for setting up the factory for use in the editor.
     /// </summary>
-    internal static class TypeResolver
+    public static class TypeResolver
     {
         private static Type[] typesWithBindingAttribute;
 
-        private static Type[] TypesWithBindingAttribute
+        public static Type[] TypesWithBindingAttribute
         {
             get
             {
@@ -28,7 +28,7 @@ namespace UnityUI.Internal
 
         private static Type[] typesWithAdapterAttribute;
 
-        internal static Type[] TypesWithAdapterAttribute
+        public static Type[] TypesWithAdapterAttribute
         {
             get
             {
@@ -182,12 +182,6 @@ namespace UnityUI.Internal
 
                         yield return viewModel.GetType();
                     }
-                }
-
-                // Stop at the top level
-                if (trans.GetComponent<BindingRoot>() != null)
-                {
-                    break;
                 }
 
                 trans = trans.parent;

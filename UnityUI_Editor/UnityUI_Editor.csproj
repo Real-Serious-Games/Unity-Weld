@@ -44,10 +44,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseBindingEditor.cs" />
     <Compile Include="CollectionBindingEditor.cs" />
     <Compile Include="TemplateSelectorEditor.cs" />
     <Compile Include="TwoWayPropertyBindingEditor.cs" />
-    <Compile Include="TypeResolver.cs" />
     <Compile Include="EventBindingEditor.cs" />
     <Compile Include="InspectorUtils.cs" />
     <Compile Include="OneWayPropertyBindingEditor.cs" />

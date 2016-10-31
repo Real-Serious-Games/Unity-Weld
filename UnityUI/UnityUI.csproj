@@ -51,7 +51,6 @@
     <Compile Include="Binding\Adapters\FloatToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\StringToFloatAdapter.cs" />
     <Compile Include="Binding\BindingAttribute.cs" />
-    <Compile Include="Binding\BindingRoot.cs" />
     <Compile Include="Binding\BoundObservableList.cs" />
     <Compile Include="Binding\CollectionBinding.cs" />
     <Compile Include="Binding\DropdownBinding.cs" />
@@ -62,6 +61,7 @@
     <Compile Include="Binding\Internal\PropertyFinder.cs" />
     <Compile Include="Binding\Internal\PropertySync.cs" />
     <Compile Include="Binding\Internal\PropertyWatcher.cs" />
+    <Compile Include="Binding\Internal\TypeResolver.cs" />
     <Compile Include="Binding\Internal\UnityEventWatcher.cs" />
     <Compile Include="Binding\MonoBehaviourBinding.cs" />
     <Compile Include="Binding\NotifyCollectionChangedEventArgs.cs" />
