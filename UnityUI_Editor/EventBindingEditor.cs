@@ -86,14 +86,14 @@ namespace UnityUI_Editor
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowViewModelMethodDropdown(EventBinding target, MethodInfo[] bindableViewModelMethods, Type[] viewEventArgs, Rect position)
+        private void ShowViewModelMethodDropdown(EventBinding target, MethodInfo[] bindableMethods, Type[] viewEventArgs, Rect position)
         {
-            var selectedIndex = Array.IndexOf(
-                bindableViewModelMethods.Select(m => m.ReflectedType + m.Name).ToArray(),
-                target.viewModelName + target.viewModelMethodName
-            );
+            var propertyNames = bindableMethods
+                .Select(method => method.ReflectedType.Name + "." + method.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, target.viewModelMethodName);
 
-            var options = bindableViewModelMethods.Select(m =>
+            var options = bindableMethods.Select(m =>
                 new InspectorUtils.MenuItem(
                     new GUIContent(m.ReflectedType + "/" + m.Name + "(" + ParameterInfoToString(m.GetParameters()) + ")"),
                     MethodMatchesSignature(m, viewEventArgs)
@@ -101,7 +101,7 @@ namespace UnityUI_Editor
             ).ToArray();
 
             InspectorUtils.ShowCustomSelectionMenu(
-                index => SetBoundMethod(target, bindableViewModelMethods[index]),
+                index => SetBoundMethod(target, bindableMethods[index]),
                 options,
                 selectedIndex,
                 position);
@@ -146,15 +146,9 @@ namespace UnityUI_Editor
         private void SetBoundMethod(EventBinding target, MethodInfo method)
         {
             UpdateProperty(
-                updatedValue => target.viewModelName = updatedValue,
-                target.viewModelName,
-                method.ReflectedType.Name
-            );
-
-            UpdateProperty(
                 updatedValue => target.viewModelMethodName = updatedValue,
                 target.viewModelMethodName,
-                method.Name
+                method.ReflectedType.Name + "." + method.Name
             );
         }
     }

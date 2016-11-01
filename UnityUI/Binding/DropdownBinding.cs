@@ -76,19 +76,13 @@ namespace UnityUI.Binding
 
         public override void Connect()
         {
-            var viewModelBinding = GetViewModelBinding();
-            var viewModel = viewModelBinding.BoundViewModel;
             dropdown = GetComponent<Dropdown>();
+
+            var selectionPropertyEndPoint = MakeViewModelEndPoint(viewModelSelectionPropertyName, selectionUIToViewModelAdapter);
 
             selectionPropertySync = new PropertySync(
                 // Source
-                new PropertyEndPoint(
-                    viewModel,
-                	viewModelSelectionPropertyName,
-                    CreateAdapter(selectionUIToViewModelAdapter),
-                    "view-model",
-                    this
-                ),
+                selectionPropertyEndPoint,
 
                 // Dest
                 new PropertyEndPoint(
@@ -101,24 +95,15 @@ namespace UnityUI.Binding
 
                 // Errors, exceptions and validation.
                 !string.IsNullOrEmpty(exceptionPropertyName)
-                    ? new PropertyEndPoint(
-                    viewModel,
-                    exceptionPropertyName,
-                    CreateAdapter(exceptionAdapterTypeName),
-                        "view-model",
-                    this
-                    )
+                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName)
                     : null
                     ,
 
                 this
             );
 
-            selectionPropertyWatcher = new PropertyWatcher(
-                viewModel,
-                viewModelSelectionPropertyName,
-                () => selectionPropertySync.SyncFromSource()
-            );
+            selectionPropertyWatcher = selectionPropertyEndPoint
+                .Watch(() => selectionPropertySync.SyncFromSource());
 
             selectionEventWatcher = new UnityEventWatcher(
                 dropdown,
@@ -132,13 +117,7 @@ namespace UnityUI.Binding
 
             optionsPropertySync = new PropertySync(
                 // Source
-                new PropertyEndPoint(
-                    viewModel,
-                viewModelOptionsPropertyName,
-                    null, // One-way only. No dest-to source adapter required.
-                    "view-model",
-                    this
-                ),
+                MakeViewModelEndPoint(viewModelOptionsPropertyName, null),
 
                 // Dest
                 new PropertyEndPoint(

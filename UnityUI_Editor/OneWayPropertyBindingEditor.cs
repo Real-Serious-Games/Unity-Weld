@@ -127,10 +127,10 @@ namespace UnityUI_Editor
         /// </summary>
         private void ShowViewModelPropertyDropdown(OneWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType, Rect position)
         { 
-            var selectedIndex = Array.IndexOf(
-                bindableProperties.Select(p => p.ReflectedType.Name + p.Name).ToArray(),
-                target.viewModelName + target.viewModelPropertyName
-            );
+            var propertyNames = bindableProperties
+                .Select(property => property.ReflectedType.Name + "." + property.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, target.viewModelPropertyName);
 
             var options = bindableProperties
                 .Select(p => new InspectorUtils.MenuItem(
@@ -163,15 +163,9 @@ namespace UnityUI_Editor
         private void SetViewModelProperty(OneWayPropertyBinding target, PropertyInfo property)
         {
             UpdateProperty(
-                updatedValue => target.viewModelName = updatedValue,
-                target.viewModelName,
-                property.ReflectedType.Name
-            );
-
-            UpdateProperty(
                 updatedValue => target.viewModelPropertyName = updatedValue,
                 target.viewModelPropertyName,
-                property.Name
+                property.ReflectedType.Name + "." + property.Name
             );
         }
     }

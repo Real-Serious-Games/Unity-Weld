@@ -32,20 +32,13 @@ namespace UnityUI.Binding
         /// </summary>
         private UnityEventWatcher eventWatcher;
 
-        /// <summary>
-        /// Cached view-model, after connection.
-        /// </summary>
-        private object viewModel;
-
-        /// <summary>
-        /// Cached method to call on the view-model.
-        /// </summary>
-        private MethodInfo viewModelMethod;
-
         public override void Connect()
         {
-            viewModel = GetViewModelBinding().BoundViewModel;
-            viewModelMethod = viewModel.GetType().GetMethod(viewModelMethodName, new Type[0]);
+            string methodName;
+            object viewModel;
+            ParseViewModelPropertyName(viewModelMethodName, out methodName, out viewModel);
+
+            var viewModelMethod = viewModel.GetType().GetMethod(methodName, new Type[0]);
 
             eventWatcher = new UnityEventWatcher(GetComponent(boundComponentType), uiEventName, 
                 () => viewModelMethod.Invoke(viewModel, new object[0])
@@ -59,9 +52,6 @@ namespace UnityUI.Binding
                 eventWatcher.Dispose();
                 eventWatcher = null;
             }
-
-            viewModel = null;
-            viewModelMethod = null;
         }
     }
 }

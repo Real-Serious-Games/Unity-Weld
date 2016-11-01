@@ -1,4 +1,6 @@
-﻿namespace UnityUI.Binding
+﻿using UnityEngine;
+
+namespace UnityUI.Binding
 {
     /// <summary>
     /// Template for use in collection bindings.

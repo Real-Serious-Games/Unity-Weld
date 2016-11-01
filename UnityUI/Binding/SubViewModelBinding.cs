@@ -23,37 +23,10 @@ namespace UnityUI.Binding
             {
                 if (boundViewModel == null)
                 {
-                    SetUpBoundViewModel();
+                    UpdateViewModel();
                 }
                 return boundViewModel;
             }
-        }
-
-        /// <summary>
-        /// Initialise the bound view model by getting the property from the parent view model.
-        /// </summary>
-        private void SetUpBoundViewModel()
-        {
-            boundViewModel = GetBoundPropertyInfo()
-                .GetValue(GetViewModel(), null);
-        }
-
-        /// <summary>
-        /// Return the PropertyInfo of the property we're binding to.
-        /// </summary>
-        private PropertyInfo GetBoundPropertyInfo()
-        {
-            var propertyInfo = GetViewModelBinding()
-                .BoundViewModel.GetType()
-                .GetProperty(boundPropertyName);
-
-            if (propertyInfo == null)
-            {
-                throw new ApplicationException("Could not find property \"" + boundPropertyName +
-                    "\" on view model \"" + GetViewModelBinding().ViewModelTypeName + "\"");
-            }
-
-            return propertyInfo;
         }
 
         /// <summary>
@@ -72,32 +45,52 @@ namespace UnityUI.Binding
             }
         }
 
+        /// <summary>
+        /// Watches the view-model proper for changes.
+        /// </summary>
+        private PropertyWatcher viewModelPropertyWatcher;
+
+        /// <summary>
+        /// Initialise the bound view model by getting the property from the parent view model.
+        /// </summary>
+        private void UpdateViewModel()
+        {
+            string propertyName;
+            object viewModel;
+            ParseViewModelPropertyName(boundPropertyName, out propertyName, out viewModel);
+
+            var propertyInfo = viewModel.GetType().GetProperty(propertyName);
+            if (propertyInfo == null)
+            {
+                throw new ApplicationException("Could not find property \"" + propertyName + "\" on view model \"" + viewModel.GetType().Name + "\"");
+            }
+
+            boundViewModel = propertyInfo.GetValue(viewModel, null);
+        }
+
         public override void Connect()
         {
-            var notifyPropertyChanged = GetViewModel() as INotifyPropertyChanged;
-            if (notifyPropertyChanged != null)
-            {
-                notifyPropertyChanged.PropertyChanged += NotifyPropertyChanged_PropertyChanged;
-            }
+            string propertyName;
+            object viewModel;
+            ParseViewModelPropertyName(boundPropertyName, out propertyName, out viewModel);
+
+            viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
+
+            UpdateViewModel();
         }
 
         public override void Disconnect()
         {
-            var notifyPropertyChanged = GetViewModel() as INotifyPropertyChanged;
-            if (notifyPropertyChanged != null)
+            if (viewModelPropertyWatcher != null)
             {
-                notifyPropertyChanged.PropertyChanged -= NotifyPropertyChanged_PropertyChanged;
+                viewModelPropertyWatcher.Dispose();
+                viewModelPropertyWatcher = null;
             }
         }
 
-        private void NotifyPropertyChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void NotifyPropertyChanged_PropertyChanged()
         {
-            if (e.PropertyName != boundPropertyName)
-            {
-                return;
-            }
-
-            SetUpBoundViewModel();
+            UpdateViewModel();
 
             // Rebind all children.
             foreach (var memberBinding in GetComponentsInChildren<AbstractMemberBinding>())

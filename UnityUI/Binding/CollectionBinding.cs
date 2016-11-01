@@ -17,12 +17,7 @@ namespace UnityUI.Binding
         /// <summary>
         /// All the child objects that have been created, indexed by the view they are connected to.
         /// </summary>
-        IDictionary<object, GameObject> generatedChildren = new Dictionary<object, GameObject>();
-
-        /// <summary>
-        /// Collection that we have bound to.
-        /// </summary>
-        IEnumerable viewModelCollectionValue;
+        private IDictionary<object, GameObject> generatedChildren = new Dictionary<object, GameObject>();
 
         /// <summary>
         /// Template to clone for instances of objects within the collection.
@@ -32,29 +27,49 @@ namespace UnityUI.Binding
         public TemplateBinding template;
 
         /// <summary>
-        /// Cached view model binding, set on connection.
+        /// View-model cached during connection.
         /// </summary>
-        private IViewModelBinding viewModelBinding;
+        private object viewModel;
+
+        /// <summary>
+        /// Collection that we have bound to.
+        /// </summary>
+        private IEnumerable viewModelCollectionValue;
+
+        /// <summary>
+        /// Watches the view model property for changes.
+        /// </summary>
+        private PropertyWatcher propertyWatcher;
 
         public override void Connect()
         {
-            this.viewModelBinding = GetViewModelBinding();
+            string propertyName;
+            object viewModel;
+            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModel);
 
-            var notifyPropertyChanged = viewModelBinding.BoundViewModel as INotifyPropertyChanged;
-            if (notifyPropertyChanged != null)
-            {
-                notifyPropertyChanged.PropertyChanged += NotifyPropertyChanged_PropertyChanged;
-            }
+            this.viewModel = viewModel;
+
+            propertyWatcher = new PropertyWatcher(viewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
 
             BindCollection();
         }
 
-        private void NotifyPropertyChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == viewModelPropertyName)
+        public override void Disconnect()
             {
-                RebindCollection();
+            UnbindCollection();
+
+            if (propertyWatcher != null)
+            {
+                propertyWatcher.Dispose();
+                propertyWatcher = null;
             }
+
+            viewModel = null;
+        }
+
+        private void NotifyPropertyChanged_PropertyChanged()
+        {
+            RebindCollection();
         }
 
         private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -119,22 +134,6 @@ namespace UnityUI.Binding
             newObject.InitChildBindings(viewModel);
         }
 
-        public override void Disconnect()
-        {
-            UnbindCollection();
-
-            if (this.viewModelBinding != null)
-            {
-                var notifyPropertyChanged = viewModelBinding.BoundViewModel as INotifyPropertyChanged;
-                if (notifyPropertyChanged != null)
-                {
-                    notifyPropertyChanged.PropertyChanged -= NotifyPropertyChanged_PropertyChanged;
-                }
-
-                viewModelBinding = null;
-            }
-
-        }
 
         /// <summary>
         /// Bind to the view model collection so we can monitor it for changes.
@@ -142,25 +141,22 @@ namespace UnityUI.Binding
         private void BindCollection()
         {
             // Bind view model.
-            var viewModelCollectionProperty = viewModelBinding
-                .BoundViewModel.GetType()
-                .GetProperty(viewModelPropertyName);
+            var viewModelCollectionProperty = viewModel.GetType().GetProperty(viewModelPropertyName);
             if (viewModelCollectionProperty == null)
             {
-                throw new ApplicationException("Expected property " + viewModelPropertyName + " not found on type " + viewModelName);
+                throw new ApplicationException("Expected property " + viewModelPropertyName + ", not it wasn't found on type.");
             }
 
             // Get value from view model.
-            var viewModelValue = viewModelCollectionProperty.GetValue(viewModelBinding.BoundViewModel, null);
+            var viewModelValue = viewModelCollectionProperty.GetValue(viewModel, null);
             if (viewModelValue == null)
             {
-                throw new ApplicationException("Cannot bind to null property in view: " + viewModelName + "." + viewModelPropertyName);
+                throw new ApplicationException("Cannot bind to null property in view: " + viewModelPropertyName);
             }
 
             if (!(viewModelValue is IEnumerable))
             {
-                throw new ApplicationException("Property " + viewModelName + "." + viewModelPropertyName
-                    + " is not a collection and cannot be used to bind collections.");
+                throw new ApplicationException("Property " + viewModelPropertyName + " is not a collection and cannot be used to bind collections.");
             }
             viewModelCollectionValue = (IEnumerable)viewModelValue;
 
@@ -199,6 +195,8 @@ namespace UnityUI.Binding
                 {
                     collectionChanged.CollectionChanged -= Collection_CollectionChanged;
                 }
+
+                viewModelCollectionValue = null;
             }
         }
 

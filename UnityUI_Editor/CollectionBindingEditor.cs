@@ -67,14 +67,14 @@ namespace UnityUI_Editor
         /// <summary>
         /// Draws the dropdown for selecting a method from bindableViewModelCollections
         /// </summary>
-        private void ShowCollectionSelectorDropdown(CollectionBinding targetScript, PropertyInfo[] bindableViewModelCollections, Rect position)
+        private void ShowCollectionSelectorDropdown(CollectionBinding targetScript, PropertyInfo[] bindableProperties, Rect position)
         {
-            var selectedIndex = Array.IndexOf(
-                bindableViewModelCollections.Select(m => m.ReflectedType + m.Name).ToArray(),
-                targetScript.viewModelName + targetScript.viewModelPropertyName
-            );
+            var propertyNames = bindableProperties
+                .Select(property => property.ReflectedType.Name + "." + property.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, targetScript.viewModelPropertyName);
 
-            var options = bindableViewModelCollections.Select(m =>
+            var options = bindableProperties.Select(m =>
                 new InspectorUtils.MenuItem(
                     new GUIContent(m.ReflectedType + "/" + m.Name),
                     true
@@ -82,7 +82,7 @@ namespace UnityUI_Editor
             ).ToArray();
 
             InspectorUtils.ShowCustomSelectionMenu(
-                index => SetViewModelProperty(targetScript, bindableViewModelCollections[index]),
+                index => SetViewModelProperty(targetScript, bindableProperties[index]),
                 options,
                 selectedIndex,
                 position);
@@ -94,15 +94,9 @@ namespace UnityUI_Editor
         private void SetViewModelProperty(CollectionBinding target, PropertyInfo property)
         {
             UpdateProperty(
-                updatedValue => target.viewModelName = updatedValue,
-                target.viewModelName,
-                property.ReflectedType.Name
-            );
-
-            UpdateProperty(
                 updatedValue => target.viewModelPropertyName = updatedValue,
                 target.viewModelPropertyName,
-                property.Name
+                property.ReflectedType.Name + "." + property.Name
             );
         }
     }

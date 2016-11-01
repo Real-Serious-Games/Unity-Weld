@@ -24,11 +24,6 @@ namespace UnityUI.Binding
         public GameObject templates;
 
         /// <summary>
-        /// Cached view model binding, set on connection.
-        /// </summary>
-        private IViewModelBinding viewModelBinding;
-
-        /// <summary>
         /// All available templates indexed by the view model the are for.
         /// </summary>
         private IDictionary<string, TemplateBinding> availableTemplates = new Dictionary<string, TemplateBinding>();
@@ -39,9 +34,19 @@ namespace UnityUI.Binding
         private TemplateBinding initalizedTemplate = null;
 
         /// <summary>
+        /// The view-model, cached during connection.
+        /// </summary>
+        private object viewModel;
+
+        /// <summary>
         /// The property of the view model that is being bound to
         /// </summary>
         private PropertyInfo viewModelProperty = null;
+
+        /// <summary>
+        /// Watches the view-model property for changes.
+        /// </summary>
+        private PropertyWatcher viewModelPropertyWatcher;
 
         /// <summary>
         /// Connect to the attached view model.
@@ -57,22 +62,21 @@ namespace UnityUI.Binding
                 availableTemplates.Add(template.ViewModelTypeName, template);
             }
 
-            this.viewModelBinding = GetViewModelBinding();
+            string propertyName;
+            object viewModel;
+            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModel);
 
-            // Subscribe to property changed events.
-            var notifyPropertyChanged = viewModelBinding.BoundViewModel as INotifyPropertyChanged;
-            if (notifyPropertyChanged != null)
-            {
-                notifyPropertyChanged.PropertyChanged += NotifyPropertyChanged_PropertyChanged;
-            }
+            this.viewModel = viewModel;
+
+            viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, 
+                () => InitalizeTemplate()
+            );
 
             // Get property from view model.
-            viewModelProperty = viewModelBinding
-                .BoundViewModel.GetType()
-                .GetProperty(viewModelPropertyName);
+            viewModelProperty = viewModel.GetType().GetProperty(viewModelPropertyName);
             if (viewModelProperty == null)
             {
-                throw new ApplicationException("Expected property " + viewModelPropertyName + " not found on type " + viewModelName);
+                throw new ApplicationException("Expected property " + viewModelPropertyName + ", but was not found.");
             }
 
             InitalizeTemplate();
@@ -87,24 +91,13 @@ namespace UnityUI.Binding
             DestroyTemplate();
             availableTemplates.Clear();
 
-            if (viewModelBinding != null)
+            if (viewModelPropertyWatcher != null)
             {
-                // Unsubscribe from property changed events.
-                var notifyPropertyChanged = viewModelBinding.BoundViewModel as INotifyPropertyChanged;
-                if (notifyPropertyChanged != null)
-                {
-                    notifyPropertyChanged.PropertyChanged -= NotifyPropertyChanged_PropertyChanged;
-                }
-            }
-            viewModelBinding = null;
+                viewModelPropertyWatcher.Dispose();
+                viewModelPropertyWatcher = null;
         }
 
-        private void NotifyPropertyChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == viewModelPropertyName)
-            {
-                InitalizeTemplate();
-            }
+            viewModel = null;
         }
 
         /// <summary>
@@ -115,10 +108,10 @@ namespace UnityUI.Binding
             DestroyTemplate();
 
             // Get value from view model.
-            var viewModelPropertyValue = viewModelProperty.GetValue(viewModelBinding.BoundViewModel, null);
+            var viewModelPropertyValue = viewModelProperty.GetValue(viewModel, null);
             if (viewModelPropertyValue == null)
             {
-                throw new ApplicationException("Cannot bind to null property in view: " + viewModelName + "." + viewModelPropertyName);
+                throw new ApplicationException("Cannot bind to null property in view: " + viewModelPropertyName);
             }
 
             // Select template.

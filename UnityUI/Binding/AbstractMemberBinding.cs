@@ -10,10 +10,7 @@ namespace UnityUI.Binding
     /// </summary>
     public abstract class AbstractMemberBinding : MonoBehaviour, IMemberBinding
     {
-        /// <summary>
-        /// Name of the view model to bind.
-        /// </summary>
-        public string viewModelName;
+
 
         /// <summary>
         /// Initialise this binding. Used when we first start the scene.
@@ -27,17 +24,9 @@ namespace UnityUI.Binding
         }
 
         /// <summary>
-        /// Helper method to get the voiw model object from the connected ViewModelBinding.
+        /// Scan up the hierarchy and find a view model that corresponds to the specified name.
         /// </summary>
-        protected object GetViewModel()
-        {
-            return GetViewModelBinding().BoundViewModel;
-        }
-
-        /// <summary>
-        /// Scan up the hierarchy to get the view model corrosponding to the name set in viewModelName.
-        /// </summary>
-        protected IViewModelBinding GetViewModelBinding()
+        protected object FindViewModel(string viewModelName)
         {
             var trans = transform;
             while (trans != null)
@@ -47,7 +36,7 @@ namespace UnityUI.Binding
                     .FirstOrDefault();
                 if (boundMonoBehaviour != null)
                 {
-                    return new MonoBehaviourBinding(boundMonoBehaviour);
+                    return boundMonoBehaviour;
                 }
 
                 var newViewModelBinding = components                    
@@ -79,7 +68,6 @@ namespace UnityUI.Binding
                 return null;
             }
 
-            //todo: Need to cache adapter types.
             var adapterType = TypeResolver.FindAdapterType(adapterTypeName);
             if (adapterType == null)
             {
@@ -93,6 +81,54 @@ namespace UnityUI.Binding
             }
 
             return (IAdapter)Activator.CreateInstance(adapterType);
+        }
+
+        /// <summary>
+        /// Make a property end point for a property ont he view model.
+        /// </summary>
+        protected PropertyEndPoint MakeViewModelEndPoint(string viewModelPropertyName, string adapterTypeName)
+        {
+            string propertyName;
+            object viewModel;
+            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModel);
+
+            var adapter = CreateAdapter(adapterTypeName);
+
+            return new PropertyEndPoint(viewModel, propertyName, adapter, "view-model", this);
+        }
+
+        /// <summary>
+        /// Parse a combined view-model and property name.
+        /// </summary>
+        public static void ParseViewModelPropertyName(string viewModelPropertyName, out string propertyName, out string viewModelName)
+        {
+            var lastPeriodIndex = viewModelPropertyName.LastIndexOf('.');
+            if (lastPeriodIndex == -1)
+            {
+                throw new ApplicationException("No period was found, expected property name in the following format: <type-name>.<property-name>.");
+            }
+
+            viewModelName = viewModelPropertyName.Substring(0, lastPeriodIndex);
+            propertyName = viewModelPropertyName.Substring(lastPeriodIndex + 1);
+            if (viewModelName.Length == 0 || propertyName.Length == 0)
+            {
+                throw new ApplicationException("Bad format for view model property name, expected the following format: <type-name>.<property-name>.");
+            }
+        }
+
+        /// <summary>
+        /// Parse a combined view-model and property name and look up the view-model.
+        /// </summary>
+        protected void ParseViewModelPropertyName(string viewModelPropertyName, out string propertyName, out object viewModel)
+        {
+            string viewModelName;
+            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModelName);
+
+            viewModel = FindViewModel(viewModelName);
+            if (viewModel == null)
+            {
+                throw new ApplicationException("Failed to find view model in hierarchy: " + viewModelName);
+            }
         }
 
         /// <summary>

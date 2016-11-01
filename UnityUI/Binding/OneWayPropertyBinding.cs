@@ -46,19 +46,13 @@ namespace UnityUI.Binding
 
         public override void Connect()        
         {
-            var viewModelBinding = GetViewModelBinding();
-            var viewModel = viewModelBinding.BoundViewModel;
             var view = GetComponent(boundComponentType);
+
+            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null);
 
             propertySync = new PropertySync(
                 // Source
-                new PropertyEndPoint(
-                    viewModel,
-                    viewModelPropertyName,
-                    null, // One-way only. No dest-to source adapter required.
-                    "view-model",
-                    this
-                ),
+                viewModelEndPoint,
 
                 // Dest
                 new PropertyEndPoint(
@@ -75,9 +69,7 @@ namespace UnityUI.Binding
                 this
             );
 
-            viewModelWatcher = new PropertyWatcher(
-                viewModel,
-                viewModelPropertyName,
+            viewModelWatcher = viewModelEndPoint.Watch(
                 () => propertySync.SyncFromSource()
             );
 

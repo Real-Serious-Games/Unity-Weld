@@ -133,15 +133,15 @@ namespace UnityUI.Internal
         /// <summary>
         /// Return the type of a view model bound by an IViewModelBinding
         /// </summary>
-        private static Type GetBoundViewType(IViewModelBinding binding)
+        private static Type FindBoundViewType(string viewModelTypeName)
         {
             var type = TypesWithBindingAttribute
-                .Where(t => t.Name == binding.ViewModelTypeName)
+                .Where(t => t.Name == viewModelTypeName)
                 .FirstOrDefault();
 
             if (type == null)
             {
-                throw new ApplicationException("Could not find the specified view model \"" + binding.ViewModelTypeName + "\"");
+                throw new ApplicationException("Could not find the specified view model \"" + viewModelTypeName + "\"");
             }
 
             return type;
@@ -173,7 +173,7 @@ namespace UnityUI.Internal
                     {
                         foundAtLeastOneBinding = true;
 
-                        yield return GetBoundViewType(viewModelBinding);
+                        yield return FindBoundViewType(viewModelBinding.ViewModelTypeName);
                     }
                     else if (viewModel.GetType().GetCustomAttributes(typeof(BindingAttribute), false).Any())
                     {

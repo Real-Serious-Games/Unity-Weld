@@ -40,11 +40,6 @@ namespace UnityUI.Binding
         public string viewModelAdapterTypeName;
 
         /// <summary>
-        /// The name of the view-model that owns the exceeption property for when adapter/validation fails.
-        /// </summary>
-        public string exceptionViewModelName;
-
-        /// <summary>
         /// The name of the property to assign an exception to when adapter/validation fails.
         /// </summary>
         public string exceptionPropertyName;
@@ -77,19 +72,13 @@ namespace UnityUI.Binding
 
         public override void Connect()
         {
-            var viewModelBinding = GetViewModelBinding();
-            var viewModel = viewModelBinding.BoundViewModel;
             var view = GetComponent(boundComponentType);
+
+            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName);
 
             propertySync = new PropertySync(
                 // Source
-                new PropertyEndPoint(
-                    viewModel,
-                    viewModelPropertyName,
-                    CreateAdapter(viewModelAdapterTypeName),
-                    "view-model",
-                    this
-                ),
+                viewModelEndPoint,
 
                 // Dest
                 new PropertyEndPoint(
@@ -102,22 +91,14 @@ namespace UnityUI.Binding
 
                 // Errors, exceptions and validation.
                 !string.IsNullOrEmpty(exceptionPropertyName)
-                    ? new PropertyEndPoint(
-                        viewModel,
-                        exceptionPropertyName,
-                        CreateAdapter(exceptionAdapterTypeName),
-                        "view-model",
-                        this
-                    )
+                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName)
                     : null
                     ,
                 
                 this
             );
 
-            viewModelWatcher = new PropertyWatcher(
-                viewModel,
-                viewModelPropertyName,
+            viewModelWatcher = viewModelEndPoint.Watch(
                 () => propertySync.SyncFromSource()
             );
 

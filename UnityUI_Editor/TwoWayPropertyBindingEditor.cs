@@ -94,8 +94,6 @@ namespace UnityUI_Editor
                 "View-model property",
                 targetScript, 
                 bindableViewModelProperties,
-                updatedValue => targetScript.viewModelName = updatedValue,
-                targetScript.viewModelName,
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
                 targetScript.viewModelPropertyName,
                 adaptedViewPropertyType
@@ -144,8 +142,6 @@ namespace UnityUI_Editor
                 "Exception property",
                 targetScript, 
                 exceptionViewModelProperties,
-                updatedValue => targetScript.exceptionViewModelName = updatedValue,
-                targetScript.exceptionViewModelName,
                 updatedValue => targetScript.exceptionPropertyName = updatedValue,
                 targetScript.exceptionPropertyName,
                 adaptedExceptionPropertyType
@@ -208,8 +204,6 @@ namespace UnityUI_Editor
             string label,
             TwoWayPropertyBinding target, 
             PropertyInfo[] bindableProperties,
-            Action<string> viewModelNameSetter,
-            string viewModelName,
             Action<string> propertyNameSetter,
             string propertyName,
             Type viewPropertyType
@@ -226,8 +220,6 @@ namespace UnityUI_Editor
                 ShowViewModelPropertyMenu(
                     target, 
                     bindableProperties,
-                    viewModelNameSetter,
-                    viewModelName,
                     propertyNameSetter,
                     propertyName,
                     viewPropertyType, 
@@ -244,18 +236,16 @@ namespace UnityUI_Editor
         private void ShowViewModelPropertyMenu(
             TwoWayPropertyBinding target, 
             PropertyInfo[] bindableProperties,
-            Action<string> viewModelNameSetter,
-            string viewModelName,
             Action<string> propertyNameSetter,
-            string propertyName,
+            string viewModelPropertyName,
             Type viewPropertyType, 
             Rect position
         )
         {
-            var selectedIndex = Array.IndexOf(
-                bindableProperties.Select(p => p.ReflectedType + p.Name).ToArray(),
-                viewModelName + propertyName
-            );
+            var propertyNames = bindableProperties
+                .Select(property => property.ReflectedType.Name + "." + property.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, viewModelPropertyName);
 
             var options = bindableProperties
                 .Select(p => new InspectorUtils.MenuItem(
@@ -268,10 +258,8 @@ namespace UnityUI_Editor
                 index => SetViewModelProperty(
                     target, 
                     bindableProperties[index], 
-                    viewModelNameSetter, 
-                    viewModelName,
                     propertyNameSetter,
-                    propertyName
+                    viewModelPropertyName
                 ), 
                 options, 
                 selectedIndex, 
@@ -285,22 +273,14 @@ namespace UnityUI_Editor
         private void SetViewModelProperty(
             TwoWayPropertyBinding target, 
             PropertyInfo propertyInfo,
-            Action<string> viewModelNameSetter,
-            string viewModelName,
             Action<string> propertyNameSetter,
             string propertyName
         )
         {
             UpdateProperty(
-                viewModelNameSetter,
-                viewModelName,
-                propertyInfo.ReflectedType.Name
-            );
-
-            UpdateProperty(
                 propertyNameSetter,
                 propertyName,
-                propertyInfo.Name
+                propertyInfo.ReflectedType.Name + "." + propertyInfo.Name
             );
         }
     }

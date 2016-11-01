@@ -87,5 +87,13 @@ namespace UnityUI.Binding
 
             return propertyOwner.GetType().Name + "." + property.Name + " (" + property.PropertyType.Name + ")";
         }
+
+        /// <summary>
+        /// Watch the property for changes.
+        /// </summary>
+        public PropertyWatcher Watch(Action changed)
+        {
+            return new PropertyWatcher(propertyOwner, propertyName, changed);
+        }
     }
 }

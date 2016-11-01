@@ -62,14 +62,14 @@ namespace UnityTools.UnityUI_Editor
         /// <summary>
         /// Draws the dropdown for selecting a method from bindableViewModelProperties
         /// </summary>
-        private void ShowPropertySelectorDropdown(TemplateSelector targetScript, PropertyInfo[] bindableViews, Rect position)
+        private void ShowPropertySelectorDropdown(TemplateSelector targetScript, PropertyInfo[] bindableProperties, Rect position)
         {
-            var selectedIndex = Array.IndexOf(
-                bindableViews.Select(m => m.ReflectedType + m.Name).ToArray(),
-                targetScript.viewModelName + targetScript.viewModelPropertyName
-            );
+            var propertyNames = bindableProperties
+                .Select(property => property.ReflectedType.Name + "." + property.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, targetScript.viewModelPropertyName);
 
-            var options = bindableViews.Select(m =>
+            var options = bindableProperties.Select(m =>
                 new InspectorUtils.MenuItem(
                     new GUIContent(m.ReflectedType + "/" + m.Name),
                     true
@@ -77,7 +77,7 @@ namespace UnityTools.UnityUI_Editor
             ).ToArray();
 
             InspectorUtils.ShowCustomSelectionMenu(
-                index => SetViewModelProperty(targetScript, bindableViews[index]),
+                index => SetViewModelProperty(targetScript, bindableProperties[index]),
                 options,
                 selectedIndex,
                 position);
@@ -89,15 +89,9 @@ namespace UnityTools.UnityUI_Editor
         private void SetViewModelProperty(TemplateSelector target, PropertyInfo property)
         {
             UpdateProperty(
-                updatedValue => target.viewModelName = updatedValue,
-                target.viewModelName,
-                property.ReflectedType.Name
-            );
-
-            UpdateProperty(
                 updatedValue => target.viewModelPropertyName = updatedValue,
                 target.viewModelPropertyName,
-                property.Name
+                property.ReflectedType.Name + "." + property.Name
             );
         }
     }
