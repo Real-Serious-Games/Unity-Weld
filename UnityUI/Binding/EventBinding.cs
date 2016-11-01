@@ -17,12 +17,6 @@ namespace UnityUI.Binding
         public string viewModelMethodName;
 
         /// <summary>
-        /// Type of the component we're binding to.
-        /// Must be a string so because Types can't be serialised in the scene.
-        /// </summary>
-        public string boundComponentType;
-
-        /// <summary>
         /// Name of the event to bind to.
         /// </summary>
         public string uiEventName;
@@ -36,11 +30,14 @@ namespace UnityUI.Binding
         {
             string methodName;
             object viewModel;
-            ParseViewModelPropertyName(viewModelMethodName, out methodName, out viewModel);
-
+            ParseViewModelEndPointReference(viewModelMethodName, out methodName, out viewModel);
             var viewModelMethod = viewModel.GetType().GetMethod(methodName, new Type[0]);
 
-            eventWatcher = new UnityEventWatcher(GetComponent(boundComponentType), uiEventName, 
+            string eventName;
+            string boundComponentType;
+            ParseEndPointReference(uiEventName, out eventName, out boundComponentType);
+
+            eventWatcher = new UnityEventWatcher(GetComponent(boundComponentType), eventName, 
                 () => viewModelMethod.Invoke(viewModel, new object[0])
             );
         }

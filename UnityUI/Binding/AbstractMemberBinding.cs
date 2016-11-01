@@ -90,7 +90,7 @@ namespace UnityUI.Binding
         {
             string propertyName;
             object viewModel;
-            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModel);
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
 
             var adapter = CreateAdapter(adapterTypeName);
 
@@ -100,29 +100,29 @@ namespace UnityUI.Binding
         /// <summary>
         /// Parse a combined view-model and property name.
         /// </summary>
-        public static void ParseViewModelPropertyName(string viewModelPropertyName, out string propertyName, out string viewModelName)
+        public static void ParseEndPointReference(string endPointReference, out string endPointName, out string typeName)
         {
-            var lastPeriodIndex = viewModelPropertyName.LastIndexOf('.');
+            var lastPeriodIndex = endPointReference.LastIndexOf('.');
             if (lastPeriodIndex == -1)
             {
-                throw new ApplicationException("No period was found, expected property name in the following format: <type-name>.<property-name>.");
+                throw new ApplicationException("No period was found, expected end-point reference in the following format: <type-name>.<property-name>.");
             }
 
-            viewModelName = viewModelPropertyName.Substring(0, lastPeriodIndex);
-            propertyName = viewModelPropertyName.Substring(lastPeriodIndex + 1);
-            if (viewModelName.Length == 0 || propertyName.Length == 0)
+            typeName = endPointReference.Substring(0, lastPeriodIndex);
+            endPointName = endPointReference.Substring(lastPeriodIndex + 1);
+            if (typeName.Length == 0 || endPointName.Length == 0)
             {
-                throw new ApplicationException("Bad format for view model property name, expected the following format: <type-name>.<property-name>.");
+                throw new ApplicationException("Bad format for end-point reference, expected the following format: <type-name>.<property-name>.");
             }
         }
 
         /// <summary>
         /// Parse a combined view-model and property name and look up the view-model.
         /// </summary>
-        protected void ParseViewModelPropertyName(string viewModelPropertyName, out string propertyName, out object viewModel)
+        protected void ParseViewModelEndPointReference(string endPointReference, out string propertyName, out object viewModel)
         {
             string viewModelName;
-            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModelName);
+            ParseEndPointReference(endPointReference, out propertyName, out viewModelName);
 
             viewModel = FindViewModel(viewModelName);
             if (viewModel == null)

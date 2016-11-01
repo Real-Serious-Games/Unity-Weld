@@ -36,13 +36,7 @@ namespace UnityUI_Editor
                 UpdateProperty(
                     updatedValue => targetScript.uiEventName = updatedValue,
                     targetScript.uiEventName,
-                    events[selectedEventIndex].Name
-                );
-
-                UpdateProperty(
-                    updatedValue => targetScript.boundComponentType = updatedValue,
-                    targetScript.boundComponentType,
-                    events[selectedEventIndex].ComponentType.Name
+                    events[selectedEventIndex].ComponentType.Name + "." + events[selectedEventIndex].Name
                 );
             }
 
@@ -53,18 +47,21 @@ namespace UnityUI_Editor
         }
 
         /// <summary>
-        /// Draws the dropdown menu for selecting an event, returns the inxed of the selected event.
+        /// Show dropdown for selecting a UnityEvent to bind to.
         /// </summary>
         private int ShowEventSelector(EventBinding targetScript, UnityEventWatcher.BindableEvent[] events)
         {
+            var eventNames = events
+                .Select(evt => evt.ComponentType.Name + "." + evt.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(eventNames, targetScript.uiEventName);
+
             return EditorGUILayout.Popup(
-                new GUIContent("Event to bind to"),
-                events.Select(evt => evt.Name)
-                    .ToList()
-                    .IndexOf(targetScript.uiEventName),
-                events.Select(evt => 
-                    new GUIContent(evt.DeclaringType + "." + evt.Name))
-                        .ToArray());
+                new GUIContent("View event"),
+                selectedIndex,
+                events.Select(evt => new GUIContent(evt.ComponentType.Name + "." + evt.Name))
+                .ToArray()
+            );
         }
 
         /// <summary>

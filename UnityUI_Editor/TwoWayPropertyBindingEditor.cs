@@ -37,13 +37,7 @@ namespace UnityUI_Editor
                 UpdateProperty(
                     updatedValue => targetScript.uiEventName = updatedValue,
                     targetScript.uiEventName,
-                    events[selectedEventIndex].Name
-                );
-
-                UpdateProperty(
-                    updatedValue => targetScript.boundComponentType = updatedValue,
-                    targetScript.boundComponentType,
-                    events[selectedEventIndex].ComponentType.Name
+                    events[selectedEventIndex].ComponentType.Name + "." + events[selectedEventIndex].Name
                 );
             }
 
@@ -54,7 +48,7 @@ namespace UnityUI_Editor
                 UpdateProperty(
                     updatedValue => targetScript.uiPropertyName = updatedValue,
                     targetScript.uiPropertyName,
-                    properties[selectedPropertyIndex].PropertyInfo.Name
+                    properties[selectedPropertyIndex].PropertyInfo.ReflectedType.Name + "." + properties[selectedPropertyIndex].PropertyInfo.Name
                 );
                 viewPropertyType = properties[selectedPropertyIndex].PropertyInfo.PropertyType;
             }
@@ -155,16 +149,14 @@ namespace UnityUI_Editor
         private int ShowEventSelector(TwoWayPropertyBinding targetScript, UnityEventWatcher.BindableEvent[] events)
         {
             var eventNames = events
-                .Select(evt => evt.Name)
+                .Select(evt => evt.ComponentType.Name + "." + evt.Name)
                 .ToArray();
+            var selectedIndex = Array.IndexOf(eventNames, targetScript.uiEventName);
 
             return EditorGUILayout.Popup(
                 new GUIContent("View event"),
-                Array.IndexOf(eventNames, targetScript.uiEventName),
-                events.Select(evt => new GUIContent(
-                    evt.DeclaringType + "." + evt.Name + 
-                    "(" + evt.GetEventTypes()[0].ToString() + ")")
-                )
+                selectedIndex,
+                events.Select(evt => new GUIContent(evt.ComponentType.Name + "." + evt.Name))
                 .ToArray()
             );
         }
@@ -175,12 +167,13 @@ namespace UnityUI_Editor
         private int ShowUIPropertySelector(TwoWayPropertyBinding targetScript, PropertyFinder.BindablePropertyInfo[] properties)
         {
             var propertyNames = properties
-                .Select(prop => prop.PropertyInfo.Name)
+                .Select(prop => prop.PropertyInfo.ReflectedType.Name + "." + prop.PropertyInfo.Name)
                 .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, targetScript.uiPropertyName);
 
             return EditorGUILayout.Popup(
                 new GUIContent("View property"),
-                Array.IndexOf(propertyNames, targetScript.uiPropertyName),
+                selectedIndex,
                 properties.Select(prop => new GUIContent(
                         prop.PropertyInfo.ReflectedType.Name + "/" +
                         prop.PropertyInfo.Name + " : " +

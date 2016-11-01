@@ -32,13 +32,7 @@ namespace UnityUI_Editor
                 UpdateProperty(
                     updatedValue => targetScript.uiPropertyName = updatedValue,
                     targetScript.uiPropertyName,
-                    uiProperties[selectedPropertyIndex].PropertyInfo.Name
-                );
-
-                UpdateProperty(
-                    updatedValue => targetScript.boundComponentType = updatedValue,
-                    targetScript.boundComponentType,
-                    uiProperties[selectedPropertyIndex].Object.GetType().Name
+                    uiProperties[selectedPropertyIndex].Object.GetType().Name + "." + uiProperties[selectedPropertyIndex].PropertyInfo.Name
                 );
 
                 viewPropertyType = uiProperties[selectedPropertyIndex].PropertyInfo.PropertyType;
@@ -88,12 +82,13 @@ namespace UnityUI_Editor
         private int ShowUIPropertySelector(OneWayPropertyBinding targetScript, PropertyFinder.BindablePropertyInfo[] uiProperties)
         {
             var propertyNames = uiProperties
-                .Select(prop => prop.PropertyInfo.Name)
+                .Select(prop => prop.PropertyInfo.ReflectedType.Name + "." + prop.PropertyInfo.Name)
                 .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, targetScript.uiPropertyName);
 
             return EditorGUILayout.Popup(
                 new GUIContent("View property"),
-                Array.IndexOf(propertyNames, targetScript.uiPropertyName),
+                selectedIndex,
                 uiProperties
                     .Select(prop => new GUIContent(
                         prop.PropertyInfo.ReflectedType.Name + "/" + 

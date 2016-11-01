@@ -57,7 +57,7 @@ namespace UnityUI.Binding
         {
             string propertyName;
             object viewModel;
-            ParseViewModelPropertyName(boundPropertyName, out propertyName, out viewModel);
+            ParseViewModelEndPointReference(boundPropertyName, out propertyName, out viewModel);
 
             var propertyInfo = viewModel.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
@@ -72,7 +72,7 @@ namespace UnityUI.Binding
         {
             string propertyName;
             object viewModel;
-            ParseViewModelPropertyName(boundPropertyName, out propertyName, out viewModel);
+            ParseViewModelEndPointReference(boundPropertyName, out propertyName, out viewModel);
 
             viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
 

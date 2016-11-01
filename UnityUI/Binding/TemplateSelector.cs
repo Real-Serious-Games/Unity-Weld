@@ -64,7 +64,7 @@ namespace UnityUI.Binding
 
             string propertyName;
             object viewModel;
-            ParseViewModelPropertyName(viewModelPropertyName, out propertyName, out viewModel);
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
 
             this.viewModel = viewModel;
 
