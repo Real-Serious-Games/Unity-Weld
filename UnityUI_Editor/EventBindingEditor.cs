@@ -85,23 +85,19 @@ namespace UnityUI_Editor
 
         private void ShowViewModelMethodDropdown(EventBinding target, MethodInfo[] bindableMethods, Type[] viewEventArgs, Rect position)
         {
-            var propertyNames = bindableMethods
-                .Select(method => method.ReflectedType.Name + "." + method.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(propertyNames, target.viewModelMethodName);
+            InspectorUtils.ShowMenu<MethodInfo>(
+                method => method.ReflectedType + "/" + method.Name + "(" + ParameterInfoToString(method) + ")",
+                method => MethodMatchesSignature(method, viewEventArgs),
+                method => method.ReflectedType.Name + "." + method.Name == target.viewModelMethodName,
+                method => UpdateProperty(
+                    updatedValue => target.viewModelMethodName = updatedValue,
+                    target.viewModelMethodName,
+                    method.ReflectedType.Name + "." + method.Name
+                ),
+                bindableMethods,
+                position
+            );
 
-            var options = bindableMethods.Select(m =>
-                new InspectorUtils.MenuItem(
-                    new GUIContent(m.ReflectedType + "/" + m.Name + "(" + ParameterInfoToString(m.GetParameters()) + ")"),
-                    MethodMatchesSignature(m, viewEventArgs)
-                )
-            ).ToArray();
-
-            InspectorUtils.ShowCustomSelectionMenu(
-                index => SetBoundMethod(target, bindableMethods[index]),
-                options,
-                selectedIndex,
-                position);
         }
 
         /// <summary>
@@ -132,21 +128,10 @@ namespace UnityUI_Editor
         /// Convert an array of ParameterInfo objects to a nicely formatted string with their
         /// types and names delimited by commas.
         /// </summary>
-        private string ParameterInfoToString(ParameterInfo[] info)
+        private string ParameterInfoToString(MethodInfo method)
         {
+            ParameterInfo[] info = method.GetParameters();
             return string.Join(", ", info.Select(parameterInfo => parameterInfo.ToString()).ToArray());
-        }
-
-        /// <summary>
-        /// Set up the viewModelName and viewModelMethodName in the EventBinding we're editing.
-        /// </summary>
-        private void SetBoundMethod(EventBinding target, MethodInfo method)
-        {
-            UpdateProperty(
-                updatedValue => target.viewModelMethodName = updatedValue,
-                target.viewModelMethodName,
-                method.ReflectedType.Name + "." + method.Name
-            );
         }
     }
 }

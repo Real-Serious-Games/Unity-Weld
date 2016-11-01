@@ -235,45 +235,17 @@ namespace UnityUI_Editor
             Rect position
         )
         {
-            var propertyNames = bindableProperties
-                .Select(property => property.ReflectedType.Name + "." + property.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(propertyNames, viewModelPropertyName);
-
-            var options = bindableProperties
-                .Select(p => new InspectorUtils.MenuItem(
-                    new GUIContent(p.ReflectedType + "/" + p.Name + " : " + p.PropertyType.Name),
-                    p.PropertyType == viewPropertyType
-                ))
-                .ToArray();
-
-            InspectorUtils.ShowCustomSelectionMenu(
-                index => SetViewModelProperty(
-                    target, 
-                    bindableProperties[index], 
+            InspectorUtils.ShowMenu<PropertyInfo>(
+                property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
+                property => property.PropertyType == viewPropertyType,
+                property => property.ReflectedType.Name + "." + property.Name == viewModelPropertyName,
+                property => UpdateProperty(
                     propertyNameSetter,
-                    viewModelPropertyName
+                    viewModelPropertyName,
+                    property.ReflectedType.Name + "." + property.Name
                 ), 
-                options, 
-                selectedIndex, 
+                bindableProperties, 
                 position
-            );
-        }
-
-        /// <summary>
-        /// Set up the viewModelName and viewModelPropertyname in the TwoWayPropertyBinding we're editing.
-        /// </summary>
-        private void SetViewModelProperty(
-            TwoWayPropertyBinding target, 
-            PropertyInfo propertyInfo,
-            Action<string> propertyNameSetter,
-            string propertyName
-        )
-        {
-            UpdateProperty(
-                propertyNameSetter,
-                propertyName,
-                propertyInfo.ReflectedType.Name + "." + propertyInfo.Name
             );
         }
     }

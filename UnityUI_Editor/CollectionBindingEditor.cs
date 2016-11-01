@@ -69,34 +69,17 @@ namespace UnityUI_Editor
         /// </summary>
         private void ShowCollectionSelectorDropdown(CollectionBinding targetScript, PropertyInfo[] bindableProperties, Rect position)
         {
-            var propertyNames = bindableProperties
-                .Select(property => property.ReflectedType.Name + "." + property.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(propertyNames, targetScript.viewModelPropertyName);
-
-            var options = bindableProperties.Select(m =>
-                new InspectorUtils.MenuItem(
-                    new GUIContent(m.ReflectedType + "/" + m.Name),
-                    true
-                )
-            ).ToArray();
-
-            InspectorUtils.ShowCustomSelectionMenu(
-                index => SetViewModelProperty(targetScript, bindableProperties[index]),
-                options,
-                selectedIndex,
-                position);
-        }
-
-        /// <summary>
-        /// Set up the viewModelName and viewModelPropertyname in the TwoWayPropertyBinding we're editing.
-        /// </summary>
-        private void SetViewModelProperty(CollectionBinding target, PropertyInfo property)
-        {
-            UpdateProperty(
-                updatedValue => target.viewModelPropertyName = updatedValue,
-                target.viewModelPropertyName,
+            InspectorUtils.ShowMenu<PropertyInfo>(
+                property => property.ReflectedType + "/" + property.Name,
+                property => true,
+                property => property.ReflectedType.Name + "." + property.Name == targetScript.viewModelPropertyName,
+                property => UpdateProperty(
+                    updatedValue => targetScript.viewModelPropertyName = updatedValue,
+                    targetScript.viewModelPropertyName,
                 property.ReflectedType.Name + "." + property.Name
+                ),
+                bindableProperties,
+                position
             );
         }
     }

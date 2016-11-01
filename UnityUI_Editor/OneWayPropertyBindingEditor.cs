@@ -122,22 +122,16 @@ namespace UnityUI_Editor
         /// </summary>
         private void ShowViewModelPropertyDropdown(OneWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType, Rect position)
         { 
-            var propertyNames = bindableProperties
-                .Select(property => property.ReflectedType.Name + "." + property.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(propertyNames, target.viewModelPropertyName);
-
-            var options = bindableProperties
-                .Select(p => new InspectorUtils.MenuItem(
-                    new GUIContent(p.ReflectedType.Name + "/" + p.Name + " : " + p.PropertyType.Name),
-                    p.PropertyType == viewPropertyType
-                ))
-                .ToArray();
-
-            InspectorUtils.ShowCustomSelectionMenu(
-                index => SetViewModelProperty(target, bindableProperties[index]), 
-                options, 
-                selectedIndex, 
+            InspectorUtils.ShowMenu<PropertyInfo>(
+                property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
+                property => property.PropertyType == viewPropertyType,
+                property => property.ReflectedType.Name + "." + property.Name == target.viewModelPropertyName,
+                property => UpdateProperty(
+                    updatedValue => target.viewModelPropertyName = updatedValue,
+                    target.viewModelPropertyName,
+                    property.ReflectedType.Name + "." + property.Name
+                ),
+                bindableProperties,
                 position
             );
         }
@@ -150,18 +144,6 @@ namespace UnityUI_Editor
             return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .ToArray();
-        }
-
-        /// <summary>
-        /// Set up the viewModelName and viewModelPropertyName in the OneWayPropertyBinding we're editing.
-        /// </summary>
-        private void SetViewModelProperty(OneWayPropertyBinding target, PropertyInfo property)
-        {
-            UpdateProperty(
-                updatedValue => target.viewModelPropertyName = updatedValue,
-                target.viewModelPropertyName,
-                property.ReflectedType.Name + "." + property.Name
-            );
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace UnityUI.Binding
 {
@@ -50,11 +51,6 @@ namespace UnityUI.Binding
         public string exceptionAdapterTypeName;
 
         /// <summary>
-        /// Syncronizes the property in the view-model with the property in the view.
-        /// </summary>
-        private PropertySync propertySync;
-
-        /// <summary>
         /// Watches the view-model for changes that must be propagated to the view.
         /// </summary>
         private PropertyWatcher viewModelWatcher;
@@ -67,14 +63,12 @@ namespace UnityUI.Binding
         public override void Connect()
         {
             string propertyName;
-            string boundComponentType;
-            ParseEndPointReference(uiPropertyName, out propertyName, out boundComponentType);
-
-            var view = GetComponent(boundComponentType);
+            Component view;
+            ParseViewEndPointReference(uiPropertyName, out propertyName, out view);
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName);
 
-            propertySync = new PropertySync(
+            var propertySync = new PropertySync(
                 // Source
                 viewModelEndPoint,
 

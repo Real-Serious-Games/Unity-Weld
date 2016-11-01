@@ -98,36 +98,51 @@ namespace UnityUI.Binding
         }
 
         /// <summary>
-        /// Parse a combined view-model and property name.
+        /// Parse an end-point reference including a type name and member name separated by a period.
         /// </summary>
-        public static void ParseEndPointReference(string endPointReference, out string endPointName, out string typeName)
+        public static void ParseEndPointReference(string endPointReference, out string memberName, out string typeName)
         {
             var lastPeriodIndex = endPointReference.LastIndexOf('.');
             if (lastPeriodIndex == -1)
             {
-                throw new ApplicationException("No period was found, expected end-point reference in the following format: <type-name>.<property-name>.");
+                throw new ApplicationException("No period was found, expected end-point reference in the following format: <type-name>.<member-name>.");
             }
 
             typeName = endPointReference.Substring(0, lastPeriodIndex);
-            endPointName = endPointReference.Substring(lastPeriodIndex + 1);
-            if (typeName.Length == 0 || endPointName.Length == 0)
+            memberName = endPointReference.Substring(lastPeriodIndex + 1);
+            if (typeName.Length == 0 || memberName.Length == 0)
             {
-                throw new ApplicationException("Bad format for end-point reference, expected the following format: <type-name>.<property-name>.");
+                throw new ApplicationException("Bad format for end-point reference, expected the following format: <type-name>.<member-name>.");
             }
         }
 
         /// <summary>
-        /// Parse a combined view-model and property name and look up the view-model.
+        /// Parse an end-point reference and search up the hierarchy for the named view-model.
         /// </summary>
-        protected void ParseViewModelEndPointReference(string endPointReference, out string propertyName, out object viewModel)
+        protected void ParseViewModelEndPointReference(string endPointReference, out string memberName, out object viewModel)
         {
             string viewModelName;
-            ParseEndPointReference(endPointReference, out propertyName, out viewModelName);
+            ParseEndPointReference(endPointReference, out memberName, out viewModelName);
 
             viewModel = FindViewModel(viewModelName);
             if (viewModel == null)
             {
-                throw new ApplicationException("Failed to find view model in hierarchy: " + viewModelName);
+                throw new ApplicationException("Failed to find view-model in hierarchy: " + viewModelName);
+            }
+        }
+
+        /// <summary>
+        /// Parse an end-point reference and get the component for the view.
+        /// </summary>
+        protected void ParseViewEndPointReference(string endPointReference, out string memberName, out Component view)
+        {
+            string boundComponentType;
+            ParseEndPointReference(endPointReference, out memberName, out boundComponentType);
+
+            view = GetComponent(boundComponentType);
+            if (view == null)
+            {
+                throw new ApplicationException("Failed to find component on current game object: " + boundComponentType);
             }
         }
 

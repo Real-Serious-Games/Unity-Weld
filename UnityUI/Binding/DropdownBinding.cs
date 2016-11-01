@@ -32,11 +32,6 @@ namespace UnityUI.Binding
         public string exceptionAdapterTypeName;
 
         /// <summary>
-        /// Synchronises the selection property with the UI.
-        /// </summary>
-        private PropertySync selectionPropertySync;
-
-        /// <summary>
         /// Watches the selection property in the view-model for changes.
         /// </summary>
         private PropertyWatcher selectionPropertyWatcher;
@@ -45,11 +40,6 @@ namespace UnityUI.Binding
         /// Watches for selection changed event to update the view-model.
         /// </summary>
         private UnityEventWatcher selectionEventWatcher;
-
-        /// <summary>
-        /// Syncs the options property to the UI.
-        /// </summary>
-        private PropertySync optionsPropertySync;
 
         /// <summary>
         /// Type name of the adapter for converting a selection value in the 
@@ -80,7 +70,7 @@ namespace UnityUI.Binding
 
             var selectionPropertyEndPoint = MakeViewModelEndPoint(viewModelSelectionPropertyName, selectionUIToViewModelAdapter);
 
-            selectionPropertySync = new PropertySync(
+            var selectionPropertySync = new PropertySync(
                 // Source
                 selectionPropertyEndPoint,
 
@@ -115,7 +105,7 @@ namespace UnityUI.Binding
                 }
             );
 
-            optionsPropertySync = new PropertySync(
+            var optionsPropertySync = new PropertySync(
                 // Source
                 MakeViewModelEndPoint(viewModelOptionsPropertyName, null),
 

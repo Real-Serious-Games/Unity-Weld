@@ -34,10 +34,10 @@ namespace UnityUI.Binding
             var viewModelMethod = viewModel.GetType().GetMethod(methodName, new Type[0]);
 
             string eventName;
-            string boundComponentType;
-            ParseEndPointReference(uiEventName, out eventName, out boundComponentType);
+            Component view;
+            ParseViewEndPointReference(uiEventName, out eventName, out view);
 
-            eventWatcher = new UnityEventWatcher(GetComponent(boundComponentType), eventName, 
+            eventWatcher = new UnityEventWatcher(view, eventName, 
                 () => viewModelMethod.Invoke(viewModel, new object[0])
             );
         }
