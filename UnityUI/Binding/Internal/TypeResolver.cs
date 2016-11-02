@@ -135,7 +135,7 @@ namespace UnityUI.Internal
         /// <summary>
         /// Return the type of a view model bound by an IViewModelBinding
         /// </summary>
-        private static Type FindBoundViewType(string viewModelTypeName)
+        private static Type GetViewModelType(string viewModelTypeName)
         {
             var type = TypesWithBindingAttribute
                 .Where(t => t.Name == viewModelTypeName)
@@ -175,7 +175,7 @@ namespace UnityUI.Internal
                     {
                         foundAtLeastOneBinding = true;
 
-                        yield return FindBoundViewType(viewModelBinding.ViewModelTypeName);
+                        yield return GetViewModelType(viewModelBinding.GetViewModelTypeName());
                     }
                     else if (component.GetType().GetCustomAttributes(typeof(BindingAttribute), false).Any())
                     {

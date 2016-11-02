@@ -32,21 +32,22 @@ namespace UnityUI.Binding
             while (trans != null)
             {
                 var components = trans.GetComponents<MonoBehaviour>();
-                var boundMonoBehaviour = components.Where(component => component.GetType().Name == viewModelName)
+                var monoBehaviourViewModel = components
+                    .Where(component => component.GetType().Name == viewModelName)
                     .FirstOrDefault();
-                if (boundMonoBehaviour != null)
+                if (monoBehaviourViewModel != null)
                 {
-                    return boundMonoBehaviour;
+                    return monoBehaviourViewModel;
                 }
 
-                var newViewModelBinding = components                    
+                var providedViewModel = components                    
                     .Select(component => component as IViewModelProvider)
                     .Where(component => component != null)
-                    .Where(viewModelBinding => viewModelBinding.ViewModelTypeName == viewModelName && (object)viewModelBinding != this)
+                    .Where(viewModelBinding => viewModelBinding.GetViewModelTypeName() == viewModelName && (object)viewModelBinding != this)
                     .FirstOrDefault();
-                if (newViewModelBinding != null)
+                if (providedViewModel != null)
                 {
-                    return newViewModelBinding;
+                    return providedViewModel;
                 }
 
                 trans = trans.parent;

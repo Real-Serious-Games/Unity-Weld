@@ -59,7 +59,7 @@ namespace UnityUI.Binding
             var templatesInScene = templates.GetComponentsInChildren<TemplateBinding>();
             foreach (var template in templatesInScene)
             {
-                availableTemplates.Add(template.ViewModelTypeName, template);
+                availableTemplates.Add(template.GetViewModelTypeName(), template);
             }
 
             string propertyName;

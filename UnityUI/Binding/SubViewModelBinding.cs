@@ -10,24 +10,25 @@ namespace UnityUI.Binding
     public class SubViewModelBinding : AbstractMemberBinding, IViewModelProvider
     {
         /// <summary>
-        /// Name of the property in the top-level view model that contains the sub-viewmodel that 
-        /// we want to bind.
+        /// Get the view-model provided by this provider.
         /// </summary>
-        public string boundPropertyName;
-
-        private object boundViewModel;
-
-        public object BoundViewModel
+        public object GetViewModel()
         {
-            get
-            {
-                if (boundViewModel == null)
-                {
-                    UpdateViewModel();
-                }
-                return boundViewModel;
-            }
+            return viewModel;
         }
+
+        /// <summary>
+        /// Get the name of the view-model's type.
+        /// </summary>
+        public string GetViewModelTypeName()
+        {
+            return viewModelTypeName;
+        }
+
+        /// <summary>
+        /// Name of the property in the view-model that contains the sub-viewmodel.
+        /// </summary>
+        public string viewModelPropertyName;
 
         /// <summary>
         /// Name of the type of the view model we're binding to. Set from the Unity inspector.
@@ -35,20 +36,14 @@ namespace UnityUI.Binding
         public string viewModelTypeName;
 
         /// <summary>
-        /// Lazily get the view model type name from the top level view model we've bound to.
-        /// </summary>
-        public string ViewModelTypeName
-        {
-            get
-            {
-                return viewModelTypeName;
-            }
-        }
-
-        /// <summary>
         /// Watches the view-model proper for changes.
         /// </summary>
         private PropertyWatcher viewModelPropertyWatcher;
+
+        /// <summary>
+        /// Cached view-model object.
+        /// </summary>
+        private object viewModel;
 
         /// <summary>
         /// Initialise the bound view model by getting the property from the parent view model.
@@ -57,7 +52,7 @@ namespace UnityUI.Binding
         {
             string propertyName;
             object viewModel;
-            ParseViewModelEndPointReference(boundPropertyName, out propertyName, out viewModel);
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
 
             var propertyInfo = viewModel.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
@@ -65,14 +60,14 @@ namespace UnityUI.Binding
                 throw new ApplicationException("Could not find property \"" + propertyName + "\" on view model \"" + viewModel.GetType().Name + "\"");
             }
 
-            boundViewModel = propertyInfo.GetValue(viewModel, null);
+            this.viewModel = propertyInfo.GetValue(viewModel, null);
         }
 
         public override void Connect()
         {
             string propertyName;
             object viewModel;
-            ParseViewModelEndPointReference(boundPropertyName, out propertyName, out viewModel);
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
 
             viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
 

@@ -2,16 +2,19 @@
 
 namespace UnityUI.Binding
 {
+    /// <summary>
+    /// Interface for wiring view-models into the hierarchy.
+    /// </summary>
     public interface IViewModelProvider
     {
         /// <summary>
-        /// The view model we have bound.
+        /// Get the view-model provided by this provider.
         /// </summary>
-        object BoundViewModel { get; }
+        object GetViewModel();
 
         /// <summary>
-        /// Name of the view model type to bind this object to.
+        /// Get the name of the view-model's type.
         /// </summary>
-        string ViewModelTypeName { get; }
+        string GetViewModelTypeName();
     }
 }

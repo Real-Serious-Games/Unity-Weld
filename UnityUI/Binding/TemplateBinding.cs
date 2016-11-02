@@ -19,26 +19,27 @@ namespace UnityUI.Binding
     public class TemplateBinding : MonoBehaviour, IViewModelProvider, ITemplateBinding
     {
         /// <summary>
-        /// View to bind the UI to.
+        /// Get the view-model provided by this provider.
         /// </summary>
-        public string ViewModelTypeName
+        public object GetViewModel()
         {
-            get
+            return viewModel;
+        }
+
+        /// <summary>
+        /// Get the name of the view-model's type.
+        /// </summary>
+        public string GetViewModelTypeName()
             {
                 return viewModelTypeName;
             }
-        }
 
         private string viewModelTypeName = string.Empty;
 
-        public object BoundViewModel
-        {
-            get
-            {
-                return boundViewModel;
-            }
-        }
-        private object boundViewModel;
+        /// <summary>
+        /// Cached view-model object.
+        /// </summary>
+        private object viewModel;
 
         /// <summary>
         /// Set the view model and initialise all binding objects down the hierarchy.
@@ -46,7 +47,7 @@ namespace UnityUI.Binding
         public void InitChildBindings(object viewModel)
         {
             // Set the bound view to the new view model.
-            boundViewModel = viewModel;
+            this.viewModel = viewModel;
 
             foreach (var binding in GetComponentsInChildren<AbstractMemberBinding>())
             {
