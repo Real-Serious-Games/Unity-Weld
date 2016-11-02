@@ -19,55 +19,25 @@ namespace UnityUI_Editor
         {
             var targetScript = (EventBinding)target;
 
-            // Get list of events we can bind to.
-            var events = UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
+            ShowEventMenu(
+                targetScript,
+                UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                 .OrderBy(evt => evt.Name)
-                .ToArray();
-
-            // Popup for the user to pick a UnityEvent on the UI to bind to.
-            var selectedEventIndex = ShowEventSelector(targetScript, events);
-
-            Type[] eventType = null;
-            if (selectedEventIndex >= 0)
-            {
-                eventType = events[selectedEventIndex].GetEventTypes();
-
-                // Save properties on the target script so they'll be serialised into the scene
-                UpdateProperty(
+                    .ToArray(),
                     updatedValue => targetScript.uiEventName = updatedValue,
-                    targetScript.uiEventName,
-                    events[selectedEventIndex].ComponentType.Name + "." + events[selectedEventIndex].Name
+                targetScript.uiEventName
                 );
-            }
 
             var bindableViewModelMethods = GetBindableViewModelMethods(targetScript);
 
             // Show a popup for selecting which method to bind to.
-            ShowMethodSelector(targetScript, bindableViewModelMethods, eventType);
-        }
-
-        /// <summary>
-        /// Show dropdown for selecting a UnityEvent to bind to.
-        /// </summary>
-        private int ShowEventSelector(EventBinding targetScript, UnityEventWatcher.BindableEvent[] events)
-        {
-            var eventNames = events
-                .Select(evt => evt.ComponentType.Name + "." + evt.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(eventNames, targetScript.uiEventName);
-
-            return EditorGUILayout.Popup(
-                new GUIContent("View event"),
-                selectedIndex,
-                events.Select(evt => new GUIContent(evt.ComponentType.Name + "." + evt.Name))
-                .ToArray()
-            );
+            ShowMethodSelector(targetScript, bindableViewModelMethods);
         }
 
         /// <summary>
         /// Draws the dropdown for selecting a method from bindableViewModelMethods
         /// </summary>
-        private void ShowMethodSelector(EventBinding targetScript, MethodInfo[] bindableViewModelMethods, Type[] viewEventArgs)
+        private void ShowMethodSelector(EventBinding targetScript, MethodInfo[] bindableViewModelMethods)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("View model method");
@@ -77,17 +47,17 @@ namespace UnityUI_Editor
 
             if (GUILayout.Button(new GUIContent(targetScript.viewModelMethodName), EditorStyles.popup))
             {
-                ShowViewModelMethodDropdown(targetScript, bindableViewModelMethods, viewEventArgs, dropdownPosition);
+                ShowViewModelMethodDropdown(targetScript, bindableViewModelMethods, dropdownPosition);
             }
 
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowViewModelMethodDropdown(EventBinding target, MethodInfo[] bindableMethods, Type[] viewEventArgs, Rect position)
+        private void ShowViewModelMethodDropdown(EventBinding target, MethodInfo[] bindableMethods, Rect position)
         {
             InspectorUtils.ShowMenu<MethodInfo>(
-                method => method.ReflectedType + "/" + method.Name + "(" + ParameterInfoToString(method) + ")",
-                method => MethodMatchesSignature(method, viewEventArgs),
+                method => method.ReflectedType + "/" + method.Name,
+                method => true,
                 method => method.ReflectedType.Name + "." + method.Name == target.viewModelMethodName,
                 method => UpdateProperty(
                     updatedValue => target.viewModelMethodName = updatedValue,
@@ -107,31 +77,9 @@ namespace UnityUI_Editor
         {
             return TypeResolver.FindAvailableViewModelTypes(targetScript)
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
-                .Where(m => m.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !m.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
+                .Where(method => method.GetParameters().Length == 0)
+                .Where(method => method.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !method.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
                 .ToArray();
-        }
-
-        /// <summary>
-        /// Check that a method matches the specified array of types for its the calling convention.
-        /// </summary>
-        private bool MethodMatchesSignature(MethodInfo method, Type[] callingConvention)
-        {
-            var methodParameters = method.GetParameters().Select(p => p.ParameterType).ToArray();
-
-            // Check that the calling convention and methodParameters are equal
-            return callingConvention != null
-                && callingConvention.Length == methodParameters.Length
-                && !callingConvention.Where((type, index) => methodParameters[index] != type).Any();
-        }
-
-        /// <summary>
-        /// Convert an array of ParameterInfo objects to a nicely formatted string with their
-        /// types and names delimited by commas.
-        /// </summary>
-        private string ParameterInfoToString(MethodInfo method)
-        {
-            ParameterInfo[] info = method.GetParameters();
-            return string.Join(", ", info.Select(parameterInfo => parameterInfo.ToString()).ToArray());
         }
     }
 }

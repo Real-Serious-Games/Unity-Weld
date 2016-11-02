@@ -20,21 +20,14 @@ namespace UnityUI_Editor
         {
             var targetScript = (TwoWayPropertyBinding)target;
 
-            var events = UnityEventWatcher
-                .GetBindableEvents(targetScript.gameObject)
-                .Where(evt => evt.GetEventTypes().Length == 1) // Only select events that can be bound directly to properties
+            ShowEventMenu(
+                targetScript,
+                UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                 .OrderBy(evt => evt.Name)
-                .ToArray();
-
-            var selectedEventIndex = ShowEventSelector(targetScript, events);
-            if (selectedEventIndex >= 0)
-            {
-                UpdateProperty(
+                    .ToArray(),
                     updatedValue => targetScript.uiEventName = updatedValue,
-                    targetScript.uiEventName,
-                    events[selectedEventIndex].ComponentType.Name + "." + events[selectedEventIndex].Name
+                targetScript.uiEventName
                 );
-            }
 
             Type viewPropertyType = null;
             ShowViewPropertyMenu(
@@ -135,25 +128,5 @@ namespace UnityUI_Editor
             );
 
         }
-
-        /// <summary>
-        /// Show dropdown for selecting a UnityEvent to bind to.
-        /// </summary>
-        private int ShowEventSelector(TwoWayPropertyBinding targetScript, UnityEventWatcher.BindableEvent[] events)
-        {
-            var eventNames = events
-                .Select(evt => evt.ComponentType.Name + "." + evt.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(eventNames, targetScript.uiEventName);
-
-            return EditorGUILayout.Popup(
-                new GUIContent("View event"),
-                selectedIndex,
-                events.Select(evt => new GUIContent(evt.ComponentType.Name + "." + evt.Name))
-                .ToArray()
-            );
-        }
-
-
     }
 }

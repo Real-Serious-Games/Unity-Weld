@@ -70,8 +70,8 @@ namespace UnityUI_Editor
             string label,
             AbstractMemberBinding target,
             PropertyInfo[] bindableProperties,
-            Action<string> propertyNameSetter,
-            string propertyName,
+            Action<string> propertyValueSetter,
+            string curPropertyValue,
             Func<PropertyInfo, bool> menuEnabled
         )
         {
@@ -81,15 +81,15 @@ namespace UnityUI_Editor
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
 
-            if (GUILayout.Button(new GUIContent(propertyName), EditorStyles.popup))
+            if (GUILayout.Button(new GUIContent(curPropertyValue), EditorStyles.popup))
             {
                 InspectorUtils.ShowMenu<PropertyInfo>(
                     property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
                     menuEnabled,
-                    property => property.ReflectedType.Name + "." + property.Name == propertyName,
+                    property => property.ReflectedType.Name + "." + property.Name == curPropertyValue,
                     property => UpdateProperty(
-                        propertyNameSetter,
-                        propertyName,
+                        propertyValueSetter,
+                        curPropertyValue,
                         property.ReflectedType.Name + "." + property.Name
                     ),
                     bindableProperties,
@@ -100,5 +100,81 @@ namespace UnityUI_Editor
             EditorGUILayout.EndHorizontal();
         }
 
+        /// <summary>
+        /// Shows a dropdown for selecting a property in the UI to bind to.
+        /// </summary>
+        public void ShowViewPropertyMenu(
+            string label, 
+            AbstractMemberBinding targetScript, 
+            BindablePropertyInfo[] properties, 
+            Action<string> propertyValueSetter,
+            string curPropertyValue,
+            out Type selectedPropertyType
+        )
+        {
+            var propertyNames = properties
+                .Select(prop => prop.PropertyInfo.ReflectedType.Name + "." + prop.PropertyInfo.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
+            var content = properties.Select(prop => new GUIContent(
+                    prop.PropertyInfo.ReflectedType.Name + "/" +
+                    prop.PropertyInfo.Name + " : " +
+                    prop.PropertyInfo.PropertyType.Name
+                ))
+                .ToArray();
+
+            var newSelectedIndex = EditorGUILayout.Popup(new GUIContent(label), selectedIndex, content);
+            if (newSelectedIndex != selectedIndex)
+            {
+                var newSelectedProperty = properties[newSelectedIndex];
+
+                UpdateProperty(
+                    propertyValueSetter,
+                    curPropertyValue,
+                    newSelectedProperty.PropertyInfo.ReflectedType.Name + "." + newSelectedProperty.PropertyInfo.Name
+                );
+
+                selectedPropertyType = newSelectedProperty.PropertyInfo.PropertyType;
+            }
+            else
+            {
+                selectedPropertyType = properties[selectedIndex].PropertyInfo.PropertyType;
+            }
+        }
+
+        /// <summary>
+        /// Show dropdown for selecting a UnityEvent to bind to.
+        /// </summary>
+        protected void ShowEventMenu(
+            AbstractMemberBinding targetScript, 
+            BindableEvent[] events,
+            Action<string> propertyValueSetter,
+            string curPropertyValue
+        )
+        {
+            var eventNames = events
+                .Select(evt => evt.ComponentType.Name + "." + evt.Name)
+                .ToArray();
+            var selectedIndex = Array.IndexOf(eventNames, curPropertyValue);
+            var content = events
+                .Select(evt => new GUIContent(evt.ComponentType.Name + "." + evt.Name))
+                .ToArray();
+
+            var newSelectedIndex = EditorGUILayout.Popup(
+                new GUIContent("View event"),
+                selectedIndex,
+                content
+            );
+
+            if (newSelectedIndex != selectedIndex)
+            {
+                var selectedEvent = events[newSelectedIndex];
+                UpdateProperty(
+                    propertyValueSetter,
+                    curPropertyValue,
+                    selectedEvent.ComponentType.Name + "." + selectedEvent.Name
+                );
+            }
+        }
     }
 }

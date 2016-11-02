@@ -9,6 +9,35 @@ using UnityEngine.Events;
 namespace UnityUI.Binding
 {
     /// <summary>
+    /// Information needed to bind to a UnityEvent on a component.
+    /// </summary>
+    public class BindableEvent
+    {
+        /// <summary>
+        /// UnityEvent to bind to.
+        /// </summary>
+        public UnityEventBase UnityEvent { get; set; }
+
+        /// <summary>
+        /// The name of the property or field contaning this event.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The type that the event belongs to.
+        /// </summary>
+        public Type DeclaringType { get; set; }
+
+        /// <summary>
+        /// Type of the component we're binding to. This doesn't account for multiple 
+        /// components of the same type on the same GameObject, but there doesn't seem
+        /// to be any other easy way of doing that since component instance IDs are
+        /// re-generated frequently.
+        /// </summary>
+        public Type ComponentType { get; set; }
+    }
+
+    /// <summary>
     /// Watches an component for a Unity event and triggers an action when the event is raised.
     /// </summary>
     public class UnityEventWatcher : IDisposable
@@ -47,43 +76,6 @@ namespace UnityUI.Binding
             {
                 unityEventBinder.Dispose();
                 unityEventBinder = null;
-            }
-        }
-
-        /// <summary>
-        /// Information needed to bind to a UnityEvent on a component.
-        /// </summary>
-        public class BindableEvent
-        {
-            /// <summary>
-            /// UnityEvent to bind to.
-            /// </summary>
-            public UnityEventBase UnityEvent { get; set; }
-
-            /// <summary>
-            /// The name of the property or field contaning this event.
-            /// </summary>
-            public string Name { get; set; }
-
-            /// <summary>
-            /// The type that the event belongs to.
-            /// </summary>
-            public Type DeclaringType { get; set; }
-
-            /// <summary>
-            /// Type of the component we're binding to. This doesn't account for multiple 
-            /// components of the same type on the same GameObject, but there doesn't seem
-            /// to be any other easy way of doing that since component instance IDs are
-            /// re-generated frequently.
-            /// </summary>
-            public Type ComponentType { get; set; }
-
-            /// <summary>
-            /// Returns the types of the event
-            /// </summary>
-            public Type[] GetEventTypes()
-            {
-                return UnityEvent.GetType().BaseType.GetGenericArguments();
             }
         }
 
@@ -139,7 +131,7 @@ namespace UnityUI.Binding
         /// <summary>
         /// Get all bindable Unity events on a particular game object.
         /// </summary>
-        public static BindableEvent[] GetBindableEvents(GameObject gameObject)
+        public static BindableEvent[] GetBindableEvents(GameObject gameObject) //todo: Consider moving this to TypeResolver.
         {
             return gameObject.GetComponents(typeof(Component))
                 .SelectMany(component => GetBindableEvents(component))
