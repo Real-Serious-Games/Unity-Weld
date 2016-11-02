@@ -71,9 +71,14 @@ namespace UnityUI_Editor
                 }               
             }
 
-            // Show selector for property in the view model.
-            var bindableViewModelProperties = TypeResolver.FindBindableProperties(targetScript);
-            ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, adaptedViewPropertyType);
+            ShowViewModelPropertyMenu(
+                "View-model property",
+                targetScript,
+                TypeResolver.FindBindableProperties(targetScript),
+                updatedValue => targetScript.viewModelPropertyName = updatedValue,
+                targetScript.viewModelPropertyName,
+                property => property.PropertyType == adaptedViewPropertyType
+            );
         }
 
         /// <summary>
@@ -96,43 +101,6 @@ namespace UnityUI_Editor
                         prop.PropertyInfo.PropertyType.Name
                     ))
                     .ToArray()
-            );
-        }
-
-        private void ShowViewModelPropertySelector(OneWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType)
-        {
-            var buttonContent = new GUIContent(target.viewModelPropertyName);
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("View-model property");
-
-            var dropdownPosition = GUILayoutUtility.GetLastRect();
-            dropdownPosition.x += dropdownPosition.width;
-
-            if (GUILayout.Button(buttonContent, EditorStyles.popup))
-            {
-                ShowViewModelPropertyDropdown(target, bindableProperties, viewPropertyType, dropdownPosition);
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// Draws the dropdown menu for picking a property in the view model to bind to.
-        /// </summary>
-        private void ShowViewModelPropertyDropdown(OneWayPropertyBinding target, PropertyInfo[] bindableProperties, Type viewPropertyType, Rect position)
-        { 
-            InspectorUtils.ShowMenu<PropertyInfo>(
-                property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
-                property => property.PropertyType == viewPropertyType,
-                property => property.ReflectedType.Name + "." + property.Name == target.viewModelPropertyName,
-                property => UpdateProperty(
-                    updatedValue => target.viewModelPropertyName = updatedValue,
-                    target.viewModelPropertyName,
-                    property.ReflectedType.Name + "." + property.Name
-                ),
-                bindableProperties,
-                position
             );
         }
     }

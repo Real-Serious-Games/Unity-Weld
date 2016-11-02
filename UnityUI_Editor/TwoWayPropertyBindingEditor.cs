@@ -83,14 +83,13 @@ namespace UnityUI_Editor
                 }
             }
 
-            var bindableViewModelProperties = TypeResolver.FindBindableProperties(targetScript);
-            ShowViewModelPropertySelector(
+            ShowViewModelPropertyMenu(
                 "View-model property",
                 targetScript, 
-                bindableViewModelProperties,
+                TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
                 targetScript.viewModelPropertyName,
-                adaptedViewPropertyType
+                property => property.PropertyType == adaptedViewPropertyType
             );
 
             var viewModelAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
@@ -131,14 +130,13 @@ namespace UnityUI_Editor
                 }
             }
 
-            var exceptionViewModelProperties = TypeResolver.FindBindableProperties(targetScript);
-            ShowViewModelPropertySelector(
+            ShowViewModelPropertyMenu(
                 "Exception property",
                 targetScript, 
-                exceptionViewModelProperties,
+                TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.exceptionPropertyName = updatedValue,
                 targetScript.exceptionPropertyName,
-                adaptedExceptionPropertyType
+                property => property.PropertyType == adaptedExceptionPropertyType
             );
 
         }
@@ -183,38 +181,5 @@ namespace UnityUI_Editor
             );
         }
 
-        private void ShowViewModelPropertySelector(
-            string label,
-            TwoWayPropertyBinding target, 
-            PropertyInfo[] bindableProperties,
-            Action<string> propertyNameSetter,
-            string propertyName,
-            Type viewPropertyType
-            )
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(label);
-
-            var dropdownPosition = GUILayoutUtility.GetLastRect();
-            dropdownPosition.x += dropdownPosition.width;
-
-            if (GUILayout.Button(new GUIContent(propertyName), EditorStyles.popup))
-            {
-	            InspectorUtils.ShowMenu<PropertyInfo>(
-	                property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
-	                property => property.PropertyType == viewPropertyType,
-	                property => property.ReflectedType.Name + "." + property.Name == propertyName,
-	                property => UpdateProperty(
-	                	propertyNameSetter,
-	                	propertyName,
-	                	property.ReflectedType.Name + "." + property.Name
-	                ), 
-	                bindableProperties, 
-	                dropdownPosition
-            	);
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
     }
 }
