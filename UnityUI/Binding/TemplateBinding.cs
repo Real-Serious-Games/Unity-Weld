@@ -16,9 +16,22 @@ namespace UnityUI.Binding
     /// <summary>
     /// Template for use in collection bindings.
     /// </summary>
-    public class TemplateBinding : AbstractViewModelBinding, ITemplateBinding
+    public class TemplateBinding : MonoBehaviour, IViewModelProvider, ITemplateBinding
     {
-        public override object BoundViewModel
+        /// <summary>
+        /// View to bind the UI to.
+        /// </summary>
+        public string ViewModelTypeName
+        {
+            get
+            {
+                return viewModelTypeName;
+            }
+        }
+
+        private string viewModelTypeName = string.Empty;
+
+        public object BoundViewModel
         {
             get
             {

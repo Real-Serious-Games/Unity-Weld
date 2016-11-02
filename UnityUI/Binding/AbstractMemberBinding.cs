@@ -40,7 +40,7 @@ namespace UnityUI.Binding
                 }
 
                 var newViewModelBinding = components                    
-                    .Select(component => component as IViewModelBinding)
+                    .Select(component => component as IViewModelProvider)
                     .Where(component => component != null)
                     .Where(viewModelBinding => viewModelBinding.ViewModelTypeName == viewModelName && (object)viewModelBinding != this)
                     .FirstOrDefault();

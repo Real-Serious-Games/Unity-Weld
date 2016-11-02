@@ -170,7 +170,7 @@ namespace UnityUI.Internal
                     }
 
                     // Case where a ViewModelBinding is used to bind a non-MonoBehaviour class.
-                    var viewModelBinding = component as IViewModelBinding;
+                    var viewModelBinding = component as IViewModelProvider;
                     if (viewModelBinding != null)
                     {
                         foundAtLeastOneBinding = true;

@@ -7,7 +7,7 @@ namespace UnityUI.Binding
     /// <summary>
     /// Bind a sub-view model which is a property on another view model for use in the UI.
     /// </summary>
-    public class SubViewModelBinding : AbstractMemberBinding, IViewModelBinding
+    public class SubViewModelBinding : AbstractMemberBinding, IViewModelProvider
     {
         /// <summary>
         /// Name of the property in the top-level view model that contains the sub-viewmodel that 
