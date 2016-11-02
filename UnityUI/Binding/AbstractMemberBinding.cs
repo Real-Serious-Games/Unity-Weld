@@ -76,8 +76,7 @@ namespace UnityUI.Binding
 
             if (!typeof(IAdapter).IsAssignableFrom(adapterType))
             {
-                throw new ApplicationException("Type '" + adapterTypeName + "' does not implement IAdapter and " +
-                    "cannot be used as an adapter.");
+                throw new ApplicationException("Type '" + adapterTypeName + "' does not implement IAdapter and cannot be used as an adapter.");
             }
 
             return (IAdapter)Activator.CreateInstance(adapterType);

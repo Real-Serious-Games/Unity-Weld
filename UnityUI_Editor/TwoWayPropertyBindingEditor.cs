@@ -57,20 +57,7 @@ namespace UnityUI_Editor
                 )
             );
 
-            Type adaptedViewPropertyType = viewPropertyType;
-            if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
-            {
-                var adapterType = TypeResolver.FindAdapterType(targetScript.viewAdapterTypeName);
-                if (adapterType != null)
-                {
-                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
-                    if (adapterAttribute != null)
-                    {
-                        adaptedViewPropertyType = adapterAttribute.InputType;
-                    }
-                }
-            }
-
+            var adaptedViewPropertyType = AdaptType(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "View-model property",
                 targetScript, 
@@ -104,20 +91,7 @@ namespace UnityUI_Editor
                 (newValue) => targetScript.exceptionAdapterTypeName = newValue
             );
 
-            var adaptedExceptionPropertyType = typeof(Exception);
-            if (!string.IsNullOrEmpty(targetScript.exceptionAdapterTypeName))
-            {
-                var adapterType = TypeResolver.FindAdapterType(targetScript.exceptionAdapterTypeName);
-                if (adapterType != null)
-                {
-                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
-                    if (adapterAttribute != null)
-                    {
-                        adaptedExceptionPropertyType = adapterAttribute.OutputType;
-                    }
-                }
-            }
-
+            var adaptedExceptionPropertyType = AdaptType(typeof(Exception), targetScript.exceptionAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "Exception property",
                 targetScript, 

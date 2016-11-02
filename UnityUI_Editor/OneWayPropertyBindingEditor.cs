@@ -49,20 +49,7 @@ namespace UnityUI_Editor
                 }
             );
 
-            Type adaptedViewPropertyType = viewPropertyType;
-            if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
-            {
-                var adapterType = TypeResolver.FindAdapterType(targetScript.viewAdapterTypeName);
-                if (adapterType != null)
-                {
-                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
-                    if (adapterAttribute != null)
-                    {
-                        adaptedViewPropertyType = adapterAttribute.InputType;
-                    }
-                }               
-            }
-
+            var adaptedViewPropertyType = AdaptType(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "View-model property",
                 targetScript,

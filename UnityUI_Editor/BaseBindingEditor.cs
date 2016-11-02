@@ -6,6 +6,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityUI.Binding;
+using UnityUI.Internal;
 
 namespace UnityUI_Editor
 {
@@ -175,6 +176,27 @@ namespace UnityUI_Editor
                     selectedEvent.ComponentType.Name + "." + selectedEvent.Name
                 );
             }
+        }
+
+        /// <summary>
+        /// Pass a type through an adapter and get the result.
+        /// </summary>
+        protected Type AdaptType(Type inputType, string adapterName)
+        {
+            if (!string.IsNullOrEmpty(adapterName))
+            {
+                var adapterType = TypeResolver.FindAdapterType(adapterName);
+                if (adapterType != null)
+                {
+                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
+                    if (adapterAttribute != null)
+                    {
+                        return adapterAttribute.InputType;
+                    }
+                }
+            }
+
+            return inputType;
         }
     }
 }
