@@ -26,11 +26,6 @@ namespace UnityUI_Editor
                 .OrderBy(evt => evt.Name)
                 .ToArray();
 
-            var properties = PropertyFinder
-                .GetBindableProperties(targetScript.gameObject)
-                .OrderBy(property => property.PropertyInfo.Name)
-                .ToArray();
-
             var selectedEventIndex = ShowEventSelector(targetScript, events);
             if (selectedEventIndex >= 0)
             {
@@ -42,16 +37,16 @@ namespace UnityUI_Editor
             }
 
             Type viewPropertyType = null;
-            var selectedPropertyIndex = ShowUIPropertySelector(targetScript, properties);
-            if (selectedPropertyIndex >= 0)
-            {
-                UpdateProperty(
+            ShowViewPropertyMenu(
+                "View property",
+                targetScript,
+                PropertyFinder.GetBindableProperties(targetScript.gameObject)
+                    .OrderBy(property => property.PropertyInfo.Name)
+                    .ToArray(),
                     updatedValue => targetScript.uiPropertyName = updatedValue,
                     targetScript.uiPropertyName,
-                    properties[selectedPropertyIndex].PropertyInfo.ReflectedType.Name + "." + properties[selectedPropertyIndex].PropertyInfo.Name
+                out viewPropertyType
                 );
-                viewPropertyType = properties[selectedPropertyIndex].PropertyInfo.PropertyType;
-            }
 
             var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
@@ -159,27 +154,6 @@ namespace UnityUI_Editor
             );
         }
 
-        /// <summary>
-        /// Shows a dropdown for selecting a property in the UI to bind to.
-        /// </summary>
-        private int ShowUIPropertySelector(TwoWayPropertyBinding targetScript, PropertyFinder.BindablePropertyInfo[] properties)
-        {
-            var propertyNames = properties
-                .Select(prop => prop.PropertyInfo.ReflectedType.Name + "." + prop.PropertyInfo.Name)
-                .ToArray();
-            var selectedIndex = Array.IndexOf(propertyNames, targetScript.uiPropertyName);
-
-            return EditorGUILayout.Popup(
-                new GUIContent("View property"),
-                selectedIndex,
-                properties.Select(prop => new GUIContent(
-                        prop.PropertyInfo.ReflectedType.Name + "/" +
-                        prop.PropertyInfo.Name + " : " +
-                        prop.PropertyInfo.PropertyType.Name
-                    ))
-                    .ToArray()
-            );
-        }
 
     }
 }

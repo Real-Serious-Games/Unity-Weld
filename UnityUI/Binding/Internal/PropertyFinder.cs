@@ -8,20 +8,6 @@ using UnityEngine;
 namespace UnityUI.Binding
 {
     /// <summary>
-    /// Helper to find bindable properties.
-    /// </summary>
-    public class PropertyFinder
-    {
-        /// <summary>
-        /// List of types to exclude from the types of components in the UI we can bind to.
-        /// </summary>
-        private static readonly HashSet<Type> hiddenTypes = new HashSet<Type>{
-            typeof(AbstractMemberBinding),
-            typeof(OneWayPropertyBinding),
-            typeof(TwoWayPropertyBinding)
-        };
-
-        /// <summary>
         /// Information needed to bind to a property on a component. 
         /// </summary>
         public struct BindablePropertyInfo
@@ -37,12 +23,25 @@ namespace UnityUI.Binding
             public UnityEngine.Component Object { get; set; }
 
             public BindablePropertyInfo(PropertyInfo propertyInfo, UnityEngine.Component obj)
-                : this()
             {
-                PropertyInfo = propertyInfo;
-                Object = obj;
+            	this.PropertyInfo = propertyInfo;
+            	this.Object = obj;
             }
         }
+
+    /// <summary>
+    /// Helper to find bindable properties.
+    /// </summary>
+    public class PropertyFinder
+    {
+        /// <summary>
+        /// List of types to exclude from the types of components in the UI we can bind to.
+        /// </summary>
+        private static readonly HashSet<Type> hiddenTypes = new HashSet<Type>{
+            typeof(AbstractMemberBinding),
+            typeof(OneWayPropertyBinding),
+            typeof(TwoWayPropertyBinding)
+        };
 
         /// <summary>
         /// Use reflection to find all components with properties we can bind to.
