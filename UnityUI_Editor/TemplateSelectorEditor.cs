@@ -18,7 +18,7 @@ namespace UnityTools.UnityUI_Editor
             // Initialise everything
             var targetScript = (TemplateSelector)target;
 
-            var bindableViews = GetBindableViewModelProperties(targetScript);
+            var bindableViews = TypeResolver.FindBindableProperties(targetScript);
             ShowPropertySelector(targetScript, bindableViews);
 
             EditorGUILayout.BeginHorizontal();
@@ -31,14 +31,6 @@ namespace UnityTools.UnityUI_Editor
             );
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        private PropertyInfo[] GetBindableViewModelProperties(TemplateSelector target)
-        {
-            return TypeResolver.GetAvailableViewModelTypes(target)
-                .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                .Where(property => property.GetCustomAttributes(false).Any(attribute => attribute is BindingAttribute))
-                .ToArray();
         }
 
         /// <summary>

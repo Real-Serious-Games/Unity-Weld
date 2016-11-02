@@ -83,7 +83,7 @@ namespace UnityUI_Editor
                 }
             }
 
-            var bindableViewModelProperties = GetBindableViewModelProperties(targetScript);
+            var bindableViewModelProperties = TypeResolver.FindBindableProperties(targetScript);
             ShowViewModelPropertySelector(
                 "View-model property",
                 targetScript, 
@@ -131,7 +131,7 @@ namespace UnityUI_Editor
                 }
             }
 
-            var exceptionViewModelProperties = GetBindableViewModelProperties(targetScript);
+            var exceptionViewModelProperties = TypeResolver.FindBindableProperties(targetScript);
             ShowViewModelPropertySelector(
                 "Exception property",
                 targetScript, 
@@ -181,17 +181,6 @@ namespace UnityUI_Editor
                     ))
                     .ToArray()
             );
-        }
-
-        /// <summary>
-        /// Get a list of all the methods in the bound view model of a specific type that we can bind to.
-        /// </summary>
-        private PropertyInfo[] GetBindableViewModelProperties(TwoWayPropertyBinding target)
-        {
-            return TypeResolver.GetAvailableViewModelTypes(target)
-                .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                .Where(property => property.GetCustomAttributes(false).Any(attribute => attribute is BindingAttribute))
-                .ToArray();
         }
 
         private void ShowViewModelPropertySelector(

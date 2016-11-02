@@ -72,7 +72,7 @@ namespace UnityUI_Editor
             }
 
             // Show selector for property in the view model.
-            var bindableViewModelProperties = GetBindableViewModelProperties(targetScript);
+            var bindableViewModelProperties = TypeResolver.FindBindableProperties(targetScript);
             ShowViewModelPropertySelector(targetScript, bindableViewModelProperties, adaptedViewPropertyType);
         }
 
@@ -134,17 +134,6 @@ namespace UnityUI_Editor
                 bindableProperties,
                 position
             );
-        }
-
-        /// <summary>
-        /// Get a list of properties in the bound view model that match the type of the selected property in the UI.
-        /// </summary>
-        private PropertyInfo[] GetBindableViewModelProperties(OneWayPropertyBinding target)
-        {
-            return TypeResolver.GetAvailableViewModelTypes(target)
-                .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                .Where(property => property.GetCustomAttributes(false).Any(attribute => attribute is BindingAttribute))
-                .ToArray();
         }
     }
 }

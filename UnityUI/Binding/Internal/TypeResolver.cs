@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityUI.Binding;
 
@@ -151,7 +152,7 @@ namespace UnityUI.Internal
         /// Scan up the hierarchy and find all the types that can be bound to 
         /// a specified MemberBinding.
         /// </summary>
-        public static IEnumerable<Type> GetAvailableViewModelTypes(AbstractMemberBinding memberBinding)
+        public static IEnumerable<Type> FindAvailableViewModelTypes(AbstractMemberBinding memberBinding)
         {
             bool foundAtLeastOneBinding = false;
 
@@ -192,5 +193,20 @@ namespace UnityUI.Internal
                 Debug.LogError("UI binding " + memberBinding.gameObject.name + " must be placed underneath at least one bindable component.", memberBinding);
             }
         }
+
+        /// <summary>
+        /// Find bindable properties in available view models.
+        /// </summary>
+        public static PropertyInfo[] FindBindableProperties(AbstractMemberBinding target)
+        {
+            return FindAvailableViewModelTypes(target)
+                .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                .Where(property => property
+                    .GetCustomAttributes(false)
+                    .Any(attribute => attribute is BindingAttribute) // Filter out properties that don't have [Binding].
+                )
+                .ToArray();
+        }
+
     }
 }

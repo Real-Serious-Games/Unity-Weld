@@ -105,7 +105,7 @@ namespace UnityUI_Editor
         /// </summary>
         private MethodInfo[] GetBindableViewModelMethods(EventBinding targetScript)
         {
-            return TypeResolver.GetAvailableViewModelTypes(targetScript)
+            return TypeResolver.FindAvailableViewModelTypes(targetScript)
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                 .Where(m => m.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !m.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
                 .ToArray();

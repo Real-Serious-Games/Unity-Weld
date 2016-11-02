@@ -21,7 +21,7 @@ namespace UnityUI_Editor
             // Initialise everything
             var targetScript = (CollectionBinding)target;
 
-            var bindableCollections = GetBindableViewModelCollections(targetScript);
+            var bindableCollections = FindBindableCollectionProperties(targetScript);
             ShowCollectionSelector(targetScript, bindableCollections);
 
             EditorGUILayout.BeginHorizontal();
@@ -36,11 +36,12 @@ namespace UnityUI_Editor
             EditorGUILayout.EndHorizontal();
         }
 
-        private PropertyInfo[] GetBindableViewModelCollections(CollectionBinding target)
+        /// <summary>
+        /// Find collection properties that can be data-bound.
+        /// </summary>
+        private PropertyInfo[] FindBindableCollectionProperties(CollectionBinding target)
         {
-            return TypeResolver.GetAvailableViewModelTypes(target)
-                .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                .Where(property => property.GetCustomAttributes(false).Any(attribute => attribute is BindingAttribute))
+            return TypeResolver.FindBindableProperties(target)
                 .Where(property => typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 .Where(property => !typeof(string).IsAssignableFrom(property.PropertyType))
                 .ToArray();

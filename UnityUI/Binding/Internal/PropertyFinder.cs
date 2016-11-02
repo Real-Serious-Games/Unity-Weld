@@ -47,7 +47,7 @@ namespace UnityUI.Binding
         /// <summary>
         /// Use reflection to find all components with properties we can bind to.
         /// </summary>
-        public static IEnumerable<BindablePropertyInfo> GetBindableProperties(GameObject gameObject)
+        public static IEnumerable<BindablePropertyInfo> GetBindableProperties(GameObject gameObject) //todo: Maybe move this to the TypeResolver.
         {
             return gameObject.GetComponents<UnityEngine.Component>()
                 .SelectMany(component =>
