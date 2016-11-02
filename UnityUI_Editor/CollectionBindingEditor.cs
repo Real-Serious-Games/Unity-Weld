@@ -24,7 +24,7 @@ namespace UnityUI_Editor
             ShowViewModelPropertyMenu(
                 "View-model property",
                 targetScript, 
-                FindBindableCollectionProperties(targetScript),
+                TypeResolver.FindBindableCollectionProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
                 targetScript.viewModelPropertyName,
                 property => true
@@ -40,17 +40,6 @@ namespace UnityUI_Editor
             );
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// Find collection properties that can be data-bound.
-        /// </summary>
-        private PropertyInfo[] FindBindableCollectionProperties(CollectionBinding target)
-        {
-            return TypeResolver.FindBindableProperties(target)
-                .Where(property => typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
-                .Where(property => !typeof(string).IsAssignableFrom(property.PropertyType))
-                .ToArray();
         }
     }
 }

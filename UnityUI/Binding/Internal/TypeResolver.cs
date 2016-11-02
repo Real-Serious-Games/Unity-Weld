@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -217,6 +218,17 @@ namespace UnityUI.Internal
                 .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                 .Where(method => method.GetParameters().Length == 0)
                 .Where(method => method.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !method.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Find collection properties that can be data-bound.
+        /// </summary>
+        public static PropertyInfo[] FindBindableCollectionProperties(CollectionBinding target)
+        {
+            return TypeResolver.FindBindableProperties(target)
+                .Where(property => typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                .Where(property => !typeof(string).IsAssignableFrom(property.PropertyType))
                 .ToArray();
         }
     }
