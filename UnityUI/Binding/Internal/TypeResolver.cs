@@ -208,5 +208,16 @@ namespace UnityUI.Internal
                 .ToArray();
         }
 
+        /// <summary>
+        /// Get a list of methods in the view model that we can bind to.
+        /// </summary>
+        public static MethodInfo[] FindBindableMethods(EventBinding targetScript)
+        {
+            return FindAvailableViewModelTypes(targetScript)
+                .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+                .Where(method => method.GetParameters().Length == 0)
+                .Where(method => method.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !method.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
+                .ToArray();
+        }
     }
 }
