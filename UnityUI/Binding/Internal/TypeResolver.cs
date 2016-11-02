@@ -158,29 +158,29 @@ namespace UnityUI.Internal
             var trans = memberBinding.transform;
             while (trans != null)
             {
-                var viewModels = trans.GetComponents<MonoBehaviour>();
-                foreach (var viewModel in viewModels)
+                var components = trans.GetComponents<MonoBehaviour>();
+                foreach (var component in components)
                 {
                     // Can't bind to self
-                    if (viewModel == memberBinding)
+                    if (component == memberBinding)
                     {
                         continue;
                     }
 
                     // Case where a ViewModelBinding is used to bind a non-MonoBehaviour class.
-                    var viewModelBinding = viewModel as IViewModelBinding;
+                    var viewModelBinding = component as IViewModelBinding;
                     if (viewModelBinding != null)
                     {
                         foundAtLeastOneBinding = true;
 
                         yield return FindBoundViewType(viewModelBinding.ViewModelTypeName);
                     }
-                    else if (viewModel.GetType().GetCustomAttributes(typeof(BindingAttribute), false).Any())
+                    else if (component.GetType().GetCustomAttributes(typeof(BindingAttribute), false).Any())
                     {
                         // Case where we are binding to an existing MonoBehaviour.
                         foundAtLeastOneBinding = true;
 
-                        yield return viewModel.GetType();
+                        yield return component.GetType();
                     }
                 }
 
@@ -189,8 +189,7 @@ namespace UnityUI.Internal
 
             if (!foundAtLeastOneBinding)
             {
-                Debug.LogError("UI binding " + memberBinding.gameObject.name +
-                    " must be placed underneath at least one bindable component.", memberBinding);
+                Debug.LogError("UI binding " + memberBinding.gameObject.name + " must be placed underneath at least one bindable component.", memberBinding);
             }
         }
     }

@@ -143,6 +143,7 @@ namespace UnityUI_Editor
         {
             return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                .Where(property => property.GetCustomAttributes(false).Any(attribute => attribute is BindingAttribute))
                 .ToArray();
         }
     }

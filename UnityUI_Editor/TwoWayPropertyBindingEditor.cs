@@ -190,6 +190,7 @@ namespace UnityUI_Editor
         {
             return TypeResolver.GetAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                .Where(property => property.GetCustomAttributes(false).Any(attribute => attribute is BindingAttribute))
                 .ToArray();
         }
 
@@ -210,43 +211,21 @@ namespace UnityUI_Editor
 
             if (GUILayout.Button(new GUIContent(propertyName), EditorStyles.popup))
             {
-                ShowViewModelPropertyMenu(
-                    target, 
-                    bindableProperties,
-                    propertyNameSetter,
-                    propertyName,
-                    viewPropertyType, 
-                    dropdownPosition
-                );
+	            InspectorUtils.ShowMenu<PropertyInfo>(
+	                property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
+	                property => property.PropertyType == viewPropertyType,
+	                property => property.ReflectedType.Name + "." + property.Name == propertyName,
+	                property => UpdateProperty(
+	                	propertyNameSetter,
+	                	propertyName,
+	                	property.ReflectedType.Name + "." + property.Name
+	                ), 
+	                bindableProperties, 
+	                dropdownPosition
+            	);
             }
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// Draws the dropdown menu for picking a property in the view model to bind to.
-        /// </summary>
-        private void ShowViewModelPropertyMenu(
-            TwoWayPropertyBinding target, 
-            PropertyInfo[] bindableProperties,
-            Action<string> propertyNameSetter,
-            string viewModelPropertyName,
-            Type viewPropertyType, 
-            Rect position
-        )
-        {
-            InspectorUtils.ShowMenu<PropertyInfo>(
-                property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
-                property => property.PropertyType == viewPropertyType,
-                property => property.ReflectedType.Name + "." + property.Name == viewModelPropertyName,
-                property => UpdateProperty(
-                    propertyNameSetter,
-                    viewModelPropertyName,
-                    property.ReflectedType.Name + "." + property.Name
-                ), 
-                bindableProperties, 
-                position
-            );
         }
     }
 }
