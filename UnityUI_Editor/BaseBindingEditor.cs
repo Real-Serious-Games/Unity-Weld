@@ -21,7 +21,7 @@ namespace UnityUI_Editor
         protected void UpdateProperty<TValue>(Action<TValue> setter, TValue oldValue, TValue newValue)
             where TValue : class
         {
-            if (!newValue.Equals(oldValue))
+            if (newValue == null || !newValue.Equals(oldValue))
             {
                 setter(newValue);
 
