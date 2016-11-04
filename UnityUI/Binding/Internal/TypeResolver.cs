@@ -163,8 +163,8 @@ namespace UnityUI.Internal
                 var components = trans.GetComponents<MonoBehaviour>();
                 foreach (var component in components)
                 {
-                    // Can't bind to self
-                    if (component == memberBinding)
+                    // Can't bind to self or null
+                    if (component == null || component == memberBinding)
                     {
                         continue;
                     }
