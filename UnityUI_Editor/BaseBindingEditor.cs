@@ -141,9 +141,10 @@ namespace UnityUI_Editor
             {
                 if (selectedIndex < 0)
                 {
-                    selectedPropertyType = typeof(object);
+                    selectedPropertyType = null;
                     return;
                 }
+
                 selectedPropertyType = properties[selectedIndex].PropertyInfo.PropertyType;
             }
         }
