@@ -28,7 +28,7 @@ namespace UnityUI.Binding
         /// </summary>
         public string uiPropertyName;
 
-        /// <summary> 
+        /// <summary>
         /// Watches the view-model for changes that must be propagated to the view.
         /// </summary>
         private PropertyWatcher viewModelWatcher;

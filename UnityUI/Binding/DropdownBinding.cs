@@ -78,7 +78,7 @@ namespace UnityUI.Binding
                 new PropertyEndPoint(
                     this,
                     "SelectedOption",
-                	CreateAdapter(selectionViewModelToUIAdapter),
+                    CreateAdapter(selectionViewModelToUIAdapter),
                     "view",
                     this
                 ),
@@ -113,7 +113,7 @@ namespace UnityUI.Binding
                 new PropertyEndPoint(
                     this,
                     "Options",
-                	CreateAdapter(optionsAdapter),
+                    CreateAdapter(optionsAdapter),
                     "view",
                     this
                 ),
@@ -145,7 +145,7 @@ namespace UnityUI.Binding
             }
 
             dropdown = null;
-                    }
+        }
 
         /// <summary>
         /// Used to remember the selection if it gets set before the options list is set.
@@ -196,14 +196,14 @@ namespace UnityUI.Binding
                 selectedOption = value;
 
                 UpdateSelectedOption();
-                }
             }
+        }
 
         /// <summary>
         /// Update the options.
         /// </summary>
         private void UpdateOptions()
-            {
+        {
             dropdown.options = options
                 .Select(option => new Dropdown.OptionData(option))
                 .ToList();

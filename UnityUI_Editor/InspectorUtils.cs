@@ -39,6 +39,7 @@ namespace UnityUI_Editor
                     menu.AddDisabledItem(content);
                 }
             }
+
             menu.DropDown(position);
         }
 

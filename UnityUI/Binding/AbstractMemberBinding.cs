@@ -84,7 +84,7 @@ namespace UnityUI.Binding
         }
 
         /// <summary>
-        /// Make a property end point for a property ont he view model.
+        /// Make a property end point for a property on the view model.
         /// </summary>
         protected PropertyEndPoint MakeViewModelEndPoint(string viewModelPropertyName, string adapterTypeName)
         {

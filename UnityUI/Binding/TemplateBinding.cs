@@ -30,9 +30,9 @@ namespace UnityUI.Binding
         /// Get the name of the view-model's type.
         /// </summary>
         public string GetViewModelTypeName()
-            {
-                return viewModelTypeName;
-            }
+        {
+            return viewModelTypeName;
+        }
 
         private string viewModelTypeName = string.Empty;
 

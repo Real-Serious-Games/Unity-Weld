@@ -23,12 +23,12 @@ namespace UnityUI_Editor
                 "View property",
                 targetScript,
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)
-                .OrderBy(property => property.PropertyInfo.Name)
+                    .OrderBy(property => property.PropertyInfo.Name)
                     .ToArray(),
-                    updatedValue => targetScript.uiPropertyName = updatedValue,
-                    targetScript.uiPropertyName,
+                updatedValue => targetScript.uiPropertyName = updatedValue,
+                targetScript.uiPropertyName,
                 out viewPropertyType
-                );
+            );
 
             var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)

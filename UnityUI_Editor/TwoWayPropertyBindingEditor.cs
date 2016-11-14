@@ -23,11 +23,11 @@ namespace UnityUI_Editor
             ShowEventMenu(
                 targetScript,
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
-                .OrderBy(evt => evt.Name)
+                    .OrderBy(evt => evt.Name)
                     .ToArray(),
-                    updatedValue => targetScript.uiEventName = updatedValue,
+                updatedValue => targetScript.uiEventName = updatedValue,
                 targetScript.uiEventName
-                );
+            );
 
             Type viewPropertyType = null;
             ShowViewPropertyMenu(
@@ -36,10 +36,10 @@ namespace UnityUI_Editor
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)
                     .OrderBy(property => property.PropertyInfo.Name)
                     .ToArray(),
-                    updatedValue => targetScript.uiPropertyName = updatedValue,
-                    targetScript.uiPropertyName,
+                updatedValue => targetScript.uiPropertyName = updatedValue,
+                targetScript.uiPropertyName,
                 out viewPropertyType
-                );
+            );
 
             var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
@@ -47,8 +47,8 @@ namespace UnityUI_Editor
                 .ToArray();
 
             ShowAdapterMenu(
-                "View adaptor", 
-                viewAdapterTypeNames, 
+                "View adaptor",
+                viewAdapterTypeNames,
                 targetScript.viewAdapterTypeName,
                 newValue => UpdateProperty(
                     updatedValue => targetScript.viewAdapterTypeName = updatedValue,
@@ -60,7 +60,7 @@ namespace UnityUI_Editor
             var adaptedViewPropertyType = AdaptType(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "View-model property",
-                targetScript, 
+                targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
                 targetScript.viewModelPropertyName,
@@ -73,8 +73,8 @@ namespace UnityUI_Editor
                 .ToArray();
 
             ShowAdapterMenu(
-                "View-model adaptor", 
-                viewModelAdapterTypeNames, 
+                "View-model adaptor",
+                viewModelAdapterTypeNames,
                 targetScript.viewModelAdapterTypeName,
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
             );
@@ -94,13 +94,12 @@ namespace UnityUI_Editor
             var adaptedExceptionPropertyType = AdaptType(typeof(Exception), targetScript.exceptionAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "Exception property",
-                targetScript, 
+                targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.exceptionPropertyName = updatedValue,
                 targetScript.exceptionPropertyName,
                 property => property.PropertyType == adaptedExceptionPropertyType
             );
-
         }
     }
 }

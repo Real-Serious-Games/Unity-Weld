@@ -95,7 +95,7 @@ namespace UnityUI.Binding
             {
                 viewModelPropertyWatcher.Dispose();
                 viewModelPropertyWatcher = null;
-        }
+            }
 
             viewModel = null;
         }

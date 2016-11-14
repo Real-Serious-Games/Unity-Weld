@@ -55,7 +55,7 @@ namespace UnityUI.Binding
         }
 
         public override void Disconnect()
-            {
+        {
             UnbindCollection();
 
             if (propertyWatcher != null)

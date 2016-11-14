@@ -22,11 +22,11 @@ namespace UnityUI_Editor
             ShowEventMenu(
                 targetScript,
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
-                .OrderBy(evt => evt.Name)
+                    .OrderBy(evt => evt.Name)
                     .ToArray(),
-                    updatedValue => targetScript.uiEventName = updatedValue,
+                updatedValue => targetScript.uiEventName = updatedValue,
                 targetScript.uiEventName
-                );
+            );
 
             ShowMethodMenu(targetScript, TypeResolver.FindBindableMethods(targetScript));
         }
@@ -44,20 +44,19 @@ namespace UnityUI_Editor
 
             if (GUILayout.Button(new GUIContent(targetScript.viewModelMethodName), EditorStyles.popup))
             {
-            InspectorUtils.ShowMenu<MethodInfo>(
-                method => method.ReflectedType + "/" + method.Name,
-                method => true,
+                InspectorUtils.ShowMenu<MethodInfo>(
+                    method => method.ReflectedType + "/" + method.Name,
+                    method => true,
                     method => method.ReflectedType.Name + "." + method.Name == targetScript.viewModelMethodName,
-                method => UpdateProperty(
+                    method => UpdateProperty(
                         updatedValue => targetScript.viewModelMethodName = updatedValue,
                         targetScript.viewModelMethodName,
-                    method.ReflectedType.Name + "." + method.Name
-                ),
-                bindableMethods,
+                        method.ReflectedType.Name + "." + method.Name
+                    ),
+                    bindableMethods,
                     dropdownPosition
-            );
-
-        }
+                );
+            }
 
             EditorGUILayout.EndHorizontal();
         }
