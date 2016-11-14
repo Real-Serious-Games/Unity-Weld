@@ -185,21 +185,45 @@ namespace UnityUI_Editor
         }
 
         /// <summary>
-        /// Pass a type through an adapter and get the result.
+        /// Find the adapter attribute for a named adapter type.
         /// </summary>
-        protected Type AdaptType(Type inputType, string adapterName)
+        protected AdapterAttribute FindAdapterAttribute(string adapterName)
         {
             if (!string.IsNullOrEmpty(adapterName))
             {
                 var adapterType = TypeResolver.FindAdapterType(adapterName);
                 if (adapterType != null)
                 {
-                    var adapterAttribute = TypeResolver.FindAdapterAttribute(adapterType);
-                    if (adapterAttribute != null)
-                    {
-                        return adapterAttribute.InputType;
-                    }
+                    return TypeResolver.FindAdapterAttribute(adapterType);
                 }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Pass a type through an adapter and get the result.
+        /// </summary>
+        protected Type AdaptTypeBackward(Type inputType, string adapterName)
+        {
+            var adapterAttribute = FindAdapterAttribute(adapterName);
+            if (adapterAttribute != null)
+            {
+                return adapterAttribute.InputType;
+            }
+
+            return inputType;
+        }
+
+        /// <summary>
+        /// Pass a type through an adapter and get the result.
+        /// </summary>
+        protected Type AdaptTypeForward(Type inputType, string adapterName)
+        {
+            var adapterAttribute = FindAdapterAttribute(adapterName);
+            if (adapterAttribute != null)
+            {
+                return adapterAttribute.OutputType;
             }
 
             return inputType;

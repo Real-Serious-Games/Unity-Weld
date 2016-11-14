@@ -49,7 +49,7 @@ namespace UnityUI_Editor
                 }
             );
 
-            var adaptedViewPropertyType = AdaptType(viewPropertyType, targetScript.viewAdapterTypeName);
+            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "View-model property",
                 targetScript,

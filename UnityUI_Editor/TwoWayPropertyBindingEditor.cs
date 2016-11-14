@@ -57,7 +57,7 @@ namespace UnityUI_Editor
                 )
             );
 
-            var adaptedViewPropertyType = AdaptType(viewPropertyType, targetScript.viewAdapterTypeName);
+            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "View-model property",
                 targetScript,
@@ -91,7 +91,7 @@ namespace UnityUI_Editor
                 (newValue) => targetScript.exceptionAdapterTypeName = newValue
             );
 
-            var adaptedExceptionPropertyType = AdaptType(typeof(Exception), targetScript.exceptionAdapterTypeName);
+            var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
             ShowViewModelPropertyMenu(
                 "Exception property",
                 targetScript,
