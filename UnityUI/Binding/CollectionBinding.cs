@@ -132,9 +132,6 @@ namespace UnityUI.Binding
 
             generatedChildren.Add(viewModel, newObject.gameObject);
 
-            var templateRectTransform = template.GetComponent<RectTransform>();
-            var newRectTransform = newObject.GetComponent<RectTransform>();
-
             // Set bound view.
             newObject.InitChildBindings(viewModel);
 
