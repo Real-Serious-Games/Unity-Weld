@@ -47,7 +47,7 @@ namespace UnityUI.Binding
                     .FirstOrDefault();
                 if (providedViewModel != null)
                 {
-                    return providedViewModel;
+                    return providedViewModel.GetViewModel();
                 }
 
                 trans = trans.parent;
