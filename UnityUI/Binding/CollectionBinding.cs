@@ -141,10 +141,11 @@ namespace UnityUI.Binding
         private void BindCollection()
         {
             // Bind view model.
-            var viewModelCollectionProperty = viewModel.GetType().GetProperty(viewModelPropertyName);
+            var viewModelType = viewModel.GetType();
+            var viewModelCollectionProperty = viewModelType.GetProperty(viewModelPropertyName);
             if (viewModelCollectionProperty == null)
             {
-                throw new ApplicationException("Expected property " + viewModelPropertyName + ", not it wasn't found on type.");
+                throw new ApplicationException("Expected property " + viewModelPropertyName + ", but it wasn't found on type " + viewModelType.Name + ".");
             }
 
             // Get value from view model.
