@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace UnityUI.Binding
 {
@@ -46,6 +47,8 @@ namespace UnityUI.Binding
         /// </summary>
         public void InitChildBindings(object viewModel)
         {
+            Assert.IsNotNull(viewModel, "Cannot initialise child bindings with null view model.");
+
             // Set the bound view to the new view model.
             this.viewModel = viewModel;
 
@@ -55,4 +58,4 @@ namespace UnityUI.Binding
             }
         }
     }
-}
+} 

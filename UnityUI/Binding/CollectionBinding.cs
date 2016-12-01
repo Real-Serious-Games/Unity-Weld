@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace UnityUI.Binding
 {
@@ -116,6 +117,8 @@ namespace UnityUI.Binding
         /// </summary>
         private void AddAndInstantiateChild(object viewModel)
         {
+            Assert.IsNotNull(viewModel, "Cannot instantiate child with null view model");
+
             var newObject = Instantiate(template);
             newObject.transform.SetParent(transform);
             newObject.gameObject.SetActive(true);
