@@ -121,7 +121,6 @@ namespace UnityUI.Binding
 
             var newObject = Instantiate(template);
             newObject.transform.SetParent(transform);
-            newObject.gameObject.SetActive(true);
 
             generatedChildren.Add(viewModel, newObject.gameObject);
 
@@ -135,6 +134,8 @@ namespace UnityUI.Binding
 
             // Set bound view.
             newObject.InitChildBindings(viewModel);
+
+            newObject.gameObject.SetActive(true);
         }
 
 
