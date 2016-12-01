@@ -35,7 +35,7 @@ namespace UnityUI.Binding
             return viewModelTypeName;
         }
 
-        private string viewModelTypeName = string.Empty;
+        public string viewModelTypeName = string.Empty;
 
         /// <summary>
         /// Cached view-model object.
