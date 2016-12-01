@@ -10,8 +10,6 @@ namespace UnityUI.Binding
     /// </summary>
     public abstract class AbstractMemberBinding : MonoBehaviour, IMemberBinding
     {
-
-
         /// <summary>
         /// Initialise this binding. Used when we first start the scene.
         /// Detaches any attached view models, finds available view models afresh and then connects the binding.
@@ -156,7 +154,7 @@ namespace UnityUI.Binding
         /// </summary>
         public abstract void Disconnect();
 
-        public void Awake()
+        protected void Awake()
         {
             Connect();
         }

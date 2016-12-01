@@ -40,6 +40,16 @@ namespace UnityUI.Binding
         /// </summary>
         private PropertyWatcher propertyWatcher;
 
+        private new void Awake()
+        {
+            Assert.IsNotNull(template, "CollectionBinding must be assigned a template.");
+
+            // Templates should always be deactivated since they're only used to clone new instances.
+            template.gameObject.SetActive(false);
+
+            base.Awake();
+        }
+
         public override void Connect()
         {
             string propertyName;
