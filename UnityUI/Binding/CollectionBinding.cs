@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -120,17 +118,12 @@ namespace UnityUI.Binding
             Assert.IsNotNull(viewModel, "Cannot instantiate child with null view model");
 
             var newObject = Instantiate(template);
-            newObject.transform.SetParent(transform);
+            newObject.transform.SetParent(transform, false);
 
             generatedChildren.Add(viewModel, newObject.gameObject);
 
             var templateRectTransform = template.GetComponent<RectTransform>();
             var newRectTransform = newObject.GetComponent<RectTransform>();
-            if (newRectTransform != null && templateRectTransform != null)
-            {
-                newRectTransform.localScale = templateRectTransform.localScale;
-                newRectTransform.localPosition = templateRectTransform.localPosition;
-            }
 
             // Set bound view.
             newObject.InitChildBindings(viewModel);
