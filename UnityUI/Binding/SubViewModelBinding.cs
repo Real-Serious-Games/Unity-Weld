@@ -14,6 +14,11 @@ namespace UnityUI.Binding
         /// </summary>
         public object GetViewModel()
         {
+            if (viewModel == null)
+            {
+                Connect();
+            }
+
             return viewModel;
         }
 
@@ -65,6 +70,12 @@ namespace UnityUI.Binding
 
         public override void Connect()
         {
+            if (viewModelPropertyWatcher != null)
+            {
+                // Already connected - no need to connect again.
+                return;
+            }
+
             string propertyName;
             object viewModel;
             ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
