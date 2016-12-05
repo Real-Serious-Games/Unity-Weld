@@ -126,9 +126,11 @@ namespace UnityUI.Binding
             initalizedTemplate = Instantiate(selectedTemplate);
 
             initalizedTemplate.transform.SetParent(transform, false);
-            initalizedTemplate.gameObject.SetActive(true);
 
+            // Set up child bindings before we activate the template object so that they will be configured properly before trying to connect.
             initalizedTemplate.InitChildBindings(viewModelPropertyValue);
+
+            initalizedTemplate.gameObject.SetActive(true);
         }
 
         /// <summary>
