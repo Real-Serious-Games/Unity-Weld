@@ -73,7 +73,7 @@ namespace UnityUI.Binding
             );
 
             // Get property from view model.
-            viewModelProperty = viewModel.GetType().GetProperty(viewModelPropertyName);
+            viewModelProperty = viewModel.GetType().GetProperty(propertyName);
             if (viewModelProperty == null)
             {
                 throw new ApplicationException("Expected property " + viewModelPropertyName + ", but was not found.");
