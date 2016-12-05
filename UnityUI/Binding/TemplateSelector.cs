@@ -56,7 +56,7 @@ namespace UnityUI.Binding
             Disconnect();
 
             // Cache available templates.
-            var templatesInScene = templates.GetComponentsInChildren<TemplateBinding>();
+            var templatesInScene = templates.GetComponentsInChildren<TemplateBinding>(true);
             foreach (var template in templatesInScene)
             {
                 availableTemplates.Add(template.GetViewModelTypeName(), template);
