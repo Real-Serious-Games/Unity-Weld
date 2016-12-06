@@ -19,6 +19,7 @@ public class TemplateBindingEditor : BaseBindingEditor
 
         var availableViewModels = TypeResolver.TypesWithBindingAttribute
             .Select(type => type.Name)
+            .OrderBy(name => name)
             .ToArray();
 
         var selectedIndex = Array.IndexOf(availableViewModels, targetScript.viewModelTypeName);
