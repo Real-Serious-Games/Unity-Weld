@@ -53,7 +53,10 @@ namespace UnityUI_Editor
                         targetScript.viewModelMethodName,
                         method.ReflectedType.Name + "." + method.Name
                     ),
-                    bindableMethods,
+                    bindableMethods
+                        .OrderBy(method => method.ReflectedType.Name)
+                        .ThenBy(method => method.Name)
+                        .ToArray(),
                     dropdownPosition
                 );
             }
