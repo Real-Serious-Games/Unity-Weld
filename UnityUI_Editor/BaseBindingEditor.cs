@@ -93,7 +93,10 @@ namespace UnityUI_Editor
                         curPropertyValue,
                         property.ReflectedType.Name + "." + property.Name
                     ),
-                    bindableProperties,
+                    bindableProperties
+                        .OrderBy(property => property.ReflectedType.Name)
+                        .ThenBy(property => property.Name)
+                        .ToArray(),
                     dropdownPosition
                 );
             }

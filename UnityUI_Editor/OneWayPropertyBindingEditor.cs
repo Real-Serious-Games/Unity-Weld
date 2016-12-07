@@ -23,7 +23,8 @@ namespace UnityUI_Editor
                 "View property",
                 targetScript,
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)
-                    .OrderBy(property => property.PropertyInfo.Name)
+                    .OrderBy(property => property.PropertyInfo.ReflectedType.Name)
+                    .ThenBy(property => property.PropertyInfo.Name)
                     .ToArray(),
                 updatedValue => targetScript.uiPropertyName = updatedValue,
                 targetScript.uiPropertyName,
