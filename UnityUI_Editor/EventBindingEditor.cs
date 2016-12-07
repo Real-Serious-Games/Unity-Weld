@@ -36,13 +36,15 @@ namespace UnityUI_Editor
         /// </summary>
         private void ShowMethodMenu(EventBinding targetScript, MethodInfo[] bindableMethods)
         {
+            var tooltip = "Method on the view-model to bind to.";
+
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("View-model method");
+            EditorGUILayout.PrefixLabel(new GUIContent("View-model method", tooltip));
 
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
 
-            if (GUILayout.Button(new GUIContent(targetScript.viewModelMethodName), EditorStyles.popup))
+            if (GUILayout.Button(new GUIContent(targetScript.viewModelMethodName, tooltip), EditorStyles.popup))
             {
                 InspectorUtils.ShowMenu<MethodInfo>(
                     method => method.ReflectedType + "/" + method.Name,

@@ -171,7 +171,7 @@ namespace UnityUI_Editor
                 .ToArray();
 
             var newSelectedIndex = EditorGUILayout.Popup(
-                new GUIContent("View event"),
+                new GUIContent("View event", "Event on the view to bind to."),
                 selectedIndex,
                 content
             );

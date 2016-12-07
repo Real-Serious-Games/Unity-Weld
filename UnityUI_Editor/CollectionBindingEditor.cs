@@ -30,16 +30,16 @@ namespace UnityUI_Editor
                 property => true
             );
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("Collection template");
-
             UpdateProperty(
                 updatedValue => targetScript.template = updatedValue,
                 targetScript.template,
-                (TemplateBinding)EditorGUILayout.ObjectField(targetScript.template, typeof(TemplateBinding), true)
+                (TemplateBinding)EditorGUILayout.ObjectField(
+                    new GUIContent("Collection template", "Object to create instances of for each item in the collection."), 
+                    targetScript.template, 
+                    typeof(TemplateBinding), 
+                    true
+                )
             );
-
-            EditorGUILayout.EndHorizontal();
         }
     }
 }
