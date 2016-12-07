@@ -27,16 +27,16 @@ namespace UnityTools.UnityUI_Editor
                 property => true
             );
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("Templates root object");
-
             UpdateProperty(
                 updatedValue => targetScript.templates = updatedValue,
                 targetScript.templates,
-                (GameObject)EditorGUILayout.ObjectField(targetScript.templates, typeof(GameObject), true)
+                (GameObject)EditorGUILayout.ObjectField(
+                    new GUIContent("Templates root object", "Parent object to the objects we want to use as templates."),
+                    targetScript.templates, 
+                    typeof(GameObject), 
+                    true
+                )
             );
-
-            EditorGUILayout.EndHorizontal();
         }
     }
 }

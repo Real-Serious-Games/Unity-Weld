@@ -25,7 +25,7 @@ public class TemplateBindingEditor : BaseBindingEditor
         var selectedIndex = Array.IndexOf(availableViewModels, targetScript.viewModelTypeName);
 
         var newSelectedIndex = EditorGUILayout.Popup(
-            new GUIContent("Template view model"),
+            new GUIContent("Template view model", "Type of the view model that this template will be bound to when it is instantiated."),
             selectedIndex,
             availableViewModels.Select(viewModel => new GUIContent(viewModel)).ToArray()
         );
