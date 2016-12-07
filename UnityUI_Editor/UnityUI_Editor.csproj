@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BaseBindingEditor.cs" />
     <Compile Include="CollectionBindingEditor.cs" />
+    <Compile Include="TemplateBindingEditor.cs" />
     <Compile Include="TemplateSelectorEditor.cs" />
     <Compile Include="TwoWayPropertyBindingEditor.cs" />
     <Compile Include="EventBindingEditor.cs" />
