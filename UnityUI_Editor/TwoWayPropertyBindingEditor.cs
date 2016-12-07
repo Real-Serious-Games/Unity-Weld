@@ -31,7 +31,7 @@ namespace UnityUI_Editor
 
             Type viewPropertyType = null;
             ShowViewPropertyMenu(
-                "View property",
+                new GUIContent("View property", "Property on the view to bind to"),
                 targetScript,
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)
                     .OrderBy(property => property.PropertyInfo.ReflectedType.Name)
@@ -48,7 +48,7 @@ namespace UnityUI_Editor
                 .ToArray();
 
             ShowAdapterMenu(
-                "View adaptor",
+                new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
                 viewAdapterTypeNames,
                 targetScript.viewAdapterTypeName,
                 newValue => UpdateProperty(
@@ -60,7 +60,7 @@ namespace UnityUI_Editor
 
             var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
-                "View-model property",
+                new GUIContent("View-model property", "Property on the view-model to bind to."),
                 targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
@@ -74,7 +74,7 @@ namespace UnityUI_Editor
                 .ToArray();
 
             ShowAdapterMenu(
-                "View-model adaptor",
+                new GUIContent("View-model adaptor", "Adapter that converts from the view back to the view-model"),
                 viewModelAdapterTypeNames,
                 targetScript.viewModelAdapterTypeName,
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
@@ -86,7 +86,7 @@ namespace UnityUI_Editor
                 .ToArray();
 
             ShowAdapterMenu(
-                "Exception adaptor",
+                new GUIContent("Exception adaptor", "Adapter that handles exceptions thrown by the view-model adapter"),
                 expectionAdapterTypeNames,
                 targetScript.exceptionAdapterTypeName,
                 (newValue) => targetScript.exceptionAdapterTypeName = newValue
@@ -94,7 +94,7 @@ namespace UnityUI_Editor
 
             var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
             ShowViewModelPropertyMenu(
-                "Exception property",
+                new GUIContent("Exception property", "Property on the view-model to bind the exception to."),
                 targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.exceptionPropertyName = updatedValue,

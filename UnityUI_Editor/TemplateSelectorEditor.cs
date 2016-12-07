@@ -19,7 +19,7 @@ namespace UnityTools.UnityUI_Editor
             var targetScript = (TemplateSelector)target;
 
             ShowViewModelPropertyMenu(
-                "Template property",
+                new GUIContent("Template property", "Property on the view model to use for selecting templates."),
                 targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,

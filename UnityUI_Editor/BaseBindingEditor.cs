@@ -33,7 +33,7 @@ namespace UnityUI_Editor
         /// Display the adapters popup menu.
         /// </summary>
         protected static void ShowAdapterMenu(
-            string label,
+            GUIContent label,
             string[] adapterTypeNames,
             string curValue,
             Action<string> valueUpdated
@@ -46,7 +46,7 @@ namespace UnityUI_Editor
 
             var curSelectionIndex = Array.IndexOf(adapterTypeNames, curValue) + 1; // +1 to account for 'None'.
             var newSelectionIndex = EditorGUILayout.Popup(
-                    new GUIContent(label),
+                    label,
                     curSelectionIndex,
                     adapterMenu
                 );
@@ -68,7 +68,7 @@ namespace UnityUI_Editor
         /// Display a popup menu for selecting a property from a view-model.
         /// </summary>
         protected void ShowViewModelPropertyMenu(
-            string label,
+            GUIContent label,
             AbstractMemberBinding target,
             PropertyInfo[] bindableProperties,
             Action<string> propertyValueSetter,
@@ -82,7 +82,7 @@ namespace UnityUI_Editor
             var dropdownPosition = GUILayoutUtility.GetLastRect();
             dropdownPosition.x += dropdownPosition.width;
 
-            if (GUILayout.Button(new GUIContent(curPropertyValue), EditorStyles.popup))
+            if (GUILayout.Button(new GUIContent(curPropertyValue, label.tooltip), EditorStyles.popup))
             {
                 InspectorUtils.ShowMenu<PropertyInfo>(
                     property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
@@ -108,7 +108,7 @@ namespace UnityUI_Editor
         /// Shows a dropdown for selecting a property in the UI to bind to.
         /// </summary>
         public void ShowViewPropertyMenu(
-            string label, 
+            GUIContent label, 
             AbstractMemberBinding targetScript, 
             BindablePropertyInfo[] properties, 
             Action<string> propertyValueSetter,
@@ -127,7 +127,7 @@ namespace UnityUI_Editor
                 ))
                 .ToArray();
 
-            var newSelectedIndex = EditorGUILayout.Popup(new GUIContent(label), selectedIndex, content);
+            var newSelectedIndex = EditorGUILayout.Popup(label, selectedIndex, content);
             if (newSelectedIndex != selectedIndex)
             {
                 var newSelectedProperty = properties[newSelectedIndex];
