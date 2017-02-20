@@ -46,7 +46,7 @@ namespace UnityUI.Binding
                 var notifyPropertyChanged = propertyOwner as INotifyPropertyChanged;
                 if (notifyPropertyChanged != null)
                 {
-                    notifyPropertyChanged.PropertyChanged += propertyOwner_PropertyChanged;
+                    notifyPropertyChanged.PropertyChanged -= propertyOwner_PropertyChanged;
                 }
 
                 propertyOwner = null;
