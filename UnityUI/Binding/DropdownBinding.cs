@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     [RequireComponent(typeof(Dropdown))]
     public class DropdownBinding : AbstractMemberBinding

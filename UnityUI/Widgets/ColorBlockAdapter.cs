@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UnityUI.Widgets
+namespace UnityWeld.Widgets
 {
     /// <summary>
     /// Adapter to assist with binding to individual colors within a color block.

@@ -6,12 +6,12 @@ using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityUI;
-using UnityUI.Binding;
-using UnityUI.Internal;
-using UnityUI_Editor;
+using UnityWeld;
+using UnityWeld.Binding;
+using UnityWeld.Internal;
+using UnityWeld_Editor;
 
-namespace UnityUI_Editor
+namespace UnityWeld_Editor
 {
     [CustomEditor(typeof(CollectionBinding))]
     class CollectionBindingEditor : BaseBindingEditor

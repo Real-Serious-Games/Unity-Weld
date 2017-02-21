@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Attribute that defines what types an adapter can convert from and to.

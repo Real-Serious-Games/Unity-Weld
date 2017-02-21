@@ -1,4 +1,4 @@
-﻿namespace UnityUI.Binding
+﻿namespace UnityWeld.Binding
 {
     public interface IMemberBinding
     {

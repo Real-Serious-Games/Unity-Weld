@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine.Events;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Factory for adding the correct type of listener to a generic UnityEvent, given a view model and 

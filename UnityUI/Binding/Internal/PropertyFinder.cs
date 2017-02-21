@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Information needed to bind to a property on a component. 

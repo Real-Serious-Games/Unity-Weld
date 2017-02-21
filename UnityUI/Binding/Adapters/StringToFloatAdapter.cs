@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UnityUI.Binding.Adapters
+namespace UnityWeld.Binding.Adapters
 {
     /// <summary>
     /// Adapter that parses a string as a float.

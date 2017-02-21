@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     public class ObservableList<T> : IList<T>, IList, INotifyCollectionChanged
     {

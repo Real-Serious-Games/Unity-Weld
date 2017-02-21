@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Mark a class, interface, method or property as bindable. Bindable methods and properties must 

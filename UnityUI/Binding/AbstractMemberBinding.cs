@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityUI.Internal;
+using UnityWeld.Internal;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Base class for binders to Unity MonoBehaviours.

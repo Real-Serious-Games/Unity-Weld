@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     public enum NotifyCollectionChangedAction
     {

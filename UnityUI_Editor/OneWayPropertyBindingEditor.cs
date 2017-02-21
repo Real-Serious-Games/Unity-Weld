@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityUI.Binding;
-using UnityUI.Internal;
+using UnityWeld.Binding;
+using UnityWeld.Internal;
 
-namespace UnityUI_Editor
+namespace UnityWeld_Editor
 {
     [CustomEditor(typeof(OneWayPropertyBinding))]
     class OneWayPropertyBindingEditor : BaseBindingEditor

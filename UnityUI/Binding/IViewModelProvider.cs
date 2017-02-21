@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Interface for wiring view-models into the hierarchy.

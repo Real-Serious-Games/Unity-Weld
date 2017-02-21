@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Information needed to bind to a UnityEvent on a component.

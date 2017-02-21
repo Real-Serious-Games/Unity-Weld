@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityUI.Binding;
+using UnityWeld.Binding;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Class for binding Unity UI events to methods in a view model.

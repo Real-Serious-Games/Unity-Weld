@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace UnityUI_Editor
+namespace UnityWeld_Editor
 {
     /// <summary>
     /// Common utilities for custom inspectors.

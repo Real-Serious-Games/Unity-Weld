@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityUI.Binding;
+using UnityWeld.Binding;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     /// <summary>
     /// Binds to a view and instantiates a template based on the view type.

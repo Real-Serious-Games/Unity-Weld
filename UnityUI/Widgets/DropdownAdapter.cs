@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace UnityUI.Widgets
+namespace UnityWeld.Widgets
 {
     /// <summary>
     /// Adapter to set up and bind to a Dropdown using strings instead of OptionData.

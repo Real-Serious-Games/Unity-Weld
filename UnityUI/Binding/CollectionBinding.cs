@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace UnityUI.Binding
+namespace UnityWeld.Binding
 {
     public class CollectionBinding : AbstractMemberBinding
     {

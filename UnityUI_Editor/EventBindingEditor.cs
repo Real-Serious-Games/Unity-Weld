@@ -6,11 +6,11 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityUI;
-using UnityUI.Binding;
-using UnityUI.Internal;
+using UnityWeld;
+using UnityWeld.Binding;
+using UnityWeld.Internal;
 
-namespace UnityUI_Editor
+namespace UnityWeld_Editor
 {
     [CustomEditor(typeof(EventBinding))]
     public class EventBindingEditor : BaseBindingEditor

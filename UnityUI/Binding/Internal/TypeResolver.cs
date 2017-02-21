@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityUI.Binding;
+using UnityWeld.Binding;
 
-namespace UnityUI.Internal
+namespace UnityWeld.Internal
 {
     /// <summary>
     /// Helper class for setting up the factory for use in the editor.

@@ -2,9 +2,9 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityUI.Binding;
-using UnityUI.Internal;
-using UnityUI_Editor;
+using UnityWeld.Binding;
+using UnityWeld.Internal;
+using UnityWeld_Editor;
 
 /// <summary>
 /// Editor for template bindings with a dropdown for selecting what view model
