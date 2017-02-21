@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnityUI_Editor</RootNamespace>
-    <AssemblyName>UnityUI_Editor</AssemblyName>
+    <AssemblyName>UnityWeld_Editor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -56,9 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UnityUI\UnityUI.csproj">
+    <ProjectReference Include="..\UnityUI\UnityWeld.csproj">
       <Project>{e1dd36b8-97ac-44a1-b98a-a6cf6b1b7459}</Project>
-      <Name>UnityUI</Name>
+      <Name>UnityWeld</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
