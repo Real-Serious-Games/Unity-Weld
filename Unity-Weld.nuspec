@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RSG.UnityWeld</id>
+    <version>0.1.0</version>
+    <title>RSG.UnityWeld</title>
+    <authors>Real Serious Games</authors>
+    <owners>Real Serious Games</owners>
+    <licenseUrl>https://github.com/Real-Serious-Games/Unity-Weld</licenseUrl>
+    <projectUrl>https://github.com/Real-Serious-Games/Unity-Weld</projectUrl>
+    <iconUrl>https://avatars0.githubusercontent.com/u/7463833?v=2&amp;s=200</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Unity-Weld is a library for Unity 5+ that enables two-way data binding.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>C# Unity Unity3D UI MVVM data binding databinding</tags>
+  </metadata>
+  <files>
+    <file src="dll\UnityWeld.dll" target="lib\net35"/>
+    <file src="dll\UnityWeld_Editor.dll" target="lib\net35"/>
+  </files>
+</package>
