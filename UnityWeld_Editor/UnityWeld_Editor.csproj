@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UnityUI\UnityWeld.csproj">
+    <ProjectReference Include="..\UnityWeld\UnityWeld.csproj">
       <Project>{e1dd36b8-97ac-44a1-b98a-a6cf6b1b7459}</Project>
       <Name>UnityWeld</Name>
     </ProjectReference>
