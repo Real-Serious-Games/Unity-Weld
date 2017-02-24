@@ -31,7 +31,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The templates that have been instantiated.
         /// </summary>
-        private List<TemplateBinding> initalizedTemplates = null;
+        private List<TemplateBinding> initalizedTemplates = new List<TemplateBinding>();
 
         /// <summary>
         /// The view-model, cached during connection.
@@ -121,8 +121,6 @@ namespace UnityWeld.Binding
                         throw new ApplicationException("Cannot bind to null property in view: " + viewModelPropertyName);
                     }
 
-                    initalizedTemplates = new List<TemplateBinding>();
-
                     TemplateBinding initalizedTemplate = null;
 
                     // Select template.
@@ -153,17 +151,12 @@ namespace UnityWeld.Binding
         /// </summary>
         private void DestroyTemplate()
         {
-            if (initalizedTemplates == null)
-            {
-                return;
-            }
-
             foreach (TemplateBinding tb in initalizedTemplates)
             {
                 Destroy(tb.gameObject);
             }
             initalizedTemplates.Clear();
-            initalizedTemplates = null;
+            initalizedTemplates = new List<TemplateBinding>();
         }
     }
 }
