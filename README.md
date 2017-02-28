@@ -20,3 +20,5 @@ Alternatively, just copy the `UnityUI/Binding` and `UnityUI/Widgets` folders int
 ## Getting started
 
 Check out the [Unity-Weld-Examples](https://github.com/Real-Serious-Games/Unity-Weld-Examples) repository for some examples of how to use Unity-Weld.
+
+If you're interested in getting involved feel free to check out the [roadmap on Trello](https://trello.com/b/KVFUvGR0), or submit a pull request.
