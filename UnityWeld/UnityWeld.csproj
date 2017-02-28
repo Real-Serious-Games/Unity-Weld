@@ -69,6 +69,7 @@
     <Compile Include="Binding\ObservableList.cs" />
     <Compile Include="Binding\OneWayPropertyBinding.cs" />
     <Compile Include="Binding\SubViewModelBinding.cs" />
+    <Compile Include="Binding\TemplateArraySelector.cs" />
     <Compile Include="Binding\TemplateSelector.cs" />
     <Compile Include="Binding\TwoWayPropertyBinding.cs" />
     <Compile Include="Binding\AbstractMemberBinding.cs" />
