@@ -20,7 +20,6 @@ namespace UnityWeld_Editor
             var targetScript = (EventBinding)target;
 
             ShowEventMenu(
-                targetScript,
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
                     .ToArray(),

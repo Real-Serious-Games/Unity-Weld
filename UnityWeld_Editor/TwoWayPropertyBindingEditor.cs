@@ -21,7 +21,6 @@ namespace UnityWeld_Editor
             var targetScript = (TwoWayPropertyBinding)target;
 
             ShowEventMenu(
-                targetScript,
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
                     .ToArray(),
@@ -32,7 +31,6 @@ namespace UnityWeld_Editor
             Type viewPropertyType = null;
             ShowViewPropertyMenu(
                 new GUIContent("View property", "Property on the view to bind to"),
-                targetScript,
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)
                     .OrderBy(property => property.PropertyInfo.ReflectedType.Name)
                     .ThenBy(property => property.PropertyInfo.Name)
@@ -61,7 +59,6 @@ namespace UnityWeld_Editor
             var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
-                targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
                 targetScript.viewModelPropertyName,
@@ -95,7 +92,6 @@ namespace UnityWeld_Editor
             var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
             ShowViewModelPropertyMenu(
                 new GUIContent("Exception property", "Property on the view-model to bind the exception to."),
-                targetScript,
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.exceptionPropertyName = updatedValue,
                 targetScript.exceptionPropertyName,

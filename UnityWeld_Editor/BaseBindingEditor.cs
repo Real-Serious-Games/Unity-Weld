@@ -39,7 +39,7 @@ namespace UnityWeld_Editor
             Action<string> valueUpdated
         )
         {
-            var adapterMenu = new string[] { "None" }
+            var adapterMenu = new[] { "None" }
                 .Concat(adapterTypeNames)
                 .Select(typeName => new GUIContent(typeName))
                 .ToArray();
@@ -69,7 +69,6 @@ namespace UnityWeld_Editor
         /// </summary>
         protected void ShowViewModelPropertyMenu(
             GUIContent label,
-            AbstractMemberBinding target,
             PropertyInfo[] bindableProperties,
             Action<string> propertyValueSetter,
             string curPropertyValue,
@@ -109,7 +108,6 @@ namespace UnityWeld_Editor
         /// </summary>
         public void ShowViewPropertyMenu(
             GUIContent label, 
-            AbstractMemberBinding targetScript, 
             BindablePropertyInfo[] properties, 
             Action<string> propertyValueSetter,
             string curPropertyValue,
@@ -156,7 +154,6 @@ namespace UnityWeld_Editor
         /// Show dropdown for selecting a UnityEvent to bind to.
         /// </summary>
         protected void ShowEventMenu(
-            AbstractMemberBinding targetScript, 
             BindableEvent[] events,
             Action<string> propertyValueSetter,
             string curPropertyValue

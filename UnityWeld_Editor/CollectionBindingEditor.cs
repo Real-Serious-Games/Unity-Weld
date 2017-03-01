@@ -23,7 +23,6 @@ namespace UnityWeld_Editor
 
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
-                targetScript, 
                 TypeResolver.FindBindableCollectionProperties(targetScript),
                 updatedValue => targetScript.viewModelPropertyName = updatedValue,
                 targetScript.viewModelPropertyName,
