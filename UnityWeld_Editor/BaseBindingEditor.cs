@@ -90,11 +90,11 @@ namespace UnityWeld_Editor
                 InspectorUtils.ShowMenu(
                     property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
                     menuEnabled,
-                    property => property.ReflectedType.Name + "." + property.Name == curPropertyValue,
+                    property => PropertyInfoToString(property) == curPropertyValue,
                     property => UpdateProperty(
                         propertyValueSetter,
                         curPropertyValue,
-                        property.ReflectedType.Name + "." + property.Name
+                        PropertyInfoToString(property)
                     ),
                     bindableProperties
                         .OrderBy(property => property.ReflectedType.Name)
@@ -105,6 +105,11 @@ namespace UnityWeld_Editor
             }
 
             EditorGUILayout.EndHorizontal();
+        }
+
+        private static string PropertyInfoToString(PropertyInfo property)
+        {
+            return string.Concat(property.ReflectedType.ToString(), ".", property.Name);
         }
 
         /// <summary>

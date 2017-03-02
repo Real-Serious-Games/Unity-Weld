@@ -31,7 +31,7 @@ namespace UnityWeld.Binding
             {
                 var components = trans.GetComponents<MonoBehaviour>();
                 var monoBehaviourViewModel = components
-                    .FirstOrDefault(component => component.GetType().Name == viewModelName);
+                    .FirstOrDefault(component => component.GetType().ToString() == viewModelName);
                 if (monoBehaviourViewModel != null)
                 {
                     return monoBehaviourViewModel;
