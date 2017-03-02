@@ -108,35 +108,6 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Convert a PropertyInfo to a uniquely identifiable string.
-        /// </summary>
-        private static string PropertyInfoToString(PropertyInfo property)
-        {
-            return string.Concat(property.ReflectedType.ToString(), ".", property.Name);
-        }
-
-        /// <summary>
-        /// Convert a BindableEvent to a uniquely identifiable string.
-        /// </summary>
-        private static string BindableEventToString(BindableEvent evt)
-        {
-            return string.Concat(evt.ComponentType.ToString(), ".", evt.Name);
-        }
-
-        /// <summary>
-        /// Returns an array of all the names of adapter types that match the 
-        /// provided prediate function.
-        /// </summary>
-        protected static string[] GetAdapterTypeNames(Func<Type, bool> adapterSelectionPredicate)
-        {
-            return TypeResolver.TypesWithAdapterAttribute
-                .Where(adapterSelectionPredicate)
-                .Select(type => type.ToString())
-                .ToArray();
-        }
-
-
-        /// <summary>
         /// Shows a dropdown for selecting a property in the UI to bind to.
         /// </summary>
         public void ShowViewPropertyMenu(
@@ -256,6 +227,34 @@ namespace UnityWeld_Editor
             var adapterAttribute = FindAdapterAttribute(adapterName);
 
             return adapterAttribute != null ? adapterAttribute.OutputType : inputType;
+        }
+
+        /// <summary>
+        /// Convert a PropertyInfo to a uniquely identifiable string.
+        /// </summary>
+        private static string PropertyInfoToString(PropertyInfo property)
+        {
+            return string.Concat(property.ReflectedType.ToString(), ".", property.Name);
+        }
+
+        /// <summary>
+        /// Convert a BindableEvent to a uniquely identifiable string.
+        /// </summary>
+        private static string BindableEventToString(BindableEvent evt)
+        {
+            return string.Concat(evt.ComponentType.ToString(), ".", evt.Name);
+        }
+
+        /// <summary>
+        /// Returns an array of all the names of adapter types that match the 
+        /// provided prediate function.
+        /// </summary>
+        protected static string[] GetAdapterTypeNames(Func<Type, bool> adapterSelectionPredicate)
+        {
+            return TypeResolver.TypesWithAdapterAttribute
+                .Where(adapterSelectionPredicate)
+                .Select(type => type.ToString())
+                .ToArray();
         }
     }
 }
