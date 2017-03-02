@@ -106,7 +106,7 @@ namespace UnityWeld.Internal
         /// </summary>
         public static Type FindAdapterType(string typeName)
         {
-            var matchingTypes = TypesWithAdapterAttribute.Where(type => type.Name == typeName);
+            var matchingTypes = TypesWithAdapterAttribute.Where(type => type.ToString() == typeName);
             if (!matchingTypes.Any())
             {
                 return null;
@@ -117,7 +117,7 @@ namespace UnityWeld.Internal
                 throw new ApplicationException("Multiple types match: " + typeName);
             }
 
-            return matchingTypes.First();               
+            return matchingTypes.First();
         }
 
         /// <summary>

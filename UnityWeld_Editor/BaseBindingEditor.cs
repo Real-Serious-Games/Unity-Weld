@@ -116,6 +116,15 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
+        /// Convert a BindableEvent to a uniquely identifiable string.
+        /// </summary>
+        private static string BindableEventToString(BindableEvent evt)
+        {
+            return string.Concat(evt.ComponentType.ToString(), ".", evt.Name);
+        }
+
+
+        /// <summary>
         /// Shows a dropdown for selecting a property in the UI to bind to.
         /// </summary>
         public void ShowViewPropertyMenu(
@@ -172,7 +181,7 @@ namespace UnityWeld_Editor
         )
         {
             var eventNames = events
-                .Select(evt => evt.ComponentType.Name + "." + evt.Name)
+                .Select(BindableEventToString)
                 .ToArray();
             var selectedIndex = Array.IndexOf(eventNames, curPropertyValue);
             var content = events
@@ -194,7 +203,7 @@ namespace UnityWeld_Editor
             UpdateProperty(
                 propertyValueSetter,
                 curPropertyValue,
-                selectedEvent.ComponentType.Name + "." + selectedEvent.Name
+                BindableEventToString(selectedEvent)
             );
         }
 

@@ -32,7 +32,7 @@ namespace UnityWeld_Editor
 
             var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
-                .Select(type => type.Name)
+                .Select(type => type.ToString())
                 .ToArray();
 
             ShowAdapterMenu(

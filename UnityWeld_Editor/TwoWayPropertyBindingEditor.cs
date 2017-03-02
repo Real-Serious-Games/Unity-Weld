@@ -42,7 +42,7 @@ namespace UnityWeld_Editor
 
             var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
-                .Select(type => type.Name)
+                .Select(type => type.ToString())
                 .ToArray();
 
             ShowAdapterMenu(
@@ -67,7 +67,7 @@ namespace UnityWeld_Editor
 
             var viewModelAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => adaptedViewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType)
-                .Select(type => type.Name)
+                .Select(type => type.ToString())
                 .ToArray();
 
             ShowAdapterMenu(
