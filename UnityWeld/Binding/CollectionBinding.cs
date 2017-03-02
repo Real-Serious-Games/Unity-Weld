@@ -154,7 +154,7 @@ namespace UnityWeld.Binding
             var viewModelCollectionProperty = viewModelType.GetProperty(propertyName);
             if (viewModelCollectionProperty == null)
             {
-                throw new ApplicationException("Expected property " + viewModelPropertyName + ", but it wasn't found on type " + viewModelType.Name + ".");
+                throw new ApplicationException("Expected property " + viewModelPropertyName + ", but it wasn't found on type " + viewModelType + ".");
             }
 
             // Get value from view model.

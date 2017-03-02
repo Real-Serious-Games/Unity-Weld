@@ -122,7 +122,7 @@ namespace UnityWeld.Binding
 
             if (boundEvent == null)
             {
-                throw new ApplicationException("Could not bind to event \"" + boundEventName + "\" on component " + componentType.Name);
+                throw new ApplicationException(string.Format("Could not bind to event \"{0}\" on component \"{1}\".", boundEventName, componentType));
             }
 
             return boundEvent;
@@ -134,7 +134,7 @@ namespace UnityWeld.Binding
         public static BindableEvent[] GetBindableEvents(GameObject gameObject) //todo: Consider moving this to TypeResolver.
         {
             return gameObject.GetComponents(typeof(Component))
-                .SelectMany(component => GetBindableEvents(component))
+                .SelectMany(GetBindableEvents)
                 .ToArray();
         }
     }

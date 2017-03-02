@@ -88,7 +88,7 @@ namespace UnityWeld_Editor
             if (GUILayout.Button(new GUIContent(curPropertyValue, label.tooltip), EditorStyles.popup))
             {
                 InspectorUtils.ShowMenu(
-                    property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
+                    property => string.Concat(property.ReflectedType, "/", property.Name, " : ", property.PropertyType.Name),
                     menuEnabled,
                     property => PropertyInfoToString(property) == curPropertyValue,
                     property => UpdateProperty(
@@ -139,11 +139,11 @@ namespace UnityWeld_Editor
                 .Select(prop => PropertyInfoToString(prop.PropertyInfo))
                 .ToArray();
             var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
-            var content = properties.Select(prop => new GUIContent(
-                    prop.PropertyInfo.ReflectedType.Name + "/" +
-                    prop.PropertyInfo.Name + " : " +
+            var content = properties.Select(prop => new GUIContent(string.Concat(
+                    prop.PropertyInfo.ReflectedType.Name + "/",
+                    prop.PropertyInfo.Name + " : ",
                     prop.PropertyInfo.PropertyType.Name
-                ))
+                )))
                 .ToArray();
 
             var newSelectedIndex = EditorGUILayout.Popup(label, selectedIndex, content);

@@ -62,7 +62,7 @@ namespace UnityWeld.Binding
             var propertyInfo = viewModel.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
             {
-                throw new ApplicationException("Could not find property \"" + propertyName + "\" on view model \"" + viewModel.GetType().Name + "\"");
+                throw new ApplicationException(string.Format("Could not find property \"{0}\" on view model \"{1}\".", propertyName, viewModel.GetType()));
             }
 
             this.viewModel = propertyInfo.GetValue(viewModel, null);

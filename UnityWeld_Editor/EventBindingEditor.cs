@@ -45,7 +45,7 @@ namespace UnityWeld_Editor
 
             if (GUILayout.Button(new GUIContent(targetScript.viewModelMethodName, tooltip), EditorStyles.popup))
             {
-                InspectorUtils.ShowMenu<MethodInfo>(
+                InspectorUtils.ShowMenu(
                     method => method.ReflectedType + "/" + method.Name,
                     method => true,
                     method => MethodInfoToString(method) == targetScript.viewModelMethodName,
