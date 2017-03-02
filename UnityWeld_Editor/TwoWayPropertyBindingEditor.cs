@@ -79,7 +79,7 @@ namespace UnityWeld_Editor
 
             var expectionAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
                 .Where(type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception))
-                .Select(type => type.Name)
+                .Select(type => type.ToString())
                 .ToArray();
 
             ShowAdapterMenu(
