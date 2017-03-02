@@ -107,6 +107,9 @@ namespace UnityWeld_Editor
             EditorGUILayout.EndHorizontal();
         }
 
+        /// <summary>
+        /// Convert a PropertyInfo to a uniquely identifiable string.
+        /// </summary>
         private static string PropertyInfoToString(PropertyInfo property)
         {
             return string.Concat(property.ReflectedType.ToString(), ".", property.Name);
