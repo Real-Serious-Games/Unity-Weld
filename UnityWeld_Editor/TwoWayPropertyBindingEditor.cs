@@ -40,10 +40,10 @@ namespace UnityWeld_Editor
                 out viewPropertyType
             );
 
-            var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
-                .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
-                .Select(type => type.ToString())
-                .ToArray();
+            var viewAdapterTypeNames = GetAdapterTypeNames(
+                type => viewPropertyType == null || 
+                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
+            );
 
             ShowAdapterMenu(
                 new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
@@ -65,10 +65,10 @@ namespace UnityWeld_Editor
                 property => property.PropertyType == adaptedViewPropertyType
             );
 
-            var viewModelAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
-                .Where(type => adaptedViewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType)
-                .Select(type => type.ToString())
-                .ToArray();
+            var viewModelAdapterTypeNames = GetAdapterTypeNames(
+                type => adaptedViewPropertyType == null || 
+                    TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType
+            );
 
             ShowAdapterMenu(
                 new GUIContent("View-model adaptor", "Adapter that converts from the view back to the view-model"),
@@ -77,10 +77,9 @@ namespace UnityWeld_Editor
                 (newValue) => targetScript.viewModelAdapterTypeName = newValue
             );
 
-            var expectionAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
-                .Where(type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception))
-                .Select(type => type.ToString())
-                .ToArray();
+            var expectionAdapterTypeNames = GetAdapterTypeNames(
+                type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception)
+            );
 
             ShowAdapterMenu(
                 new GUIContent("Exception adaptor", "Adapter that handles exceptions thrown by the view-model adapter"),

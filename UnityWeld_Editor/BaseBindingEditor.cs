@@ -123,6 +123,18 @@ namespace UnityWeld_Editor
             return string.Concat(evt.ComponentType.ToString(), ".", evt.Name);
         }
 
+        /// <summary>
+        /// Returns an array of all the names of adapter types that match the 
+        /// provided prediate function.
+        /// </summary>
+        protected static string[] GetAdapterTypeNames(Func<Type, bool> adapterSelectionPredicate)
+        {
+            return TypeResolver.TypesWithAdapterAttribute
+                .Where(adapterSelectionPredicate)
+                .Select(type => type.ToString())
+                .ToArray();
+        }
+
 
         /// <summary>
         /// Shows a dropdown for selecting a property in the UI to bind to.
@@ -140,8 +152,10 @@ namespace UnityWeld_Editor
                 .ToArray();
             var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
             var content = properties.Select(prop => new GUIContent(string.Concat(
-                    prop.PropertyInfo.ReflectedType.Name + "/",
-                    prop.PropertyInfo.Name + " : ",
+                    prop.PropertyInfo.ReflectedType.Name, 
+                    "/",
+                    prop.PropertyInfo.Name, 
+                    " : ",
                     prop.PropertyInfo.PropertyType.Name
                 )))
                 .ToArray();

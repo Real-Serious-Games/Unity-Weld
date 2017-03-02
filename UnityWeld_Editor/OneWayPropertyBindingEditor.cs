@@ -30,10 +30,10 @@ namespace UnityWeld_Editor
                 out viewPropertyType
             );
 
-            var viewAdapterTypeNames = TypeResolver.TypesWithAdapterAttribute
-                .Where(type => viewPropertyType == null || TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType)
-                .Select(type => type.ToString())
-                .ToArray();
+            var viewAdapterTypeNames = GetAdapterTypeNames(
+                type => viewPropertyType == null || 
+                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
+            );
 
             ShowAdapterMenu(
                 new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
