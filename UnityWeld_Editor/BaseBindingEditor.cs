@@ -21,12 +21,14 @@ namespace UnityWeld_Editor
         protected void UpdateProperty<TValue>(Action<TValue> setter, TValue oldValue, TValue newValue)
             where TValue : class
         {
-            if (newValue != oldValue)
+            if (newValue == oldValue)
             {
-                setter(newValue);
-
-                InspectorUtils.MarkSceneDirty(((Component)target).gameObject);
+                return;
             }
+
+            setter(newValue);
+
+            InspectorUtils.MarkSceneDirty(((Component)target).gameObject);
         }
 
         /// <summary>
@@ -51,16 +53,18 @@ namespace UnityWeld_Editor
                     adapterMenu
                 );
 
-            if (newSelectionIndex != curSelectionIndex)
+            if (newSelectionIndex == curSelectionIndex)
             {
-                if (newSelectionIndex == 0)
-                {
-                    valueUpdated(null); // No adapter selected.
-                }
-                else
-                {
-                    valueUpdated(adapterTypeNames[newSelectionIndex - 1]); // -1 to account for 'None'.
-                }
+                return;
+            }
+
+            if (newSelectionIndex == 0)
+            {
+                valueUpdated(null); // No adapter selected.
+            }
+            else
+            {
+                valueUpdated(adapterTypeNames[newSelectionIndex - 1]); // -1 to account for 'None'.
             }
         }
 
@@ -173,15 +177,17 @@ namespace UnityWeld_Editor
                 content
             );
 
-            if (newSelectedIndex != selectedIndex)
+            if (newSelectedIndex == selectedIndex)
             {
-                var selectedEvent = events[newSelectedIndex];
-                UpdateProperty(
-                    propertyValueSetter,
-                    curPropertyValue,
-                    selectedEvent.ComponentType.Name + "." + selectedEvent.Name
-                );
+                return;
             }
+
+            var selectedEvent = events[newSelectedIndex];
+            UpdateProperty(
+                propertyValueSetter,
+                curPropertyValue,
+                selectedEvent.ComponentType.Name + "." + selectedEvent.Name
+            );
         }
 
         /// <summary>
@@ -207,12 +213,8 @@ namespace UnityWeld_Editor
         protected Type AdaptTypeBackward(Type inputType, string adapterName)
         {
             var adapterAttribute = FindAdapterAttribute(adapterName);
-            if (adapterAttribute != null)
-            {
-                return adapterAttribute.InputType;
-            }
 
-            return inputType;
+            return adapterAttribute != null ? adapterAttribute.InputType : inputType;
         }
 
         /// <summary>
@@ -221,12 +223,8 @@ namespace UnityWeld_Editor
         protected Type AdaptTypeForward(Type inputType, string adapterName)
         {
             var adapterAttribute = FindAdapterAttribute(adapterName);
-            if (adapterAttribute != null)
-            {
-                return adapterAttribute.OutputType;
-            }
 
-            return inputType;
+            return adapterAttribute != null ? adapterAttribute.OutputType : inputType;
         }
     }
 }
