@@ -83,7 +83,7 @@ namespace UnityWeld_Editor
 
             if (GUILayout.Button(new GUIContent(curPropertyValue, label.tooltip), EditorStyles.popup))
             {
-                InspectorUtils.ShowMenu<PropertyInfo>(
+                InspectorUtils.ShowMenu(
                     property => property.ReflectedType + "/" + property.Name + " : " + property.PropertyType.Name,
                     menuEnabled,
                     property => property.ReflectedType.Name + "." + property.Name == curPropertyValue,

@@ -31,18 +31,16 @@ namespace UnityWeld.Binding
             {
                 var components = trans.GetComponents<MonoBehaviour>();
                 var monoBehaviourViewModel = components
-                    .Where(component => component.GetType().Name == viewModelName)
-                    .FirstOrDefault();
+                    .FirstOrDefault(component => component.GetType().Name == viewModelName);
                 if (monoBehaviourViewModel != null)
                 {
                     return monoBehaviourViewModel;
                 }
 
-                var providedViewModel = components                    
+                var providedViewModel = components
                     .Select(component => component as IViewModelProvider)
                     .Where(component => component != null)
-                    .Where(viewModelBinding => viewModelBinding.GetViewModelTypeName() == viewModelName && (object)viewModelBinding != this)
-                    .FirstOrDefault();
+                    .FirstOrDefault(viewModelBinding => viewModelBinding.GetViewModelTypeName() == viewModelName && (object)viewModelBinding != this);
                 if (providedViewModel != null)
                 {
                     return providedViewModel.GetViewModel();

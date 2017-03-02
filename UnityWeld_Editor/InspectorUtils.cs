@@ -25,7 +25,6 @@ namespace UnityWeld_Editor
             {
                 // Need to cache index so that it doesn't get passed through to the callback by reference.
                 int index = i;
-
                 var item = items[index];
 
                 var content = new GUIContent(menuName(item));

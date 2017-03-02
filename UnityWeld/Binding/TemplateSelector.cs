@@ -26,7 +26,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// All available templates indexed by the view model the are for.
         /// </summary>
-        private IDictionary<string, TemplateBinding> availableTemplates = new Dictionary<string, TemplateBinding>();
+        private readonly IDictionary<string, TemplateBinding> availableTemplates = new Dictionary<string, TemplateBinding>();
 
         /// <summary>
         /// The template that has been instantiated.
@@ -68,9 +68,7 @@ namespace UnityWeld.Binding
 
             this.viewModel = viewModel;
 
-            viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, 
-                () => InitalizeTemplate()
-            );
+            viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, InitalizeTemplate);
 
             // Get property from view model.
             viewModelProperty = viewModel.GetType().GetProperty(propertyName);
