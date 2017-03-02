@@ -127,7 +127,7 @@ namespace UnityWeld_Editor
         )
         {
             var propertyNames = properties
-                .Select(prop => prop.PropertyInfo.ReflectedType.Name + "." + prop.PropertyInfo.Name)
+                .Select(prop => PropertyInfoToString(prop.PropertyInfo))
                 .ToArray();
             var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
             var content = properties.Select(prop => new GUIContent(
@@ -145,7 +145,7 @@ namespace UnityWeld_Editor
                 UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    newSelectedProperty.PropertyInfo.ReflectedType.Name + "." + newSelectedProperty.PropertyInfo.Name
+                    PropertyInfoToString(newSelectedProperty.PropertyInfo)
                 );
 
                 selectedPropertyType = newSelectedProperty.PropertyInfo.PropertyType;
