@@ -113,7 +113,7 @@ namespace UnityWeld.Binding
             }
 
             // Select template.
-            var viewModelValueType = viewModelPropertyValue.GetType().Name;
+            var viewModelValueType = viewModelPropertyValue.GetType().ToString();
             TemplateBinding selectedTemplate = null;
             if (!availableTemplates.TryGetValue(viewModelValueType, out selectedTemplate))
             {

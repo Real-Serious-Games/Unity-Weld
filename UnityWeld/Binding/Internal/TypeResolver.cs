@@ -138,8 +138,7 @@ namespace UnityWeld.Internal
         private static Type GetViewModelType(string viewModelTypeName)
         {
             var type = TypesWithBindingAttribute
-                .Where(t => t.Name == viewModelTypeName)
-                .FirstOrDefault();
+                .FirstOrDefault(t => t.ToString() == viewModelTypeName);
 
             if (type == null)
             {
