@@ -48,11 +48,11 @@ namespace UnityWeld_Editor
                 InspectorUtils.ShowMenu(
                     method => method.ReflectedType + "/" + method.Name,
                     method => true,
-                    method => MethodInfoToString(method) == targetScript.viewModelMethodName,
+                    method => MemberInfoToString(method) == targetScript.viewModelMethodName,
                     method => UpdateProperty(
                         updatedValue => targetScript.viewModelMethodName = updatedValue,
                         targetScript.viewModelMethodName,
-                        MethodInfoToString(method)
+                        MemberInfoToString(method)
                     ),
                     bindableMethods
                         .OrderBy(method => method.ReflectedType.Name)
@@ -63,14 +63,6 @@ namespace UnityWeld_Editor
             }
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// Convert a MethodInfo into a uniquely identifiable string.
-        /// </summary>
-        private static string MethodInfoToString(MethodInfo method)
-        {
-            return string.Concat(method.ReflectedType.ToString(), ".", method.Name);
         }
     }
 }

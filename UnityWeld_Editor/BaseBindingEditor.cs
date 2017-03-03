@@ -90,11 +90,11 @@ namespace UnityWeld_Editor
                 InspectorUtils.ShowMenu(
                     property => string.Concat(property.ReflectedType, "/", property.Name, " : ", property.PropertyType.Name),
                     menuEnabled,
-                    property => PropertyInfoToString(property) == curPropertyValue,
+                    property => MemberInfoToString(property) == curPropertyValue,
                     property => UpdateProperty(
                         propertyValueSetter,
                         curPropertyValue,
-                        PropertyInfoToString(property)
+                        MemberInfoToString(property)
                     ),
                     bindableProperties
                         .OrderBy(property => property.ReflectedType.Name)
@@ -119,7 +119,7 @@ namespace UnityWeld_Editor
         )
         {
             var propertyNames = properties
-                .Select(prop => PropertyInfoToString(prop.PropertyInfo))
+                .Select(prop => MemberInfoToString(prop.PropertyInfo))
                 .ToArray();
             var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
             var content = properties.Select(prop => new GUIContent(string.Concat(
@@ -139,7 +139,7 @@ namespace UnityWeld_Editor
                 UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    PropertyInfoToString(newSelectedProperty.PropertyInfo)
+                    MemberInfoToString(newSelectedProperty.PropertyInfo)
                 );
 
                 selectedPropertyType = newSelectedProperty.PropertyInfo.PropertyType;
@@ -230,11 +230,11 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Convert a PropertyInfo to a uniquely identifiable string.
+        /// Convert a MemberInfo to a uniquely identifiable string.
         /// </summary>
-        private static string PropertyInfoToString(PropertyInfo property)
+        protected static string MemberInfoToString(MemberInfo member)
         {
-            return string.Concat(property.ReflectedType.ToString(), ".", property.Name);
+            return string.Concat(member.ReflectedType.ToString(), ".", member.Name);
         }
 
         /// <summary>
