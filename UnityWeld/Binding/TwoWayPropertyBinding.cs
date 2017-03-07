@@ -35,6 +35,11 @@ namespace UnityWeld.Binding
         public string viewAdapterTypeName;
 
         /// <summary>
+        /// Options for the adapter from the view model to the UI.
+        /// </summary>
+        public AdapterOptions viewAdapterOptions;
+
+        /// <summary>
         /// Name of the type of the adapter we're using to conver values from the
         /// UI back to the view model. Can be empty for no adapter.
         /// </summary>
@@ -49,6 +54,11 @@ namespace UnityWeld.Binding
         /// Adapter to apply to any adapter/validation exception that is assigned to the view model.
         /// </summary>
         public string exceptionAdapterTypeName;
+
+        /// <summary>
+        /// Adapter options for an exception.
+        /// </summary>
+        public AdapterOptions exceptionAdapterOptions;
 
         /// <summary>
         /// Watches the view-model for changes that must be propagated to the view.
@@ -66,7 +76,7 @@ namespace UnityWeld.Binding
             Component view;
             ParseViewEndPointReference(uiPropertyName, out propertyName, out view);
 
-            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName);
+            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName, viewAdapterOptions);
 
             var propertySync = new PropertySync(
                 // Source
@@ -77,13 +87,14 @@ namespace UnityWeld.Binding
                     view,
                     propertyName,
                     CreateAdapter(viewAdapterTypeName),
+                    viewAdapterOptions,
                     "view",
                     this
                 ),
 
                 // Errors, exceptions and validation.
                 !string.IsNullOrEmpty(exceptionPropertyName)
-                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName)
+                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName, null)
                     : null
                     ,
                 

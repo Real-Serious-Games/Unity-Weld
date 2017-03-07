@@ -68,7 +68,7 @@ namespace UnityWeld.Binding
         {
             dropdown = GetComponent<Dropdown>();
 
-            var selectionPropertyEndPoint = MakeViewModelEndPoint(viewModelSelectionPropertyName, selectionUIToViewModelAdapter);
+            var selectionPropertyEndPoint = MakeViewModelEndPoint(viewModelSelectionPropertyName, selectionUIToViewModelAdapter, null);
 
             var selectionPropertySync = new PropertySync(
                 // Source
@@ -79,13 +79,14 @@ namespace UnityWeld.Binding
                     this,
                     "SelectedOption",
                     CreateAdapter(selectionViewModelToUIAdapter),
+                    null,
                     "view",
                     this
                 ),
 
                 // Errors, exceptions and validation.
                 !string.IsNullOrEmpty(exceptionPropertyName)
-                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName)
+                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName, null)
                     : null
                     ,
 
@@ -107,13 +108,14 @@ namespace UnityWeld.Binding
 
             var optionsPropertySync = new PropertySync(
                 // Source
-                MakeViewModelEndPoint(viewModelOptionsPropertyName, null),
+                MakeViewModelEndPoint(viewModelOptionsPropertyName, null, null),
 
                 // Dest
                 new PropertyEndPoint(
                     this,
                     "Options",
                     CreateAdapter(optionsAdapter),
+                    null,
                     "view",
                     this
                 ),
@@ -126,7 +128,7 @@ namespace UnityWeld.Binding
 
             // Copy the initial value from view-model to view.
             selectionPropertySync.SyncFromSource();
-			optionsPropertySync.SyncFromSource();
+            optionsPropertySync.SyncFromSource();
             UpdateOptions();
         }
 

@@ -32,10 +32,16 @@ namespace UnityWeld.Binding
         /// </summary>
         private readonly IAdapter adaptor;
 
-        public PropertyEndPoint(object propertyOwner, string propertyName, IAdapter adaptor, string endPointType, Component context)
+        /// <summary>
+        /// Options for using the adapter to convert values.
+        /// </summary>
+        private readonly AdapterOptions adapterOptions;
+
+        public PropertyEndPoint(object propertyOwner, string propertyName, IAdapter adaptor, AdapterOptions options, string endPointType, Component context)
         {
             this.propertyOwner = propertyOwner;
             this.adaptor = adaptor;
+            this.adapterOptions = options;
             var type = propertyOwner.GetType();
 
             if (string.IsNullOrEmpty(propertyName))
@@ -72,7 +78,7 @@ namespace UnityWeld.Binding
 
             if (adaptor != null)
             {
-                input = adaptor.Convert(input);
+                input = adaptor.Convert(input, adapterOptions);
             }
 
             property.SetValue(propertyOwner, input, null);

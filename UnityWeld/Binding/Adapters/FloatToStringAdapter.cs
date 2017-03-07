@@ -8,10 +8,10 @@ namespace UnityWeld.Binding.Adapters
     /// <summary>
     /// Adapter that converts a float to a string.
     /// </summary>
-    [Adapter(typeof(float), typeof(string))]
-    public class FloatToStringAdapter : IAdapter
+    [Adapter(typeof(float), typeof(string), typeof(FloatToStringAdapterOptions))]
+    public class FloatToStringAdapter 
     {
-        public object Convert(object valueIn)
+        public object Convert(object valueIn, FloatToStringAdapterOptions options)
         {
             return ((float)valueIn).ToString();
         }

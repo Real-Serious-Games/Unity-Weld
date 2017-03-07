@@ -19,6 +19,11 @@ namespace UnityWeld.Binding
         public string viewAdapterTypeName;
 
         /// <summary>
+        /// Options for adapting from the view model to the UI property.
+        /// </summary>
+        public AdapterOptions viewAdapterOptions;
+
+        /// <summary>
         /// Name of the property in the view model to bind.
         /// </summary>
         public string viewModelPropertyName;
@@ -39,7 +44,7 @@ namespace UnityWeld.Binding
             Component view;
             ParseViewEndPointReference(uiPropertyName, out propertyName, out view);
 
-            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null);
+            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, uiPropertyName, viewAdapterOptions);
 
             var propertySync = new PropertySync(
                 // Source
@@ -50,6 +55,7 @@ namespace UnityWeld.Binding
                     view,
                     propertyName,
                     CreateAdapter(viewAdapterTypeName),
+                    viewAdapterOptions,
                     "view",
                     this
                 ),

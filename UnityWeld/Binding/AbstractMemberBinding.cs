@@ -82,7 +82,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Make a property end point for a property on the view model.
         /// </summary>
-        protected PropertyEndPoint MakeViewModelEndPoint(string viewModelPropertyName, string adapterTypeName)
+        protected PropertyEndPoint MakeViewModelEndPoint(string viewModelPropertyName, string adapterTypeName, AdapterOptions adapterOptions)
         {
             string propertyName;
             object viewModel;
@@ -90,7 +90,7 @@ namespace UnityWeld.Binding
 
             var adapter = CreateAdapter(adapterTypeName);
 
-            return new PropertyEndPoint(viewModel, propertyName, adapter, "view-model", this);
+            return new PropertyEndPoint(viewModel, propertyName, adapter, adapterOptions, "view-model", this);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine.Assertions;
 
 namespace UnityWeld.Binding
 {
@@ -15,10 +16,20 @@ namespace UnityWeld.Binding
         {
             InputType = fromType;
             OutputType = toType;
+            OptionsType = typeof(AdapterOptions);
+        }
+
+        public AdapterAttribute(Type fromType, Type toType, Type optionsType)
+        {
+            InputType = fromType;
+            OutputType = toType;
+            OptionsType = optionsType;
         }
 
         public Type InputType { get; private set; }
 
         public Type OutputType { get; private set; }
+
+        public Type OptionsType { get; private set; }
     }
 }

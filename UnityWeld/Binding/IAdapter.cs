@@ -15,6 +15,6 @@ namespace UnityWeld.Binding
         /// Convert from the source type to the output type. This should throw an exception 
         /// if the conversion fails or the input isn't valid.
         /// </summary>
-        object Convert(object valueIn);
+        object Convert(object valueIn, AdapterOptions options);
     }
 }
