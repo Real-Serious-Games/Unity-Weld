@@ -193,6 +193,43 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
+        /// Show a field for selecting an AdapterOptions object matching the specified type of adapter.
+        /// </summary>
+        protected void ShowAdapterOptionsMenu(
+            string label, 
+            string adapterTypeName, 
+            Action<AdapterOptions> propertyValueSetter, 
+            AdapterOptions currentPropertyValue
+        )
+        {
+            // Don't show selector until an adapter has been selected.
+            if (string.IsNullOrEmpty(adapterTypeName))
+            {
+                return;
+            }
+
+            var adapterOptionsType = TypeResolver.FindAdapterAttribute(
+                TypeResolver.FindAdapterType(adapterTypeName)
+            ).OptionsType;
+
+            // Don't show selector unless the current adapter has its own overridden
+            // adapter options type.
+            if (adapterOptionsType == typeof(AdapterOptions))
+            {
+                return;
+            }
+
+            var newAdapterOptions = (AdapterOptions)EditorGUILayout.ObjectField(
+                label, 
+                currentPropertyValue, 
+                adapterOptionsType, 
+                false
+            );
+
+            UpdateProperty(propertyValueSetter, currentPropertyValue, newAdapterOptions);
+        }
+
+        /// <summary>
         /// Find the adapter attribute for a named adapter type.
         /// </summary>
         protected AdapterAttribute FindAdapterAttribute(string adapterName)
