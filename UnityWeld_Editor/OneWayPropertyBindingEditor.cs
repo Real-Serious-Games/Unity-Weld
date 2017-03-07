@@ -49,6 +49,25 @@ namespace UnityWeld_Editor
                 }
             );
 
+            if (!string.IsNullOrEmpty(targetScript.viewAdapterTypeName))
+            {
+                var adapterOptionsType = TypeResolver.FindAdapterAttribute(
+                    TypeResolver.FindAdapterType(targetScript.viewAdapterTypeName)
+                ).OptionsType;
+
+                if (adapterOptionsType != typeof(AdapterOptions))
+                {
+                    var oldAdapterOptions = targetScript.viewAdapterOptions;
+                    var adapterOptionsName = "View adapter options";
+                    var newAdapterOptions = (AdapterOptions)EditorGUILayout.ObjectField(adapterOptionsName, oldAdapterOptions, adapterOptionsType, false);
+                    if (newAdapterOptions != oldAdapterOptions)
+                    {
+                        targetScript.viewAdapterOptions = newAdapterOptions;
+                        InspectorUtils.MarkSceneDirty(targetScript.gameObject);
+                    }
+                }
+            }
+
             var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
