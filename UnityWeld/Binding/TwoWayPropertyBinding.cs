@@ -46,6 +46,11 @@ namespace UnityWeld.Binding
         public string viewModelAdapterTypeName;
 
         /// <summary>
+        /// Options for the adapter from the UI to the view model.
+        /// </summary>
+        public AdapterOptions viewModelAdapterOptions;
+
+        /// <summary>
         /// The name of the property to assign an exception to when adapter/validation fails.
         /// </summary>
         public string exceptionPropertyName;
@@ -76,7 +81,7 @@ namespace UnityWeld.Binding
             Component view;
             ParseViewEndPointReference(uiPropertyName, out propertyName, out view);
 
-            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName, viewAdapterOptions);
+            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName, viewModelAdapterOptions);
 
             var propertySync = new PropertySync(
                 // Source
@@ -94,7 +99,7 @@ namespace UnityWeld.Binding
 
                 // Errors, exceptions and validation.
                 !string.IsNullOrEmpty(exceptionPropertyName)
-                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName, null)
+                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName, exceptionAdapterOptions)
                     : null
                     ,
                 

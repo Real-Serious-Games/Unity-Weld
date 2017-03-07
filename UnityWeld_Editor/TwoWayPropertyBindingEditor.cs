@@ -49,11 +49,27 @@ namespace UnityWeld_Editor
                 new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
                 viewAdapterTypeNames,
                 targetScript.viewAdapterTypeName,
-                newValue => UpdateProperty(
-                    updatedValue => targetScript.viewAdapterTypeName = updatedValue,
-                    targetScript.viewAdapterTypeName,
-                    newValue
-                )
+                newValue =>
+                {
+                    // Get rid of old adapter options if we changed the type of the adapter.
+                    if (newValue != targetScript.viewAdapterTypeName)
+                    {
+                        targetScript.viewAdapterOptions = null;
+                    }
+
+                    UpdateProperty(
+                        updatedValue => targetScript.viewAdapterTypeName = updatedValue,
+                        targetScript.viewAdapterTypeName,
+                        newValue
+                    );
+                }
+            );
+
+            ShowAdapterOptionsMenu(
+                "View adapter options",
+                targetScript.viewAdapterTypeName,
+                options => targetScript.viewAdapterOptions = options,
+                targetScript.viewAdapterOptions
             );
 
             var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
@@ -74,7 +90,26 @@ namespace UnityWeld_Editor
                 new GUIContent("View-model adaptor", "Adapter that converts from the view back to the view-model"),
                 viewModelAdapterTypeNames,
                 targetScript.viewModelAdapterTypeName,
-                (newValue) => targetScript.viewModelAdapterTypeName = newValue
+                newValue =>
+                {
+                    if (newValue != targetScript.viewModelAdapterTypeName)
+                    {
+                        targetScript.viewModelAdapterOptions = null;
+                    }
+
+                    UpdateProperty(
+                        updatedValue => targetScript.viewModelAdapterTypeName = updatedValue,
+                        targetScript.viewModelAdapterTypeName,
+                        newValue
+                    );
+                }
+            );
+
+            ShowAdapterOptionsMenu(
+                "View-model adapter options",
+                targetScript.viewModelAdapterTypeName,
+                options => targetScript.viewModelAdapterOptions = options,
+                targetScript.viewModelAdapterOptions
             );
 
             var expectionAdapterTypeNames = GetAdapterTypeNames(
@@ -85,7 +120,26 @@ namespace UnityWeld_Editor
                 new GUIContent("Exception adaptor", "Adapter that handles exceptions thrown by the view-model adapter"),
                 expectionAdapterTypeNames,
                 targetScript.exceptionAdapterTypeName,
-                (newValue) => targetScript.exceptionAdapterTypeName = newValue
+                newValue =>
+                {
+                    if (newValue != targetScript.exceptionAdapterTypeName)
+                    {
+                        targetScript.exceptionAdapterOptions = null;
+                    }
+
+                    UpdateProperty(
+                        updatedValue => targetScript.exceptionAdapterTypeName = updatedValue,
+                        targetScript.exceptionAdapterTypeName,
+                        newValue
+                    );
+                }
+            );
+
+            ShowAdapterOptionsMenu(
+                "Exception adapter options",
+                targetScript.exceptionAdapterTypeName,
+                options => targetScript.exceptionAdapterOptions = options,
+                targetScript.exceptionAdapterOptions
             );
 
             var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
