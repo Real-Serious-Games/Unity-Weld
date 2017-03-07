@@ -44,7 +44,7 @@ namespace UnityWeld.Internal
         }
 
         /// <summary>
-        /// Find all types marked with the [Binding] attribute.
+        /// Find all types marked with the specified attribute.
         /// </summary>
         private static Type[] FindTypesMarkedByAttribute(Type attributeType)
         {
