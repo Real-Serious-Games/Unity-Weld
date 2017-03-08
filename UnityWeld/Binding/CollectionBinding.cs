@@ -16,7 +16,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// All the child objects that have been created, indexed by the view they are connected to.
         /// </summary>
-        private IDictionary<object, GameObject> generatedChildren = new Dictionary<object, GameObject>();
+        private readonly IDictionary<object, GameObject> generatedChildren = new Dictionary<object, GameObject>();
 
         /// <summary>
         /// Template to clone for instances of objects within the collection.
@@ -53,12 +53,12 @@ namespace UnityWeld.Binding
         public override void Connect()
         {
             string propertyName;
-            object viewModel;
-            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
+            object newViewModel;
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out newViewModel);
 
-            this.viewModel = viewModel;
+            viewModel = newViewModel;
 
-            propertyWatcher = new PropertyWatcher(viewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
+            propertyWatcher = new PropertyWatcher(newViewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
 
             BindCollection();
         }
@@ -83,40 +83,44 @@ namespace UnityWeld.Binding
 
         private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            switch (e.Action)
             {
-                // Add items that were added to the bound collection.
-                if (e.NewItems != null)
-                {
-                    foreach (var item in e.NewItems)
+                case NotifyCollectionChangedAction.Add:
+                    // Add items that were added to the bound collection.
+                    if (e.NewItems != null)
                     {
-                        AddAndInstantiateChild(item);
+                        foreach (var item in e.NewItems)
+                        {
+                            AddAndInstantiateChild(item);
+                        }
                     }
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                // TODO: respect item order
-                // Remove items that have been deleted.
-                if (e.OldItems != null)
-                {
-                    foreach (var item in e.OldItems)
+
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    // TODO: respect item order
+                    // Remove items that have been deleted.
+                    if (e.OldItems != null)
                     {
-                        var itemToRemove = item;
+                        foreach (var item in e.OldItems)
+                        {
+                            var itemToRemove = item;
 
-                        Destroy(generatedChildren[itemToRemove]);
-                        generatedChildren.Remove(itemToRemove);
+                            Destroy(generatedChildren[itemToRemove]);
+                            generatedChildren.Remove(itemToRemove);
+                        }
                     }
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Reset)
-            {
-                foreach (var generatedChild in generatedChildren.Values)
-                {
-                    Destroy(generatedChild);
-                }
 
-                generatedChildren.Clear();
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    foreach (var generatedChild in generatedChildren.Values)
+                    {
+                        Destroy(generatedChild);
+                    }
+
+                    generatedChildren.Clear();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
