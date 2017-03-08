@@ -13,7 +13,8 @@ namespace UnityWeld.Binding.Adapters
     {
         public object Convert(object valueIn, AdapterOptions options)
         {
-            return ((float)valueIn).ToString(((FloatToStringAdapterOptions)options).Format);
+            var format = ((FloatToStringAdapterOptions) options).Format;
+            return ((float)valueIn).ToString(format);
         }
     }
 }

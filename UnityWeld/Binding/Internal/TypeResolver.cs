@@ -15,7 +15,7 @@ namespace UnityWeld.Internal
     {
         private static Type[] typesWithBindingAttribute;
 
-        public static Type[] TypesWithBindingAttribute
+        public static IEnumerable<Type> TypesWithBindingAttribute
         {
             get
             {
@@ -30,7 +30,7 @@ namespace UnityWeld.Internal
 
         private static Type[] typesWithAdapterAttribute;
 
-        public static Type[] TypesWithAdapterAttribute
+        public static IEnumerable<Type> TypesWithAdapterAttribute
         {
             get
             {
