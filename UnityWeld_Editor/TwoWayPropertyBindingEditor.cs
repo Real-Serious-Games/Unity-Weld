@@ -87,7 +87,7 @@ namespace UnityWeld_Editor
             );
 
             ShowAdapterMenu(
-                new GUIContent("View-model adaptor", "Adapter that converts from the view back to the view-model"),
+                new GUIContent("View-model adapter", "Adapter that converts from the view back to the view-model"),
                 viewModelAdapterTypeNames,
                 targetScript.viewModelAdapterTypeName,
                 newValue =>
@@ -117,7 +117,7 @@ namespace UnityWeld_Editor
             );
 
             ShowAdapterMenu(
-                new GUIContent("Exception adaptor", "Adapter that handles exceptions thrown by the view-model adapter"),
+                new GUIContent("Exception adapter", "Adapter that handles exceptions thrown by the view-model adapter"),
                 expectionAdapterTypeNames,
                 targetScript.exceptionAdapterTypeName,
                 newValue =>
