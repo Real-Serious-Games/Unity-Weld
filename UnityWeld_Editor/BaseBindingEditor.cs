@@ -112,22 +112,22 @@ namespace UnityWeld_Editor
         /// </summary>
         public void ShowViewPropertyMenu(
             GUIContent label, 
-            BindablePropertyInfo[] properties, 
+            PropertyInfo[] properties, 
             Action<string> propertyValueSetter,
             string curPropertyValue,
             out Type selectedPropertyType
         )
         {
             var propertyNames = properties
-                .Select(prop => MemberInfoToString(prop.PropertyInfo))
+                .Select(MemberInfoToString)
                 .ToArray();
             var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
             var content = properties.Select(prop => new GUIContent(string.Concat(
-                    prop.PropertyInfo.ReflectedType.Name, 
+                    prop.ReflectedType.Name, 
                     "/",
-                    prop.PropertyInfo.Name, 
+                    prop.Name, 
                     " : ",
-                    prop.PropertyInfo.PropertyType.Name
+                    prop.PropertyType.Name
                 )))
                 .ToArray();
 
@@ -139,10 +139,10 @@ namespace UnityWeld_Editor
                 UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    MemberInfoToString(newSelectedProperty.PropertyInfo)
+                    MemberInfoToString(newSelectedProperty)
                 );
 
-                selectedPropertyType = newSelectedProperty.PropertyInfo.PropertyType;
+                selectedPropertyType = newSelectedProperty.PropertyType;
             }
             else
             {
@@ -152,7 +152,7 @@ namespace UnityWeld_Editor
                     return;
                 }
 
-                selectedPropertyType = properties[selectedIndex].PropertyInfo.PropertyType;
+                selectedPropertyType = properties[selectedIndex].PropertyType;
             }
         }
 

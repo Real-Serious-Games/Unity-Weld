@@ -8,28 +8,6 @@ using UnityEngine;
 namespace UnityWeld.Binding
 {
     /// <summary>
-    /// Information needed to bind to a property on a component. 
-    /// </summary>
-    public struct BindablePropertyInfo
-    {
-        /// <summary>
-        /// PropertyInfo of the property to bind to.
-        /// </summary>
-        public PropertyInfo PropertyInfo { get; set; }
-
-        /// <summary>
-        /// Object the property belongs to.
-        /// </summary>
-        public UnityEngine.Component Object { get; set; }
-
-        public BindablePropertyInfo(PropertyInfo propertyInfo, UnityEngine.Component obj)
-        {
-            this.PropertyInfo = propertyInfo;
-            this.Object = obj;
-        }
-    }
-
-    /// <summary>
     /// Helper to find bindable properties.
     /// </summary>
     public class PropertyFinder
@@ -46,21 +24,20 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Use reflection to find all components with properties we can bind to.
         /// </summary>
-        public static IEnumerable<BindablePropertyInfo> GetBindableProperties(GameObject gameObject) //todo: Maybe move this to the TypeResolver.
+        public static IEnumerable<PropertyInfo> GetBindableProperties(GameObject gameObject) //todo: Maybe move this to the TypeResolver.
         {
             return gameObject.GetComponents<UnityEngine.Component>()
                 .SelectMany(component =>
                 {
-                    var propertiesOnComponent = new List<BindablePropertyInfo>();
+                    var propertiesOnComponent = new List<PropertyInfo>();
                     foreach (var propertyInfo in component.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                     {
-                        propertiesOnComponent.Add(
-                            new BindablePropertyInfo(propertyInfo, component));
+                        propertiesOnComponent.Add(propertyInfo);
                     }
                     return propertiesOnComponent;
                 })
-                .Where(prop => !hiddenTypes.Contains(prop.PropertyInfo.ReflectedType))
-                .Where(prop => !prop.PropertyInfo.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any());
+                .Where(prop => !hiddenTypes.Contains(prop.ReflectedType))
+                .Where(prop => !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any());
         }
     }
 }
