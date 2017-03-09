@@ -11,7 +11,7 @@ using UnityWeld_Editor;
 /// to bind to.
 /// </summary>
 [CustomEditor(typeof(Template))]
-public class TemplateBindingEditor : BaseBindingEditor
+public class TemplateEditor : BaseBindingEditor
 {
     public override void OnInspectorGUI()
     {
