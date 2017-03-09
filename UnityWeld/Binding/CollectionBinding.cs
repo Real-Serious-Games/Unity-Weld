@@ -23,7 +23,7 @@ namespace UnityWeld.Binding
         /// </summary>
         [SerializeField]
         [Tooltip("Template to clone for each item in the collection")]
-        public TemplateBinding template;
+        public Template template;
 
         /// <summary>
         /// View-model cached during connection.

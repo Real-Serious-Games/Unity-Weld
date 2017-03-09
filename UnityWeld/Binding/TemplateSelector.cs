@@ -26,12 +26,12 @@ namespace UnityWeld.Binding
         /// <summary>
         /// All available templates indexed by the view model the are for.
         /// </summary>
-        private readonly IDictionary<string, TemplateBinding> availableTemplates = new Dictionary<string, TemplateBinding>();
+        private readonly IDictionary<string, Template> availableTemplates = new Dictionary<string, Template>();
 
         /// <summary>
         /// The template that has been instantiated.
         /// </summary>
-        private TemplateBinding initalizedTemplate = null;
+        private Template initalizedTemplate = null;
 
         /// <summary>
         /// The view-model, cached during connection.
@@ -56,7 +56,7 @@ namespace UnityWeld.Binding
             Disconnect();
 
             // Cache available templates.
-            var templatesInScene = templates.GetComponentsInChildren<TemplateBinding>(true);
+            var templatesInScene = templates.GetComponentsInChildren<Template>(true);
             foreach (var template in templatesInScene)
             {
                 availableTemplates.Add(template.GetViewModelTypeName(), template);
@@ -114,7 +114,7 @@ namespace UnityWeld.Binding
 
             // Select template.
             var viewModelValueType = viewModelPropertyValue.GetType().ToString();
-            TemplateBinding selectedTemplate = null;
+            Template selectedTemplate = null;
             if (!availableTemplates.TryGetValue(viewModelValueType, out selectedTemplate))
             {
                 throw new ApplicationException("Cannot find matching template for: " + viewModelValueType);

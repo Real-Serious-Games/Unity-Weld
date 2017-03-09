@@ -6,7 +6,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Template for use in collection bindings.
     /// </summary>
-    public interface ITemplateBinding
+    public interface ITemplate
     {
         /// <summary>
         /// Set the view model and initialise all binding objects down the hierarchy.
@@ -17,7 +17,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Template for use in collection bindings.
     /// </summary>
-    public class TemplateBinding : MonoBehaviour, IViewModelProvider, ITemplateBinding
+    public class Template : MonoBehaviour, IViewModelProvider, ITemplate
     {
         /// <summary>
         /// Get the view-model provided by this provider.

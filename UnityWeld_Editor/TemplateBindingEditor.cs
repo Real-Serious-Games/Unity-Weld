@@ -10,12 +10,12 @@ using UnityWeld_Editor;
 /// Editor for template bindings with a dropdown for selecting what view model
 /// to bind to.
 /// </summary>
-[CustomEditor(typeof(TemplateBinding))]
+[CustomEditor(typeof(Template))]
 public class TemplateBindingEditor : BaseBindingEditor
 {
     public override void OnInspectorGUI()
     {
-        var targetScript = (TemplateBinding)target;
+        var targetScript = (Template)target;
 
         var availableViewModels = TypeResolver.TypesWithBindingAttribute
             .Select(type => type.ToString())
