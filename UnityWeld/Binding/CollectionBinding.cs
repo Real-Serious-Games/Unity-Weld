@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace UnityWeld.Binding
 {
-    public class CollectionBinding : AbstractMemberBinding
+    public class CollectionBinding : AbstractTemplateSelector
     {
         /// <summary>
         /// Name of the property in the view model to bind.

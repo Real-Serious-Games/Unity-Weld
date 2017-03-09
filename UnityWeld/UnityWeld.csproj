@@ -78,6 +78,7 @@
     <Compile Include="Binding\EventBinding.cs" />
     <Compile Include="Binding\Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Binding\AbstractTemplateSelector.cs" />
     <Compile Include="Widgets\ColorBlockAdapter.cs" />
     <Compile Include="Widgets\DropdownAdapter.cs" />
   </ItemGroup>

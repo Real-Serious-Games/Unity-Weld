@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityWeld.Binding;
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -11,7 +8,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Binds to a view and instantiates a template based on the view type.
     /// </summary>
-    public class TemplateBinding : AbstractMemberBinding
+    public class TemplateBinding : AbstractTemplateSelector
     {
         /// <summary>
         /// The name of the property we are binding to on the view model.
