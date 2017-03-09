@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="Binding\AdapterAttribute.cs" />
     <Compile Include="Binding\AdapterOptions.cs" />
+    <Compile Include="Binding\Adapters\DateTimeToStringAdapter.cs" />
+    <Compile Include="Binding\Adapters\DateTimeToStringAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\FloatToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\FloatToStringAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\StringToFloatAdapter.cs" />
