@@ -11,7 +11,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Binds to a view and instantiates a template based on the view type.
     /// </summary>
-    public class TemplateSelector : AbstractMemberBinding
+    public class TemplateBinding : AbstractMemberBinding
     {
         /// <summary>
         /// The name of the property we are binding to on the view model.

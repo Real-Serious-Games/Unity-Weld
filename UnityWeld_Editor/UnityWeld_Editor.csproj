@@ -48,7 +48,7 @@
     <Compile Include="BaseBindingEditor.cs" />
     <Compile Include="CollectionBindingEditor.cs" />
     <Compile Include="TemplateEditor.cs" />
-    <Compile Include="TemplateSelectorEditor.cs" />
+    <Compile Include="TemplateBindingEditor.cs" />
     <Compile Include="TwoWayPropertyBindingEditor.cs" />
     <Compile Include="EventBindingEditor.cs" />
     <Compile Include="InspectorUtils.cs" />

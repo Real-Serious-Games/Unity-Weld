@@ -9,14 +9,14 @@ using UnityWeld_Editor;
 
 namespace UnityTools.UnityUI_Editor
 {
-    [CustomEditor(typeof(TemplateSelector))]
-    class TemplateSelectorEditor : BaseBindingEditor
+    [CustomEditor(typeof(TemplateBinding))]
+    class TemplateBindingEditor : BaseBindingEditor
     {
 
         public override void OnInspectorGUI()
         {
             // Initialise everything
-            var targetScript = (TemplateSelector)target;
+            var targetScript = (TemplateBinding)target;
 
             ShowViewModelPropertyMenu(
                 new GUIContent("Template property", "Property on the view model to use for selecting templates."),
