@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityWeld.Binding;
 
-namespace UnityUI.Binding.Adapters
+namespace UnityWeld.Binding.Adapters
 {
     /// <summary>
     /// Options for converting a DateTime to a string.
