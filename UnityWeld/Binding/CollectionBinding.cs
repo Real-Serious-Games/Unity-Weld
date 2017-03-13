@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace UnityWeld.Binding
 {
@@ -12,22 +9,10 @@ namespace UnityWeld.Binding
         /// Collection that we have bound to.
         /// </summary>
         private IEnumerable viewModelCollectionValue;
-
-        private new void Awake()
-        {
-            Assert.IsNotNull(templates, "CollectionBinding must be assigned a template.");
-
-            // Templates should always be deactivated since they're only used to clone new instances.
-            templates.SetActive(false);
-
-            base.Awake();
-        }
-
+        
         public override void Connect()
         {
             Disconnect();
-
-            CacheTemplates();
 
             string propertyName;
             object newViewModel;

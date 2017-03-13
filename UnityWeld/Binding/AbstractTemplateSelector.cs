@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityWeld.Binding;
 
 namespace UnityWeld.Binding
 {
@@ -40,10 +37,20 @@ namespace UnityWeld.Binding
         /// </summary>
         private readonly IDictionary<object, GameObject> instantiatedTemplates = new Dictionary<object, GameObject>();
 
-        
+        protected new void Awake()
+        {
+            Assert.IsNotNull(templates, "No templates have been assigned.");
+
+            CacheTemplates();
+
+            base.Awake();
+        }
+
         // Cache available templates.
         protected void CacheTemplates()
         {
+            availableTemplates.Clear();
+
             var templatesInScene = templates.GetComponentsInChildren<Template>(true);
             foreach (var template in templatesInScene)
             {

@@ -22,8 +22,6 @@ namespace UnityWeld.Binding
         {
             Disconnect();
 
-            CacheTemplates();
-
             string propertyName;
             object viewModel;
             ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
