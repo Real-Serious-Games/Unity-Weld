@@ -27,11 +27,11 @@ namespace UnityTools.UnityUI_Editor
             );
 
             UpdateProperty(
-                updatedValue => targetScript.templates = updatedValue,
-                targetScript.templates,
+                updatedValue => targetScript.templatesRoot = updatedValue,
+                targetScript.templatesRoot,
                 (GameObject)EditorGUILayout.ObjectField(
                     new GUIContent("Templates root object", "Parent object to the objects we want to use as templates."),
-                    targetScript.templates, 
+                    targetScript.templatesRoot, 
                     typeof(GameObject), 
                     true
                 )

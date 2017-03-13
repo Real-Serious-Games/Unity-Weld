@@ -25,7 +25,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The gameobject in the scene that is the parent object for the tenplates.
         /// </summary>
-        public GameObject templates;
+        public GameObject templatesRoot;
 
         /// <summary>
         /// All available templates indexed by the view model the are for.
@@ -39,7 +39,7 @@ namespace UnityWeld.Binding
 
         protected new void Awake()
         {
-            Assert.IsNotNull(templates, "No templates have been assigned.");
+            Assert.IsNotNull(templatesRoot, "No templates have been assigned.");
 
             CacheTemplates();
 
@@ -51,7 +51,7 @@ namespace UnityWeld.Binding
         {
             availableTemplates.Clear();
 
-            var templatesInScene = templates.GetComponentsInChildren<Template>(true);
+            var templatesInScene = templatesRoot.GetComponentsInChildren<Template>(true);
             foreach (var template in templatesInScene)
             {
                 template.gameObject.SetActive(false);
