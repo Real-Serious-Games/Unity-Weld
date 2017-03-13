@@ -30,12 +30,12 @@ namespace UnityWeld_Editor
             );
 
             UpdateProperty(
-                updatedValue => targetScript.template = updatedValue,
-                targetScript.template,
-                (Template)EditorGUILayout.ObjectField(
-                    new GUIContent("Collection template", "Object to create instances of for each item in the collection."), 
-                    targetScript.template, 
-                    typeof(Template), 
+                updatedValue => targetScript.templates = updatedValue,
+                targetScript.templates,
+                (GameObject)EditorGUILayout.ObjectField(
+                    new GUIContent("Collection templates", "Object to create instances of for each item in the collection."), 
+                    targetScript.templates, 
+                    typeof(GameObject), 
                     true
                 )
             );

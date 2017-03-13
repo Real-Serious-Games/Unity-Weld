@@ -9,56 +9,33 @@ namespace UnityWeld.Binding
     public class CollectionBinding : AbstractTemplateSelector
     {
         /// <summary>
-        /// Name of the property in the view model to bind.
-        /// </summary>
-        public string viewModelPropertyName = string.Empty;
-
-        /// <summary>
-        /// All the child objects that have been created, indexed by the view they are connected to.
-        /// </summary>
-        private readonly IDictionary<object, GameObject> generatedChildren = new Dictionary<object, GameObject>();
-
-        /// <summary>
-        /// Template to clone for instances of objects within the collection.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Template to clone for each item in the collection")]
-        public Template template;
-
-        /// <summary>
-        /// View-model cached during connection.
-        /// </summary>
-        private object viewModel;
-
-        /// <summary>
         /// Collection that we have bound to.
         /// </summary>
         private IEnumerable viewModelCollectionValue;
 
-        /// <summary>
-        /// Watches the view model property for changes.
-        /// </summary>
-        private PropertyWatcher propertyWatcher;
-
         private new void Awake()
         {
-            Assert.IsNotNull(template, "CollectionBinding must be assigned a template.");
+            Assert.IsNotNull(templates, "CollectionBinding must be assigned a template.");
 
             // Templates should always be deactivated since they're only used to clone new instances.
-            template.gameObject.SetActive(false);
+            templates.SetActive(false);
 
             base.Awake();
         }
 
         public override void Connect()
         {
+            Disconnect();
+
+            CacheTemplates();
+
             string propertyName;
             object newViewModel;
             ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out newViewModel);
 
             viewModel = newViewModel;
 
-            propertyWatcher = new PropertyWatcher(newViewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
+            viewModelPropertyWatcher = new PropertyWatcher(newViewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
 
             BindCollection();
         }
@@ -67,10 +44,10 @@ namespace UnityWeld.Binding
         {
             UnbindCollection();
 
-            if (propertyWatcher != null)
+            if (viewModelPropertyWatcher != null)
             {
-                propertyWatcher.Dispose();
-                propertyWatcher = null;
+                viewModelPropertyWatcher.Dispose();
+                viewModelPropertyWatcher = null;
             }
 
             viewModel = null;
@@ -91,7 +68,7 @@ namespace UnityWeld.Binding
                     {
                         foreach (var item in e.NewItems)
                         {
-                            AddAndInstantiateChild(item);
+                            InstantiateTemplate(item);
                         }
                     }
 
@@ -103,45 +80,18 @@ namespace UnityWeld.Binding
                     {
                         foreach (var item in e.OldItems)
                         {
-                            var itemToRemove = item;
-
-                            Destroy(generatedChildren[itemToRemove]);
-                            generatedChildren.Remove(itemToRemove);
+                            DestroyTemplate(item);
                         }
                     }
 
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    foreach (var generatedChild in generatedChildren.Values)
-                    {
-                        Destroy(generatedChild);
-                    }
-
-                    generatedChildren.Clear();
+                    DestroyAllTemplates();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        /// <summary>
-        /// Create a clone of the template object and bind it to the specified view model.
-        /// </summary>
-        private void AddAndInstantiateChild(object viewModel)
-        {
-            Assert.IsNotNull(viewModel, "Cannot instantiate child with null view model");
-
-            var newObject = Instantiate(template);
-            newObject.transform.SetParent(transform, false);
-
-            generatedChildren.Add(viewModel, newObject.gameObject);
-
-            // Set bound view.
-            newObject.InitChildBindings(viewModel);
-
-            newObject.gameObject.SetActive(true);
-        }
-
 
         /// <summary>
         /// Bind to the view model collection so we can monitor it for changes.
@@ -177,7 +127,7 @@ namespace UnityWeld.Binding
             // Generate children
             foreach (var value in viewModelCollectionValue)
             {
-                AddAndInstantiateChild(value);
+                InstantiateTemplate(value);
             }
 
             // Subscribe to collection changed events.
@@ -193,13 +143,7 @@ namespace UnityWeld.Binding
         /// </summary>
         private void UnbindCollection()
         {
-            // Delete all generated children
-            foreach (var child in generatedChildren.Values)
-            {
-                Destroy(child);
-            }
-
-            generatedChildren.Clear();
+            DestroyAllTemplates();
 
             // Unsubscribe from collection changed events.
             if (viewModelCollectionValue != null)

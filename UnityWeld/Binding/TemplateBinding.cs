@@ -11,40 +11,10 @@ namespace UnityWeld.Binding
     public class TemplateBinding : AbstractTemplateSelector
     {
         /// <summary>
-        /// The name of the property we are binding to on the view model.
-        /// </summary>
-        public string viewModelPropertyName = string.Empty;
-
-        /// <summary>
-        /// The gameobject in the scene that is the parent object for the tenplates.
-        /// </summary>
-        public GameObject templates;
-
-        /// <summary>
-        /// All available templates indexed by the view model the are for.
-        /// </summary>
-        private readonly IDictionary<string, Template> availableTemplates = new Dictionary<string, Template>();
-
-        /// <summary>
-        /// The template that has been instantiated.
-        /// </summary>
-        private Template initalizedTemplate = null;
-
-        /// <summary>
-        /// The view-model, cached during connection.
-        /// </summary>
-        private object viewModel;
-
-        /// <summary>
         /// The property of the view model that is being bound to
         /// </summary>
         private PropertyInfo viewModelProperty = null;
-
-        /// <summary>
-        /// Watches the view-model property for changes.
-        /// </summary>
-        private PropertyWatcher viewModelPropertyWatcher;
-
+        
         /// <summary>
         /// Connect to the attached view model.
         /// </summary>
@@ -52,12 +22,7 @@ namespace UnityWeld.Binding
         {
             Disconnect();
 
-            // Cache available templates.
-            var templatesInScene = templates.GetComponentsInChildren<Template>(true);
-            foreach (var template in templatesInScene)
-            {
-                availableTemplates.Add(template.GetViewModelTypeName(), template);
-            }
+            CacheTemplates();
 
             string propertyName;
             object viewModel;
@@ -83,8 +48,7 @@ namespace UnityWeld.Binding
         /// </summary>
         public override void Disconnect()
         {
-            DestroyTemplate();
-            availableTemplates.Clear();
+            DestroyAllTemplates();
 
             if (viewModelPropertyWatcher != null)
             {
@@ -100,7 +64,7 @@ namespace UnityWeld.Binding
         /// </summary>
         private void InitalizeTemplate()
         {
-            DestroyTemplate();
+            DestroyAllTemplates();
 
             // Get value from view model.
             var viewModelPropertyValue = viewModelProperty.GetValue(viewModel, null);
@@ -109,37 +73,7 @@ namespace UnityWeld.Binding
                 throw new ApplicationException("Cannot bind to null property in view: " + viewModelPropertyName);
             }
 
-            // Select template.
-            var viewModelValueType = viewModelPropertyValue.GetType().ToString();
-            Template selectedTemplate = null;
-            if (!availableTemplates.TryGetValue(viewModelValueType, out selectedTemplate))
-            {
-                throw new ApplicationException("Cannot find matching template for: " + viewModelValueType);
-            }
-
-            // Setup selected template.
-            initalizedTemplate = Instantiate(selectedTemplate);
-
-            initalizedTemplate.transform.SetParent(transform, false);
-
-            // Set up child bindings before we activate the template object so that they will be configured properly before trying to connect.
-            initalizedTemplate.InitChildBindings(viewModelPropertyValue);
-
-            initalizedTemplate.gameObject.SetActive(true);
-        }
-
-        /// <summary>
-        /// Destroys the instantiated template.
-        /// </summary>
-        private void DestroyTemplate()
-        {
-            if (initalizedTemplate == null)
-            {
-                return;
-            }
-
-            Destroy(initalizedTemplate.gameObject);
-            initalizedTemplate = null;
+            InstantiateTemplate(viewModelPropertyValue);
         }
     }
 }
