@@ -208,9 +208,12 @@ namespace UnityWeld_Editor
                 return;
             }
 
-            var adapterOptionsType = TypeResolver.FindAdapterAttribute(
-                TypeResolver.FindAdapterType(adapterTypeName)
-            ).OptionsType;
+            var adapterType = FindAdapterAttribute(adapterTypeName);
+            if (adapterType == null)
+            {
+                return;
+            }
+            var adapterOptionsType = adapterType.OptionsType;
 
             // Don't show selector unless the current adapter has its own overridden
             // adapter options type.
