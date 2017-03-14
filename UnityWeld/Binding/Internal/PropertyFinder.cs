@@ -27,8 +27,7 @@ namespace UnityWeld.Binding.Internal
         {
             return gameObject.GetComponents<Component>()
                 .SelectMany(component => component.GetType()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                    .ToList())
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 .Where(prop => !hiddenTypes.Contains(prop.ReflectedType))
                 .Where(prop => !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any());
         }

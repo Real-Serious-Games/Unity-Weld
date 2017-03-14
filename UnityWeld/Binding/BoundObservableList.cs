@@ -48,6 +48,7 @@ namespace UnityWeld.Binding
             this.source = source;
 
             source.CollectionChanged += source_CollectionChanged;
+            CollectionChanged += BoundObservableList_CollectionChanged;
         }
 
         public BoundObservableList(ObservableList<SourceT> source, Func<SourceT, DestT> itemMap, Action<DestT> added, Action<DestT> removed) :

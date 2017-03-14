@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityWeld.Binding.Internal;
 
-namespace UnityWeld.Binding
+namespace UnityWeld.Binding.Internal
 {
     /// <summary>
     /// Information needed to bind to a UnityEvent on a component.
