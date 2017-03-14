@@ -7,7 +7,7 @@
     <ProjectGuid>{847662FA-9E5D-440E-BE1F-D9334D4091E3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnityUI_Editor</RootNamespace>
+    <RootNamespace>UnityWeld_Editor</RootNamespace>
     <AssemblyName>UnityWeld_Editor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

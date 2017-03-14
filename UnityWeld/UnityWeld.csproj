@@ -7,7 +7,7 @@
     <ProjectGuid>{E1DD36B8-97AC-44A1-B98A-A6CF6B1B7459}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnityUI</RootNamespace>
+    <RootNamespace>UnityWeld</RootNamespace>
     <AssemblyName>UnityWeld</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
