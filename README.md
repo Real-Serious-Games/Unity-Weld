@@ -11,10 +11,10 @@ Example Unity project can be found here: [https://github.com/Real-Serious-Games/
 
 To install Unity-Weld in a new or existing Unity project:
  - Load `Unity-Weld.sln` in Visual Studio and build it
- - Copy `UnityUI.dll` into your Unity project and place in any directory within `Assets`
- - Copy `UnityUI_Editor.dll` into your Unity project and place it inside an `Editor` folder within `Assets`
+ - Copy `UnityWeld.dll` into your Unity project and place in any directory within `Assets`
+ - Copy `UnityWeld_Editor.dll` into your Unity project and place it inside an `Editor` folder within `Assets`
 
-Alternatively, just copy the `UnityUI/Binding` and `UnityUI/Widgets` folders into your `Assets` directory in your Unity project, and copy all the .cs files in `UnityUI_Editor` to a folder named `Editor` inside your `Assets` directory.
+Alternatively, just copy the `UnityWeld/Binding` and `UnityWeld/Widgets` folders into your `Assets` directory in your Unity project, and copy all the .cs files in `UnityWeld_Editor` to a folder named `Editor` inside your `Assets` directory.
 
 
 ## Getting started
