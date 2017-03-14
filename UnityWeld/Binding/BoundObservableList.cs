@@ -8,7 +8,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// An observable list that is bound to source list.
     /// </summary>
-    public class BoundObservableList<DestT, SourceT> : ObservableList<DestT>
+    public class BoundObservableList<DestT, SourceT> : ObservableList<DestT>, IDisposable
     {
         /// <summary>
         /// The source list.
@@ -187,5 +187,10 @@ namespace UnityWeld.Binding
             }
         }
 
+        public void Dispose()
+        {
+            source.CollectionChanged -= source_CollectionChanged;
+            CollectionChanged -= BoundObservableList_CollectionChanged;
+        }
     }
 }
