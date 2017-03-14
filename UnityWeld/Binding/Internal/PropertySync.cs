@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
-namespace UnityWeld.Binding
+namespace UnityWeld.Binding.Internal
 {
     /// <summary>
     /// Syncrhonises the value between two properties using reflection.
@@ -14,22 +11,22 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The property that is the source of the synchronziation.
         /// </summary>
-        private PropertyEndPoint source;
+        private readonly PropertyEndPoint source;
 
         /// <summary>
         /// The property that is the destination of the synchronziation.
         /// </summary>
-        private PropertyEndPoint dest;
+        private readonly PropertyEndPoint dest;
 
         /// <summary>
         /// The property that is set for any exception that occurs during type conversion and validation.
         /// </summary>
-        private PropertyEndPoint exception;
+        private readonly PropertyEndPoint exception;
 
         /// <summary>
         /// The Unity context for error logging.
         /// </summary>
-        private Component context;
+        private readonly Component context;
 
         public PropertySync(PropertyEndPoint source, PropertyEndPoint dest, PropertyEndPoint exception, Component context)
         {
@@ -55,7 +52,7 @@ namespace UnityWeld.Binding
             }
             catch (Exception ex)
             {
-                Debug.LogError("Failed to convert value from " + source.ToString() + " to " + dest.ToString(), context);
+                Debug.LogError(string.Format("Failed to convert value from {0} to {1}.", source, dest), context);
                 Debug.LogException(ex);
             }
         }
@@ -83,7 +80,7 @@ namespace UnityWeld.Binding
                 }
                 else
                 {
-                    Debug.LogError("Failed to convert value from " + source.ToString() + " to " + dest.ToString(), context);
+                    Debug.LogError(string.Format("Failed to convert value from {0} to {1}.", source, dest), context);
                     Debug.LogException(ex);
                 }
             }

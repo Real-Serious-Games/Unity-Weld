@@ -1,6 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Reflection;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
@@ -56,16 +55,16 @@ namespace UnityWeld.Binding
         private void UpdateViewModel()
         {
             string propertyName;
-            object viewModel;
-            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
+            object parentViewModel;
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out parentViewModel);
 
-            var propertyInfo = viewModel.GetType().GetProperty(propertyName);
+            var propertyInfo = parentViewModel.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
             {
-                throw new ApplicationException(string.Format("Could not find property \"{0}\" on view model \"{1}\".", propertyName, viewModel.GetType()));
+                throw new ApplicationException(string.Format("Could not find property \"{0}\" on view model \"{1}\".", propertyName, parentViewModel.GetType()));
             }
 
-            this.viewModel = propertyInfo.GetValue(viewModel, null);
+            viewModel = propertyInfo.GetValue(parentViewModel, null);
         }
 
         public override void Connect()
@@ -77,10 +76,10 @@ namespace UnityWeld.Binding
             }
 
             string propertyName;
-            object viewModel;
-            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
+            object parentViewModel;
+            ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out parentViewModel);
 
-            viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
+            viewModelPropertyWatcher = new PropertyWatcher(parentViewModel, propertyName, NotifyPropertyChanged_PropertyChanged);
 
             UpdateViewModel();
         }

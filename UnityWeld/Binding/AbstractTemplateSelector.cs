@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
@@ -47,7 +48,7 @@ namespace UnityWeld.Binding
         }
 
         // Cache available templates.
-        protected void CacheTemplates()
+        private void CacheTemplates()
         {
             availableTemplates.Clear();
 
@@ -62,13 +63,13 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Create a clone of the template object and bind it to the specified view model.
         /// </summary>
-        protected void InstantiateTemplate(object viewModel)
+        protected void InstantiateTemplate(object templateViewModel)
         {
-            Assert.IsNotNull(viewModel, "Cannot instantiate child with null view model");
+            Assert.IsNotNull(templateViewModel, "Cannot instantiate child with null view model");
             
             // Select template.
-            var viewModelTypeString = viewModel.GetType().ToString();
-            Template selectedTemplate = null;
+            var viewModelTypeString = templateViewModel.GetType().ToString();
+            Template selectedTemplate;
             if (!availableTemplates.TryGetValue(viewModelTypeString, out selectedTemplate))
             {
                 throw new ApplicationException("Cannot find matching template for: " + viewModelTypeString);
@@ -77,10 +78,10 @@ namespace UnityWeld.Binding
             var newObject = Instantiate(selectedTemplate);
             newObject.transform.SetParent(transform, false);
 
-            instantiatedTemplates.Add(viewModel, newObject.gameObject);
+            instantiatedTemplates.Add(templateViewModel, newObject.gameObject);
 
             // Set up child bindings before we activate the template object so that they will be configured properly before trying to connect.
-            newObject.InitChildBindings(viewModel);
+            newObject.InitChildBindings(templateViewModel);
 
             newObject.gameObject.SetActive(true);
         }
@@ -88,10 +89,10 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Destroys the instantiated template associated with the provided object.
         /// </summary>
-        protected void DestroyTemplate(object viewModel)
+        protected void DestroyTemplate(object viewModelToDestroy)
         {
-            Destroy(instantiatedTemplates[viewModel]);
-            instantiatedTemplates.Remove(viewModel);
+            Destroy(instantiatedTemplates[viewModelToDestroy]);
+            instantiatedTemplates.Remove(viewModelToDestroy);
         }
 
         /// <summary>

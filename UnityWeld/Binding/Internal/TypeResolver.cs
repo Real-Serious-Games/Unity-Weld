@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityWeld.Binding;
 
-namespace UnityWeld.Internal
+namespace UnityWeld.Binding.Internal
 {
     /// <summary>
     /// Helper class for setting up the factory for use in the editor.
@@ -61,7 +60,7 @@ namespace UnityWeld.Internal
                 }
                 catch (Exception)
                 {
-                    continue; // Some tyupes throw an exception when we try to use reflection on them.
+                    // Some types throw an exception when we try to use reflection on them.
                 }
             }
 
@@ -152,9 +151,9 @@ namespace UnityWeld.Internal
         /// Scan up the hierarchy and find all the types that can be bound to 
         /// a specified MemberBinding.
         /// </summary>
-        public static IEnumerable<Type> FindAvailableViewModelTypes(AbstractMemberBinding memberBinding)
+        private static IEnumerable<Type> FindAvailableViewModelTypes(AbstractMemberBinding memberBinding)
         {
-            bool foundAtLeastOneBinding = false;
+            var foundAtLeastOneBinding = false;
 
             var trans = memberBinding.transform;
             while (trans != null)
@@ -225,7 +224,7 @@ namespace UnityWeld.Internal
         /// </summary>
         public static PropertyInfo[] FindBindableCollectionProperties(CollectionBinding target)
         {
-            return TypeResolver.FindBindableProperties(target)
+            return FindBindableProperties(target)
                 .Where(property => typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 .Where(property => !typeof(string).IsAssignableFrom(property.PropertyType))
                 .ToArray();

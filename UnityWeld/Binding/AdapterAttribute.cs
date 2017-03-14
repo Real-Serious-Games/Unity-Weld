@@ -5,7 +5,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Attribute that defines what types an adapter can convert from and to.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class AdapterAttribute : Attribute
     {
         public AdapterAttribute(Type fromType, Type toType)

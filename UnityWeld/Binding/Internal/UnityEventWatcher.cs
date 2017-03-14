@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
@@ -67,7 +68,7 @@ namespace UnityWeld.Binding
             this.component = component;
             this.eventName = eventName;
             this.action = action;
-            this.unityEventBinder = new UnityEventBinderFactory().Create(GetBoundEvent(eventName, component).UnityEvent, action);
+            this.unityEventBinder = UnityEventBinderFactory.Create(GetBoundEvent(eventName, component).UnityEvent, action);
         }
 
         public void Dispose()

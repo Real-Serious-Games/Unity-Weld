@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using UnityWeld.Binding;
 
 namespace UnityWeld.Binding
 {

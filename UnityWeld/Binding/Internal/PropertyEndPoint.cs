@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
-namespace UnityWeld.Binding
+namespace UnityWeld.Binding.Internal
 {
     /// <summary>
     /// Represents an attachment to a property via reflection.

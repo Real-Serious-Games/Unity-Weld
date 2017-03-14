@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace UnityWeld.Binding
+﻿namespace UnityWeld.Binding
 {
     /// <summary>
     /// Base interface for all adapters. Combine with AdapterAttribute to specify 

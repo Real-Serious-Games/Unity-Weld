@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine.Events;
 
-namespace UnityWeld.Binding
+namespace UnityWeld.Binding.Internal
 {
     /// <summary>
     /// Factory for adding the correct type of listener to a generic UnityEvent, given a view model and 
     /// the name of a method in that view model to bind the UnityEvent to.
     /// </summary>
-    internal class UnityEventBinderFactory
+    internal static class UnityEventBinderFactory
     {
         /// <summary>
         /// Set up and bind a given UnityEvent with a list of types matching its generic type arguments.
         /// </summary>
-        public UnityEventBinderBase Create(UnityEventBase unityEvent, Action action)
+        public static UnityEventBinderBase Create(UnityEventBase unityEvent, Action action)
         {
             // Note that to find the paramaters of events on the UI, we need to see what 
             // generic arguments were passed to the UnityEvent they inherit from.
@@ -44,7 +42,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Abstract class for generic event binders to inherit from.
     /// </summary>
-    abstract internal class UnityEventBinderBase : IDisposable
+    internal abstract class UnityEventBinderBase : IDisposable
     {
         public abstract void Dispose();
     }
@@ -52,7 +50,7 @@ namespace UnityWeld.Binding
     internal class UnityEventBinder : UnityEventBinderBase
     {
         private UnityEvent unityEvent;
-        private Action action;
+        private readonly Action action;
 
         public UnityEventBinder(UnityEventBase unityEvent, Action action)
         {
@@ -63,11 +61,13 @@ namespace UnityWeld.Binding
 
         public override void Dispose()
         {
-            if (unityEvent != null)
+            if (unityEvent == null)
             {
-                unityEvent.RemoveListener(EventHandler);
-                unityEvent = null;
+                return;
             }
+
+            unityEvent.RemoveListener(EventHandler);
+            unityEvent = null;
         }
 
         private void EventHandler()
@@ -79,7 +79,7 @@ namespace UnityWeld.Binding
     internal class UnityEventBinder<T0> : UnityEventBinderBase
     {
         private UnityEvent<T0> unityEvent;
-        private Action action;
+        private readonly Action action;
 
         public UnityEventBinder(UnityEventBase unityEvent, Action action)
         {
@@ -90,11 +90,13 @@ namespace UnityWeld.Binding
 
         public override void Dispose()
         {
-            if (unityEvent != null)
+            if (unityEvent == null)
             {
-                unityEvent.RemoveListener(EventHandler);
-                unityEvent = null;
+                return;
             }
+
+            unityEvent.RemoveListener(EventHandler);
+            unityEvent = null;
         }
 
         private void EventHandler(T0 arg0)
@@ -106,7 +108,7 @@ namespace UnityWeld.Binding
     internal class UnityEventBinder<T0, T1> : UnityEventBinderBase
     {
         private UnityEvent<T0, T1> unityEvent;
-        private Action action;
+        private readonly Action action;
 
         public UnityEventBinder(UnityEventBase unityEvent, Action action)
         {
@@ -117,11 +119,13 @@ namespace UnityWeld.Binding
 
         public override void Dispose()
         {
-            if (unityEvent != null)
+            if (unityEvent == null)
             {
-                unityEvent.RemoveListener(EventHandler);
-                unityEvent = null;
+                return;
             }
+
+            unityEvent.RemoveListener(EventHandler);
+            unityEvent = null;
         }
 
         private void EventHandler(T0 arg0, T1 arg1)

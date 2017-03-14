@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityWeld.Binding;
-using UnityWeld.Internal;
-using UnityWeld_Editor;
+using UnityWeld.Binding.Internal;
 
-namespace UnityTools.UnityUI_Editor
+namespace UnityWeld_Editor
 {
     [CustomEditor(typeof(TemplateBinding))]
     class TemplateBindingEditor : BaseBindingEditor

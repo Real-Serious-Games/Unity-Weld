@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 
 namespace UnityWeld.Binding
 {
@@ -12,7 +10,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Inner (non-obsevable) list.
         /// </summary>
-        private List<T> innerList = new List<T>();
+        private readonly List<T> innerList = new List<T>();
 
         /// <summary>
         /// Event raised when the collection has been changed.
@@ -175,7 +173,7 @@ namespace UnityWeld.Binding
             return innerList.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return innerList.GetEnumerator();
         }

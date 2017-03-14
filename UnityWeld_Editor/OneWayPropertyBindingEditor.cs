@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityWeld.Binding;
-using UnityWeld.Internal;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld_Editor
 {
@@ -18,7 +15,7 @@ namespace UnityWeld_Editor
             // Initialise reference to target script
             var targetScript = (OneWayPropertyBinding)target;
 
-            Type viewPropertyType = null;
+            Type viewPropertyType;
             ShowViewPropertyMenu(
                 new GUIContent("View property", "Property on the view to bind to"),
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)

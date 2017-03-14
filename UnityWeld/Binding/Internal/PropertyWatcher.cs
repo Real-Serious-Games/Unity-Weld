@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
-namespace UnityWeld.Binding
+namespace UnityWeld.Binding.Internal
 {
     /// <summary>
     /// Watches an object for property changes and invokes an action when the property has changed.
@@ -19,12 +16,12 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The name of the property that is being watched.
         /// </summary>
-        private string propertyName;
+        private readonly string propertyName;
 
         /// <summary>
         /// The action to invoke when the property has changed.
         /// </summary>
-        private Action action;
+        private readonly Action action;
 
         public PropertyWatcher(object propertyOwner, string propertyName, Action action)
         {

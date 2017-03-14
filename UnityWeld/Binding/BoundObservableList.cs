@@ -13,33 +13,33 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The source list.
         /// </summary>
-        ObservableList<SourceT> source;
+        private readonly ObservableList<SourceT> source;
 
         /// <summary>
         /// Function that maps source items to dest items.
         /// </summary>
-        private Func<SourceT, DestT> itemMap;
+        private readonly Func<SourceT, DestT> itemMap;
 
         /// <summary>
         /// Callback when new items are added.
         /// </summary>
-        private Action<DestT> added;
+        private readonly Action<DestT> added;
 
         /// <summary>
         /// Callback when items are removed.
         /// </summary>
-        private Action<DestT> removed;
+        private readonly Action<DestT> removed;
 
         /// <summary>
         /// Callback invoked when the collection has changed.
         /// </summary>
-        private Action changed;
+        private readonly Action changed;
 
         /// <summary>
         /// Cache that mimics the contents of the bound list.
         /// This is so we know the items that were cleared when the list is reset.
         /// </summary>
-        private List<DestT> cache;
+        private readonly List<DestT> cache;
 
         public BoundObservableList(ObservableList<SourceT> source, Func<SourceT, DestT> itemMap) :
             base(source.Select(itemMap))
@@ -73,7 +73,7 @@ namespace UnityWeld.Binding
             }
 
             source.CollectionChanged += source_CollectionChanged;
-            this.CollectionChanged += BoundObservableList_CollectionChanged;
+            CollectionChanged += BoundObservableList_CollectionChanged;
             cache = new List<DestT>(this);
         }
 
@@ -101,7 +101,7 @@ namespace UnityWeld.Binding
             }
 
             source.CollectionChanged += source_CollectionChanged;
-            this.CollectionChanged += BoundObservableList_CollectionChanged;
+            CollectionChanged += BoundObservableList_CollectionChanged;
             cache = new List<DestT>(this);
         }
 
@@ -110,30 +110,34 @@ namespace UnityWeld.Binding
         /// </summary>
         private void source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            switch (e.Action)
             {
-                var insertAt = e.NewStartingIndex;
+                case NotifyCollectionChangedAction.Add:
+                    var insertAt = e.NewStartingIndex;
 
-                foreach (var item in e.NewItems)
-                {
-                    var generatedItem = itemMap((SourceT)item);
+                    foreach (var item in e.NewItems)
+                    {
+                        var generatedItem = itemMap((SourceT)item);
 
-                    Insert(insertAt, generatedItem);
-                    ++insertAt;
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                var removeAt = e.OldStartingIndex;
+                        Insert(insertAt, generatedItem);
+                        ++insertAt;
+                    }
 
-                for (var i = 0; i < e.OldItems.Count; i++)
-                {
-                    RemoveAt(removeAt);
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Reset)
-            {
-                Clear();
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    var removeAt = e.OldStartingIndex;
+
+                    for (var i = 0; i < e.OldItems.Count; i++)
+                    {
+                        RemoveAt(removeAt);
+                    }
+
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    Clear();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

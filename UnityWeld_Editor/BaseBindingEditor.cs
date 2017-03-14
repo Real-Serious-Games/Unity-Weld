@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityWeld.Binding;
-using UnityWeld.Internal;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld_Editor
 {
@@ -110,7 +108,7 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Shows a dropdown for selecting a property in the UI to bind to.
         /// </summary>
-        public void ShowViewPropertyMenu(
+        protected void ShowViewPropertyMenu(
             GUIContent label, 
             PropertyInfo[] properties, 
             Action<string> propertyValueSetter,

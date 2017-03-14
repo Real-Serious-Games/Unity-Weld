@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Reflection;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
@@ -13,7 +12,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The property of the view model that is being bound to
         /// </summary>
-        private PropertyInfo viewModelProperty = null;
+        private PropertyInfo viewModelProperty;
         
         /// <summary>
         /// Connect to the attached view model.
@@ -23,10 +22,7 @@ namespace UnityWeld.Binding
             Disconnect();
 
             string propertyName;
-            object viewModel;
             ParseViewModelEndPointReference(viewModelPropertyName, out propertyName, out viewModel);
-
-            this.viewModel = viewModel;
 
             viewModelPropertyWatcher = new PropertyWatcher(viewModel, propertyName, InitalizeTemplate);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {

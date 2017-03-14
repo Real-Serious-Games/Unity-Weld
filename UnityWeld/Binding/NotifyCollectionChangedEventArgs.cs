@@ -60,7 +60,7 @@ namespace UnityWeld.Binding
             return new NotifyCollectionChangedEventArgs()
             {
                 Action = NotifyCollectionChangedAction.Add,
-                NewItems = new object[] { item },
+                NewItems = new[] { item },
                 NewStartingIndex = index,
             };
         }
@@ -70,7 +70,7 @@ namespace UnityWeld.Binding
             return new NotifyCollectionChangedEventArgs()
             {
                 Action = NotifyCollectionChangedAction.Remove,
-                OldItems = new object[] { item },
+                OldItems = new[] { item },
                 OldStartingIndex = index,
             };
         }

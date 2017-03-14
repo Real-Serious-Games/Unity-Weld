@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityWeld.Internal;
+using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
@@ -24,7 +24,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Scan up the hierarchy and find a view model that corresponds to the specified name.
         /// </summary>
-        protected object FindViewModel(string viewModelName)
+        private object FindViewModel(string viewModelName)
         {
             var trans = transform;
             while (trans != null)
@@ -58,7 +58,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Find the type of the adapter with the specified name and create it.
         /// </summary>
-        protected IAdapter CreateAdapter(string adapterTypeName)
+        protected static IAdapter CreateAdapter(string adapterTypeName)
         {
             if (string.IsNullOrEmpty(adapterTypeName))
             {
@@ -96,7 +96,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Parse an end-point reference including a type name and member name separated by a period.
         /// </summary>
-        public static void ParseEndPointReference(string endPointReference, out string memberName, out string typeName)
+        protected static void ParseEndPointReference(string endPointReference, out string memberName, out string typeName)
         {
             var lastPeriodIndex = endPointReference.LastIndexOf('.');
             if (lastPeriodIndex == -1)
