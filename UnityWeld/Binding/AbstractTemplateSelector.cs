@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityWeld.Binding.Internal;
@@ -31,7 +32,7 @@ namespace UnityWeld.Binding
         /// <summary>
         /// All available templates indexed by the view model the are for.
         /// </summary>
-        private readonly IDictionary<string, Template> availableTemplates = new Dictionary<string, Template>();
+        private readonly IDictionary<Type, Template> availableTemplates = new Dictionary<Type, Template>();
 
         /// <summary>
         /// All the child objects that have been created, indexed by the view they are connected to.
@@ -56,7 +57,15 @@ namespace UnityWeld.Binding
             foreach (var template in templatesInScene)
             {
                 template.gameObject.SetActive(false);
-                availableTemplates.Add(template.GetViewModelTypeName(), template);
+                var typeName = template.GetViewModelTypeName();
+                var type = TypeResolver.TypesWithBindingAttribute.FirstOrDefault(t => t.ToString() == typeName);
+                if (type == null)
+                {
+                    Debug.LogError(string.Format("Template object {0} references type {1}, but no matching type with a [Binding] attribute could be found.", template.name, typeName), template);
+                    continue;
+                }
+                
+                availableTemplates.Add(type, template);
             }
         }
 
@@ -68,11 +77,11 @@ namespace UnityWeld.Binding
             Assert.IsNotNull(templateViewModel, "Cannot instantiate child with null view model");
             
             // Select template.
-            var viewModelTypeString = templateViewModel.GetType().ToString();
+            var viewModelType = templateViewModel.GetType();
             Template selectedTemplate;
-            if (!availableTemplates.TryGetValue(viewModelTypeString, out selectedTemplate))
+            if (!availableTemplates.TryGetValue(viewModelType, out selectedTemplate))
             {
-                throw new ApplicationException("Cannot find matching template for: " + viewModelTypeString);
+                throw new ApplicationException("Cannot find matching template for: " + viewModelType);
             }
 
             var newObject = Instantiate(selectedTemplate);
