@@ -81,12 +81,7 @@ namespace UnityWeld.Binding
             Assert.IsNotNull(templateViewModel, "Cannot instantiate child with null view model");
             
             // Select template.
-            var viewModelType = templateViewModel.GetType();
-            Template selectedTemplate;
-            if (!AvailableTemplates.TryGetValue(viewModelType, out selectedTemplate))
-            {
-                throw new ApplicationException("Cannot find matching template for: " + viewModelType);
-            }
+            var selectedTemplate = FindTemplateForType(templateViewModel.GetType());
 
             var newObject = Instantiate(selectedTemplate);
             newObject.transform.SetParent(transform, false);
@@ -97,6 +92,56 @@ namespace UnityWeld.Binding
             newObject.InitChildBindings(templateViewModel);
 
             newObject.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// Returns the template that best matches the specified type.
+        /// </summary>
+        private Template FindTemplateForType(Type templateType)
+        {
+            var possibleMatches = new List<KeyValuePair<int, Type>>();
+
+            // Recursively look in the type, interfaces it implements and types it inherits
+            // from for a type that matches a template. Also store how many steps away from 
+            // the specified template the found template was.
+            Action<Type, int> findMatches = null;
+            findMatches = (t, index) =>
+            {
+                var baseType = t.BaseType;
+                if (baseType != null && !baseType.IsInterface)
+                {
+                    findMatches(baseType, index + 1);
+                }
+
+                foreach (var interfaceType in t.GetInterfaces())
+                {
+                    findMatches(interfaceType, index + 1);
+                }
+
+                if (AvailableTemplates.Keys.Contains(t))
+                {
+                    possibleMatches.Add(new KeyValuePair<int, Type>(index, t));
+                }
+            };
+
+            // Start the recursive function, starting with an index of 0
+            findMatches(templateType, 0);
+
+            if (!possibleMatches.Any())
+            {
+                throw new ApplicationException("Could not find any template matching type " + templateType);
+            }
+
+            var sorted = possibleMatches.OrderBy(m => m.Key);
+            var selectedType = sorted.First();
+
+            if (sorted.Skip(1).Any(m => m.Key == selectedType.Key))
+            {
+                throw new ApplicationException("Multiple templates were found that match type " + templateType
+                    + ". Either remove one or provide a more template that more specifically matches the type.");
+            }
+
+            return AvailableTemplates[selectedType.Value];
         }
 
         /// <summary>
