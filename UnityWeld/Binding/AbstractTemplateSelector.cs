@@ -138,7 +138,8 @@ namespace UnityWeld.Binding
             if (sorted.Skip(1).Any(m => m.Key == selectedType.Key))
             {
                 throw new ApplicationException("Multiple templates were found that match type " + templateType
-                    + ". Either remove one or provide a more template that more specifically matches the type.");
+                    + ". This can be caused by providing multiple templates that match types " + templateType
+                    + " inherits from at the same level. Remove one or provide a template that more specifically matches the type.");
             }
 
             return AvailableTemplates[selectedType.Value];
