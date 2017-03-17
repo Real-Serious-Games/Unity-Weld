@@ -49,6 +49,8 @@ namespace UnityWeld.Binding
 
             source.CollectionChanged += source_CollectionChanged;
             CollectionChanged += BoundObservableList_CollectionChanged;
+
+            cache = new List<DestT>(this);
         }
 
         public BoundObservableList(ObservableList<SourceT> source, Func<SourceT, DestT> itemMap, Action<DestT> added, Action<DestT> removed) :
