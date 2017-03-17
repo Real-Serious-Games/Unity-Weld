@@ -147,8 +147,7 @@ namespace UnityWeld.Binding
         /// </summary>
         private void BoundObservableList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add &&
-                added != null)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 var insertIndex = e.NewStartingIndex;
 
@@ -156,7 +155,10 @@ namespace UnityWeld.Binding
                 {
                     var typedItem = (DestT)item;
 
-                    added(typedItem);
+                    if (added != null)
+                    {
+                        added(typedItem);
+                    }
 
                     cache.Insert(insertIndex, typedItem); // Keep the cache updated as new items come in.
                     ++insertIndex;
@@ -168,16 +170,22 @@ namespace UnityWeld.Binding
                 {
                     var typedItem = (DestT)item;
 
-                    removed(typedItem);
+                    if (removed != null)
+                    {
+                        removed(typedItem);
+                    }
 
                     cache.RemoveAt(e.OldStartingIndex); // Keep the cache updated as items are removed.
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                foreach (var item in cache)
+                if (removed != null)
                 {
-                    removed(item);
+                    foreach (var item in cache)
+                    {
+                        removed(item);
+                    }
                 }
                 cache.Clear();
             }
