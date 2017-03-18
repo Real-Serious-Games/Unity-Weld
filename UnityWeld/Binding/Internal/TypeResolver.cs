@@ -105,7 +105,10 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         public static Type FindAdapterType(string typeName)
         {
-            var matchingTypes = TypesWithAdapterAttribute.Where(type => type.ToString() == typeName);
+            var matchingTypes = TypesWithAdapterAttribute
+                .Where(type => type.ToString() == typeName)
+                .ToList();
+
             if (!matchingTypes.Any())
             {
                 return null;
