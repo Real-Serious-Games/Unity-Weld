@@ -99,33 +99,7 @@ namespace UnityWeld.Binding
         /// </summary>
         private Template FindTemplateForType(Type templateType)
         {
-            var possibleMatches = new List<KeyValuePair<int, Type>>();
-
-            // Recursively look in the type, interfaces it implements and types it inherits
-            // from for a type that matches a template. Also store how many steps away from 
-            // the specified template the found template was.
-            Action<Type, int> findMatches = null;
-            findMatches = (t, index) =>
-            {
-                var baseType = t.BaseType;
-                if (baseType != null && !baseType.IsInterface)
-                {
-                    findMatches(baseType, index + 1);
-                }
-
-                foreach (var interfaceType in t.GetInterfaces())
-                {
-                    findMatches(interfaceType, index + 1);
-                }
-
-                if (AvailableTemplates.Keys.Contains(t))
-                {
-                    possibleMatches.Add(new KeyValuePair<int, Type>(index, t));
-                }
-            };
-
-            // Start the recursive function, starting with an index of 0
-            findMatches(templateType, 0);
+            var possibleMatches = FindTypesMatchingTemplate(templateType).ToList();
 
             if (!possibleMatches.Any())
             {
@@ -143,6 +117,36 @@ namespace UnityWeld.Binding
             }
 
             return AvailableTemplates[selectedType.Value];
+        }
+
+        /// <summary>
+        /// Recursively look in the type, interfaces it implements and types it inherits
+        /// from for a type that matches a template. Also store how many steps away from 
+        /// the specified template the found template was.
+        /// </summary>
+        private IEnumerable<KeyValuePair<int, Type>> FindTypesMatchingTemplate(Type t, int index = 0)
+        {
+            var baseType = t.BaseType;
+            if (baseType != null && !baseType.IsInterface)
+            {
+                foreach (var type in FindTypesMatchingTemplate(baseType, index + 1))
+                {
+                    yield return type;
+                }
+            }
+
+            foreach (var interfaceType in t.GetInterfaces())
+            {
+                foreach (var type in FindTypesMatchingTemplate(interfaceType, index + 1))
+                {
+                    yield return type;
+                }
+            }
+
+            if (AvailableTemplates.Keys.Contains(t))
+            {
+                yield return new KeyValuePair<int, Type>(index, t);
+            }
         }
 
         /// <summary>
