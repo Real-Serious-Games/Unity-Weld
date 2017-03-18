@@ -42,31 +42,13 @@ namespace UnityWeld.Binding.Internal
     public class UnityEventWatcher : IDisposable
     {
         /// <summary>
-        /// The component that owns the event to listen to.
-        /// </summary>
-        private Component component;
-
-        /// <summary>
-        /// The event to listen to.
-        /// </summary>
-        private string eventName;
-
-        /// <summary>
-        /// The action to invoke when the event is raised.
-        /// </summary>
-        private Action action;
-
-        /// <summary>
         /// Helper object that links to the Unity event.
         /// </summary>
         private UnityEventBinderBase unityEventBinder;
 
         public UnityEventWatcher(Component component, string eventName, Action action)
         {
-            this.component = component;
-            this.eventName = eventName;
-            this.action = action;
-            this.unityEventBinder = UnityEventBinderFactory.Create(GetBoundEvent(eventName, component).UnityEvent, action);
+            unityEventBinder = UnityEventBinderFactory.Create(GetBoundEvent(eventName, component).UnityEvent, action);
         }
 
         public void Dispose()
