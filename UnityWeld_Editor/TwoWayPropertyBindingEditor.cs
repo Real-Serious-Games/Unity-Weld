@@ -48,6 +48,7 @@ namespace UnityWeld_Editor
                     // Get rid of old adapter options if we changed the type of the adapter.
                     if (newValue != targetScript.viewAdapterTypeName)
                     {
+                        Undo.RecordObject(targetScript, "Set view adapter options");
                         targetScript.viewAdapterOptions = null;
                     }
 
@@ -89,6 +90,7 @@ namespace UnityWeld_Editor
                 {
                     if (newValue != targetScript.viewModelAdapterTypeName)
                     {
+                        Undo.RecordObject(targetScript, "Set view-model adapter options");
                         targetScript.viewModelAdapterOptions = null;
                     }
 
@@ -120,6 +122,7 @@ namespace UnityWeld_Editor
                 {
                     if (newValue != targetScript.exceptionAdapterTypeName)
                     {
+                        Undo.RecordObject(targetScript, "Set exception adapter options");
                         targetScript.exceptionAdapterOptions = null;
                     }
 

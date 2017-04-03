@@ -41,6 +41,7 @@ namespace UnityWeld_Editor
                     // Get rid of old adapter options if we changed the type of the adapter.
                     if (newValue != targetScript.viewAdapterTypeName)
                     {
+                        Undo.RecordObject(targetScript, "Set view adapter options");
                         targetScript.viewAdapterOptions = null;
                     }
 
