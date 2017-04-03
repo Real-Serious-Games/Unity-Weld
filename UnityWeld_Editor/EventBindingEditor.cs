@@ -32,32 +32,22 @@ namespace UnityWeld_Editor
         {
             var tooltip = "Method on the view-model to bind to.";
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(new GUIContent("View-model method", tooltip));
-
-            var dropdownPosition = GUILayoutUtility.GetLastRect();
-            dropdownPosition.x += dropdownPosition.width;
-
-            if (GUILayout.Button(new GUIContent(targetScript.viewModelMethodName, tooltip), EditorStyles.popup))
-            {
-                InspectorUtils.ShowMenu(
-                    method => method.ReflectedType + "/" + method.Name,
-                    method => true,
-                    method => MemberInfoToString(method) == targetScript.viewModelMethodName,
-                    method => UpdateProperty(
-                        updatedValue => targetScript.viewModelMethodName = updatedValue,
-                        targetScript.viewModelMethodName,
-                        MemberInfoToString(method)
-                    ),
-                    bindableMethods
-                        .OrderBy(method => method.ReflectedType.Name)
-                        .ThenBy(method => method.Name)
-                        .ToArray(),
-                    dropdownPosition
-                );
-            }
-
-            EditorGUILayout.EndHorizontal();
+            InspectorUtils.DoPopup(
+                new GUIContent(targetScript.viewModelMethodName, tooltip),
+                new GUIContent("View-model method", tooltip),
+                method => method.ReflectedType + "/" + method.Name,
+                method => true,
+                method => MemberInfoToString(method) == targetScript.viewModelMethodName,
+                method => UpdateProperty(
+                    updatedValue => targetScript.viewModelMethodName = updatedValue,
+                    targetScript.viewModelMethodName,
+                    MemberInfoToString(method)
+                ),
+                bindableMethods
+                    .OrderBy(method => method.ReflectedType.Name)
+                    .ThenBy(method => method.Name)
+                    .ToArray()
+            );
         }
     }
 }

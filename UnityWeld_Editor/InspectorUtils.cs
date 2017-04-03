@@ -11,10 +11,39 @@ namespace UnityWeld_Editor
     internal class InspectorUtils
     {
         /// <summary>
+        /// Show a popup menu with some items disabled and a label to its left.
+        /// </summary>
+        public static void DoPopup<T>(
+            GUIContent content, 
+            GUIContent label,
+            Func<T, string> menuName, 
+            Func<T, bool> menuEnabled,
+            Func<T, bool> isSelected,
+            Action<T> callback, 
+            T[] items)
+        {
+            var currentEvent = Event.current;
+            var eventType = currentEvent.type;
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel(label);
+
+            var position = GUILayoutUtility.GetLastRect();
+            position.x += position.width;
+
+            if (GUILayout.Button(content, EditorStyles.popup))
+            {
+                ShowMenu(menuName, menuEnabled, isSelected, callback, items, position);
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        /// <summary>
         /// Show a menu with some items disabled. Has a callback that will be called when an item is selected with the index of the selected item.
         /// Takes a dictionary of options and whether or not they should be enabled.
         /// </summary>
-        public static void ShowMenu<T>(Func<T, string> menuName, Func<T, bool> menuEnabled, Func<T, bool> isSelected, Action<T> callback, T[] items, Rect position)
+        private static void ShowMenu<T>(Func<T, string> menuName, Func<T, bool> menuEnabled, Func<T, bool> isSelected, Action<T> callback, T[] items, Rect position)
         {
             var menu = new GenericMenu();
 

@@ -77,30 +77,22 @@ namespace UnityWeld_Editor
             Func<PropertyInfo, bool> menuEnabled
         )
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(label);
-
-            var dropdownPosition = GUILayoutUtility.GetLastRect();
-            dropdownPosition.x += dropdownPosition.width;
-
-            if (GUILayout.Button(new GUIContent(curPropertyValue, label.tooltip), EditorStyles.popup))
-            {
-                InspectorUtils.ShowMenu(
-                    property => string.Concat(property.ReflectedType, "/", property.Name, " : ", property.PropertyType.Name),
-                    menuEnabled,
-                    property => MemberInfoToString(property) == curPropertyValue,
-                    property => UpdateProperty(
-                        propertyValueSetter,
-                        curPropertyValue,
-                        MemberInfoToString(property)
-                    ),
-                    bindableProperties
-                        .OrderBy(property => property.ReflectedType.Name)
-                        .ThenBy(property => property.Name)
-                        .ToArray(),
-                    dropdownPosition
-                );
-            }
+            InspectorUtils.DoPopup(
+                new GUIContent(curPropertyValue, label.tooltip),
+                label,
+                property => string.Concat(property.ReflectedType, "/", property.Name, " : ", property.PropertyType.Name),
+                menuEnabled,
+                property => MemberInfoToString(property) == curPropertyValue,
+                property => UpdateProperty(
+                    propertyValueSetter,
+                    curPropertyValue,
+                    MemberInfoToString(property)
+                ),
+                bindableProperties
+                    .OrderBy(property => property.ReflectedType.Name)
+                    .ThenBy(property => property.Name)
+                    .ToArray()
+            );
 
             EditorGUILayout.EndHorizontal();
         }

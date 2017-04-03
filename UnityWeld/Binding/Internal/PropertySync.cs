@@ -62,7 +62,6 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         public void SyncFromDest()
         {
-
             try
             {
                 source.SetValue(dest.GetValue());
