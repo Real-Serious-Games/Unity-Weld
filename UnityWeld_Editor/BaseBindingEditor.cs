@@ -93,8 +93,6 @@ namespace UnityWeld_Editor
                     .ThenBy(property => property.Name)
                     .ToArray()
             );
-
-            EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
