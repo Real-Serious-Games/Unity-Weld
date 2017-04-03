@@ -33,7 +33,8 @@ namespace UnityWeld_Editor
 
             UpdateProperty(newValue => targetScript.viewModelTypeName = newValue,
                 selectedIndex < 0 ? string.Empty : availableViewModels[selectedIndex],
-                newSelectedIndex < 0 ? string.Empty : availableViewModels[newSelectedIndex]
+                newSelectedIndex < 0 ? string.Empty : availableViewModels[newSelectedIndex],
+                "Set bound view-model for template"
             );
         }
     }

@@ -47,7 +47,8 @@ namespace UnityWeld_Editor
                     UpdateProperty(
                         updatedValue => targetScript.viewAdapterTypeName = updatedValue,
                         targetScript.viewAdapterTypeName,
-                        newValue
+                        newValue,
+                        "Set view adapter"
                     );
                 }
             );

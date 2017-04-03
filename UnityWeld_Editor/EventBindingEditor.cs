@@ -41,7 +41,8 @@ namespace UnityWeld_Editor
                 method => UpdateProperty(
                     updatedValue => targetScript.viewModelMethodName = updatedValue,
                     targetScript.viewModelMethodName,
-                    MemberInfoToString(method)
+                    MemberInfoToString(method),
+                    "Set bound view-model method"
                 ),
                 bindableMethods
                     .OrderBy(method => method.ReflectedType.Name)

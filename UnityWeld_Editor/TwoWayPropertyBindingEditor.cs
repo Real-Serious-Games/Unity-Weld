@@ -54,7 +54,8 @@ namespace UnityWeld_Editor
                     UpdateProperty(
                         updatedValue => targetScript.viewAdapterTypeName = updatedValue,
                         targetScript.viewAdapterTypeName,
-                        newValue
+                        newValue,
+                        "Set view adapter"
                     );
                 }
             );
@@ -94,7 +95,8 @@ namespace UnityWeld_Editor
                     UpdateProperty(
                         updatedValue => targetScript.viewModelAdapterTypeName = updatedValue,
                         targetScript.viewModelAdapterTypeName,
-                        newValue
+                        newValue,
+                        "Set view-model adapter"
                     );
                 }
             );
@@ -124,7 +126,8 @@ namespace UnityWeld_Editor
                     UpdateProperty(
                         updatedValue => targetScript.exceptionAdapterTypeName = updatedValue,
                         targetScript.exceptionAdapterTypeName,
-                        newValue
+                        newValue,
+                        "Set exception adapter"
                     );
                 }
             );

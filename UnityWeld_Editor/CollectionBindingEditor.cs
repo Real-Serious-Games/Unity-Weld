@@ -29,7 +29,8 @@ namespace UnityWeld_Editor
                     targetScript.templatesRoot, 
                     typeof(GameObject), 
                     true
-                )
+                ),
+                "Set collection templates root"
             );
         }
     }

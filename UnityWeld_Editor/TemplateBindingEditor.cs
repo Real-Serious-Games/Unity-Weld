@@ -30,7 +30,8 @@ namespace UnityWeld_Editor
                     targetScript.templatesRoot, 
                     typeof(GameObject), 
                     true
-                )
+                ),
+                "Set template binding root object"
             );
         }
     }

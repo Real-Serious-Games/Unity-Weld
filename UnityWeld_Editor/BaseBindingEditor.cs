@@ -16,13 +16,15 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Sets the specified value and sets dirty to true if it doesn't match the old value.
         /// </summary>
-        protected void UpdateProperty<TValue>(Action<TValue> setter, TValue oldValue, TValue newValue)
+        protected void UpdateProperty<TValue>(Action<TValue> setter, TValue oldValue, TValue newValue, string undoActionName)
             where TValue : class
         {
             if (newValue == oldValue)
             {
                 return;
             }
+
+            Undo.RecordObject(target, undoActionName);
 
             setter(newValue);
 
@@ -86,7 +88,8 @@ namespace UnityWeld_Editor
                 property => UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    MemberInfoToString(property)
+                    MemberInfoToString(property),
+                    "Set view-model property"
                 ),
                 bindableProperties
                     .OrderBy(property => property.ReflectedType.Name)
@@ -127,7 +130,8 @@ namespace UnityWeld_Editor
                 UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    MemberInfoToString(newSelectedProperty)
+                    MemberInfoToString(newSelectedProperty),
+                    "Set view property"
                 );
 
                 selectedPropertyType = newSelectedProperty.PropertyType;
@@ -176,7 +180,8 @@ namespace UnityWeld_Editor
             UpdateProperty(
                 propertyValueSetter,
                 curPropertyValue,
-                BindableEventToString(selectedEvent)
+                BindableEventToString(selectedEvent),
+                "Set bound event"
             );
         }
 
@@ -217,7 +222,12 @@ namespace UnityWeld_Editor
                 false
             );
 
-            UpdateProperty(propertyValueSetter, currentPropertyValue, newAdapterOptions);
+            UpdateProperty(
+                propertyValueSetter, 
+                currentPropertyValue, 
+                newAdapterOptions,
+                "Set adapter options"
+            );
         }
 
         /// <summary>
