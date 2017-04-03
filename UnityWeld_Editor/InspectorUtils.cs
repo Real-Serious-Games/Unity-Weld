@@ -36,6 +36,9 @@ namespace UnityWeld_Editor
             );
         }
 
+        /// <summary>
+        /// Shows the button for a popup/dropdown control, with a label.
+        /// </summary>
         private static void ShowPopupButton(Rect buttonRect, Rect labelRect, int controlId, GUIContent currentlySelected, Action popup)
         {
             var currentEvent = Event.current;
@@ -55,24 +58,31 @@ namespace UnityWeld_Editor
                 case EventType.Repaint:
                     style.Draw(buttonRect, currentlySelected, controlId, false);
                     break;
-            }
 
-            if (eventType == EventType.mouseDown && currentEvent.button == 0)
-            {
-                if (buttonRect.Contains(currentEvent.mousePosition))
-                { 
-                    popup();
-                    GUIUtility.keyboardControl = controlId;
-                    currentEvent.Use();
-                }
-                else if (labelRect.Contains(currentEvent.mousePosition))
-                {
-                    GUIUtility.keyboardControl = controlId;
-                    currentEvent.Use();
-                }
+                case EventType.MouseDown:
+                    if (currentEvent.button != 0)
+                    {
+                        return;
+                    }
+
+                    if (buttonRect.Contains(currentEvent.mousePosition))
+                    { 
+                        popup();
+                        GUIUtility.keyboardControl = controlId;
+                        currentEvent.Use();
+                    }
+                    else if (labelRect.Contains(currentEvent.mousePosition))
+                    {
+                        GUIUtility.keyboardControl = controlId;
+                        currentEvent.Use();
+                    }
+                    break;
             }
         }
 
+        /// <summary>
+        /// Returns whether the specified control has been activated by a key press.
+        /// </summary>
         private static bool MainActionKeyForControl(Event evt, int controlId)
         {
             if (GUIUtility.keyboardControl != controlId)
@@ -80,7 +90,7 @@ namespace UnityWeld_Editor
                 return false;
             }
             bool modifierPressed = evt.alt || evt.shift || evt.command || evt.control;
-            if (evt.type == EventType.KeyDown && evt.character == ' ' && !modifierPressed)
+            if (!modifierPressed && evt.type == EventType.KeyDown && evt.character == ' ')
             {
                 evt.Use();
                 return false;
