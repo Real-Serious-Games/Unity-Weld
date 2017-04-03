@@ -22,20 +22,21 @@ namespace UnityWeld_Editor
             Action<T> callback, 
             T[] items)
         {
-            var position = EditorGUILayout.GetControlRect(false, 16f, EditorStyles.popup);
-            var controlId = GUIUtility.GetControlID(FocusType.Passive, position);
+            var labelRect = EditorGUILayout.GetControlRect(false, 16f, EditorStyles.popup);
+            var controlId = GUIUtility.GetControlID(FocusType.Passive, labelRect);
 
-            var buttonRect = EditorGUI.PrefixLabel(position, controlId, label);
+            var buttonRect = EditorGUI.PrefixLabel(labelRect, controlId, label);
 
             ShowPopupButton(
                 buttonRect, 
+                labelRect,
                 controlId, 
                 content, 
                 () => ShowMenu(menuName, menuEnabled, isSelected, callback, items, buttonRect)
             );
         }
 
-        private static void ShowPopupButton(Rect position, int controlId, GUIContent currentlySelected, Action popup)
+        private static void ShowPopupButton(Rect buttonRect, Rect labelRect, int controlId, GUIContent currentlySelected, Action popup)
         {
             var currentEvent = Event.current;
             var eventType = currentEvent.type;
@@ -52,15 +53,23 @@ namespace UnityWeld_Editor
                     break;
 
                 case EventType.Repaint:
-                    style.Draw(position, currentlySelected, controlId, false);
+                    style.Draw(buttonRect, currentlySelected, controlId, false);
                     break;
             }
 
-            if (eventType == EventType.mouseDown && currentEvent.button == 0 && position.Contains(currentEvent.mousePosition))
+            if (eventType == EventType.mouseDown && currentEvent.button == 0)
             {
-                popup();
-                GUIUtility.keyboardControl = controlId;
-                currentEvent.Use();
+                if (buttonRect.Contains(currentEvent.mousePosition))
+                { 
+                    popup();
+                    GUIUtility.keyboardControl = controlId;
+                    currentEvent.Use();
+                }
+                else if (labelRect.Contains(currentEvent.mousePosition))
+                {
+                    GUIUtility.keyboardControl = controlId;
+                    currentEvent.Use();
+                }
             }
         }
 
