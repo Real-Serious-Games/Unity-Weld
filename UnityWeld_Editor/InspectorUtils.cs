@@ -22,21 +22,63 @@ namespace UnityWeld_Editor
             Action<T> callback, 
             T[] items)
         {
+            var position = EditorGUILayout.GetControlRect(false, 16f, EditorStyles.popup);
+            var controlId = GUIUtility.GetControlID(FocusType.Passive, position);
+
+            var buttonRect = EditorGUI.PrefixLabel(position, controlId, label);
+
+            ShowPopupButton(
+                buttonRect, 
+                controlId, 
+                content, 
+                () => ShowMenu(menuName, menuEnabled, isSelected, callback, items, buttonRect)
+            );
+        }
+
+        private static void ShowPopupButton(Rect position, int controlId, GUIContent currentlySelected, Action popup)
+        {
             var currentEvent = Event.current;
             var eventType = currentEvent.type;
+            var style = EditorStyles.popup;
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(label);
-
-            var position = GUILayoutUtility.GetLastRect();
-            position.x += position.width;
-
-            if (GUILayout.Button(content, EditorStyles.popup))
+            switch (eventType)
             {
-                ShowMenu(menuName, menuEnabled, isSelected, callback, items, position);
+                case EventType.KeyDown:
+                    if (MainActionKeyForControl(currentEvent, controlId))
+                    {
+                        popup();
+                        currentEvent.Use();
+                    }
+                    break;
+
+                case EventType.Repaint:
+                    style.Draw(position, currentlySelected, controlId, false);
+                    break;
             }
 
-            EditorGUILayout.EndHorizontal();
+            if (eventType == EventType.mouseDown && currentEvent.button == 0 && position.Contains(currentEvent.mousePosition))
+            {
+                popup();
+                GUIUtility.keyboardControl = controlId;
+                currentEvent.Use();
+            }
+        }
+
+        private static bool MainActionKeyForControl(Event evt, int controlId)
+        {
+            if (GUIUtility.keyboardControl != controlId)
+            {
+                return false;
+            }
+            bool modifierPressed = evt.alt || evt.shift || evt.command || evt.control;
+            if (evt.type == EventType.KeyDown && evt.character == ' ' && !modifierPressed)
+            {
+                evt.Use();
+                return false;
+            }
+            return evt.type == EventType.KeyDown 
+                && (evt.keyCode == KeyCode.Space || evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter) 
+                && !modifierPressed;
         }
 
         /// <summary>
