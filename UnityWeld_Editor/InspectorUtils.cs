@@ -23,7 +23,7 @@ namespace UnityWeld_Editor
             T[] items)
         {
             var labelRect = EditorGUILayout.GetControlRect(false, 16f, EditorStyles.popup);
-            var controlId = GUIUtility.GetControlID(FocusType.Passive, labelRect);
+            var controlId = GUIUtility.GetControlID(FocusType.Keyboard, labelRect);
 
             var buttonRect = EditorGUI.PrefixLabel(labelRect, controlId, label);
 
