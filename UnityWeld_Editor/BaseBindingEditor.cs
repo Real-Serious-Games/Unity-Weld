@@ -78,7 +78,7 @@ namespace UnityWeld_Editor
         )
         {
             InspectorUtils.DoPopup(
-                new GUIContent(curPropertyValue, label.tooltip),
+                new GUIContent(curPropertyValue),
                 label,
                 property => string.Concat(property.ReflectedType, "/", property.Name, " : ", property.PropertyType.Name),
                 menuEnabled,

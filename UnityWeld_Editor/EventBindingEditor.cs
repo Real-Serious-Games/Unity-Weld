@@ -33,7 +33,7 @@ namespace UnityWeld_Editor
             var tooltip = "Method on the view-model to bind to.";
 
             InspectorUtils.DoPopup(
-                new GUIContent(targetScript.viewModelMethodName, tooltip),
+                new GUIContent(targetScript.viewModelMethodName),
                 new GUIContent("View-model method", tooltip),
                 method => method.ReflectedType + "/" + method.Name,
                 method => true,
