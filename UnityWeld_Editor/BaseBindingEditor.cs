@@ -215,12 +215,16 @@ namespace UnityWeld_Editor
                 return;
             }
 
+            EditorGUI.indentLevel++;
+
             var newAdapterOptions = (AdapterOptions)EditorGUILayout.ObjectField(
                 label, 
                 currentPropertyValue, 
                 adapterOptionsType, 
                 false
             );
+
+            EditorGUI.indentLevel--;
 
             UpdateProperty(
                 propertyValueSetter, 
