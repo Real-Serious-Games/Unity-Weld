@@ -66,6 +66,13 @@ namespace UnityWeld_Editor
                 out viewPropertyType
             );
 
+            // Don't let the user set other options until they've set the event and view property.
+            var guiPreviouslyEnabled = GUI.enabled;
+            if (string.IsNullOrEmpty(targetScript.uiEventName) || string.IsNullOrEmpty(targetScript.uiPropertyName))
+            {
+                GUI.enabled = false;
+            }
+
             var viewAdapterTypeNames = GetAdapterTypeNames(
                 type => viewPropertyType == null || 
                     TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
@@ -195,6 +202,8 @@ namespace UnityWeld_Editor
                 targetScript.exceptionPropertyName,
                 property => property.PropertyType == adaptedExceptionPropertyType
             );
+
+            GUI.enabled = guiPreviouslyEnabled;
         }
     }
 }

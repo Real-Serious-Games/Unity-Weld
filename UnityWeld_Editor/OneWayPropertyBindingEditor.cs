@@ -48,6 +48,7 @@ namespace UnityWeld_Editor
                 out viewPropertyType
             );
 
+            // Don't let the user set anything else until they've chosen a view property.
             var guiPreviouslyEnabled = GUI.enabled;
             if (string.IsNullOrEmpty(targetScript.uiPropertyName))
             {
