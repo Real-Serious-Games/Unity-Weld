@@ -163,6 +163,15 @@ namespace UnityWeld_Editor
                 type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception)
             );
 
+            var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
+            ShowViewModelPropertyMenu(
+                new GUIContent("Exception property", "Property on the view-model to bind the exception to."),
+                TypeResolver.FindBindableProperties(targetScript),
+                updatedValue => targetScript.exceptionPropertyName = updatedValue,
+                targetScript.exceptionPropertyName,
+                property => property.PropertyType == adaptedExceptionPropertyType
+            );
+
             ShowAdapterMenu(
                 new GUIContent("Exception adapter", "Adapter that handles exceptions thrown by the view-model adapter"),
                 expectionAdapterTypeNames,
@@ -192,15 +201,6 @@ namespace UnityWeld_Editor
                 options => targetScript.exceptionAdapterOptions = options,
                 targetScript.exceptionAdapterOptions,
                 exceptionAdapterOptionsFade.faded
-            );
-
-            var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
-            ShowViewModelPropertyMenu(
-                new GUIContent("Exception property", "Property on the view-model to bind the exception to."),
-                TypeResolver.FindBindableProperties(targetScript),
-                updatedValue => targetScript.exceptionPropertyName = updatedValue,
-                targetScript.exceptionPropertyName,
-                property => property.PropertyType == adaptedExceptionPropertyType
             );
 
             GUI.enabled = guiPreviouslyEnabled;
