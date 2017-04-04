@@ -61,6 +61,8 @@ namespace UnityWeld_Editor
                 targetScript.viewAdapterOptions
             );
 
+            EditorGUILayout.Space();
+
             var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
