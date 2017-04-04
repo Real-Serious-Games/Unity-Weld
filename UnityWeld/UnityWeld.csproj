@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOTOptimisationHelper.cs" />
     <Compile Include="Binding\AdapterAttribute.cs" />
     <Compile Include="Binding\AdapterOptions.cs" />
     <Compile Include="Binding\Adapters\DateTimeToStringAdapter.cs" />
