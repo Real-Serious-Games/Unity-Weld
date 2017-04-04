@@ -7,6 +7,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Class for binding Unity UI events to methods in a view model.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class EventBinding : AbstractMemberBinding
     {
         /// <summary>

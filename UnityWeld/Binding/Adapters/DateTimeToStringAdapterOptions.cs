@@ -6,6 +6,7 @@ namespace UnityWeld.Binding.Adapters
     /// Options for converting a DateTime to a string.
     /// </summary>
     [CreateAssetMenu(menuName = "Unity Weld/Adapter options/DateTime to string adapter")]
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class DateTimeToStringAdapterOptions : AdapterOptions
     {
         /// <summary>

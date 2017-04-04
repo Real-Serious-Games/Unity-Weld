@@ -8,6 +8,7 @@ namespace UnityWeld.Binding
     /// and updating the UI accordingly (note that this does not update the view model when
     /// the UI changes).
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class OneWayPropertyBinding : AbstractMemberBinding
     {
         /// <summary>

@@ -6,6 +6,7 @@ namespace UnityWeld.Widgets
     /// <summary>
     /// Adapter to assist with binding to individual colors within a color block.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class ColorBlockAdapter : MonoBehaviour
     {
         private Selectable selectable;

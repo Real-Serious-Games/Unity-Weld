@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -6,6 +7,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Bind a sub-view model which is a property on another view model for use in the UI.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class SubViewModelBinding : AbstractMemberBinding, IViewModelProvider
     {
         /// <summary>

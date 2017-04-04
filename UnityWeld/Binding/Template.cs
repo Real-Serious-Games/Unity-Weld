@@ -17,6 +17,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Template for use in collection bindings.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class Template : MonoBehaviour, IViewModelProvider, ITemplate
     {
         /// <summary>

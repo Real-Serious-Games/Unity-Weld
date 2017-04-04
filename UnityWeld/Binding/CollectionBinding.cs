@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class CollectionBinding : AbstractTemplateSelector
     {
         /// <summary>

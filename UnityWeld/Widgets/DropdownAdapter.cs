@@ -9,6 +9,7 @@ namespace UnityWeld.Widgets
     /// <summary>
     /// Adapter to set up and bind to a Dropdown using strings instead of OptionData.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class DropdownAdapter : MonoBehaviour
     {
         private Dropdown dropdown;

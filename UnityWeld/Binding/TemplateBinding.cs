@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using UnityEngine;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -7,6 +8,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Binds to a view and instantiates a template based on the view type.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class TemplateBinding : AbstractTemplateSelector
     {
         /// <summary>

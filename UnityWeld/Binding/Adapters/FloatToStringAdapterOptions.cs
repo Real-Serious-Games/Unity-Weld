@@ -6,6 +6,7 @@ namespace UnityWeld.Binding.Adapters
     /// Options for the float to string adapter.
     /// </summary>
     [CreateAssetMenu(menuName = "Unity Weld/Adapter options/Float to string adapter")]
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class FloatToStringAdapterOptions : AdapterOptions
     {
         /// <summary>

@@ -8,6 +8,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Base class for binders to Unity MonoBehaviours.
     /// </summary>
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public abstract class AbstractMemberBinding : MonoBehaviour, IMemberBinding
     {
         /// <summary>
