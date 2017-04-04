@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityWeld.Binding;
 using UnityWeld.Binding.Internal;
@@ -10,10 +11,31 @@ namespace UnityWeld_Editor
     [CustomEditor(typeof(OneWayPropertyBinding))]
     class OneWayPropertyBindingEditor : BaseBindingEditor
     {
-        public override void OnInspectorGUI()
+        private OneWayPropertyBinding targetScript;
+
+        private AnimBool viewAdapterOptionsFade;
+
+        private void OnEnable()
         {
             // Initialise reference to target script
-            var targetScript = (OneWayPropertyBinding)target;
+            targetScript = (OneWayPropertyBinding)target;
+
+            Type adapterType;
+
+            viewAdapterOptionsFade = new AnimBool(
+                ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType)
+            );
+
+            viewAdapterOptionsFade.valueChanged.AddListener(Repaint);
+        }
+
+        private void OnDisable()
+        {
+            viewAdapterOptionsFade.valueChanged.RemoveListener(Repaint);
+        }
+
+        public override void OnInspectorGUI()
+        {
 
             Type viewPropertyType;
             ShowViewPropertyMenu(
@@ -54,11 +76,15 @@ namespace UnityWeld_Editor
                 }
             );
 
+            Type adapterType;
+            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType);
+
             ShowAdapterOptionsMenu(
                 "View adapter options", 
-                targetScript.viewAdapterTypeName, 
+                adapterType, 
                 options => targetScript.viewAdapterOptions = options,
-                targetScript.viewAdapterOptions
+                targetScript.viewAdapterOptions,
+                viewAdapterOptionsFade.faded
             );
 
             EditorGUILayout.Space();

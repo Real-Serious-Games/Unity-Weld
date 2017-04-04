@@ -186,52 +186,64 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Show a field for selecting an AdapterOptions object matching the specified type of adapter.
+        /// Returns whether or not we should show an adapter options selector for the specified 
+        /// adapter type and finds the type for the specified type name.
         /// </summary>
-        protected void ShowAdapterOptionsMenu(
-            string label, 
-            string adapterTypeName, 
-            Action<AdapterOptions> propertyValueSetter, 
-            AdapterOptions currentPropertyValue
-        )
+        protected bool ShouldShowAdapterOptions(string adapterTypeName, out Type adapterType)
         {
             // Don't show selector until an adapter has been selected.
             if (string.IsNullOrEmpty(adapterTypeName))
             {
-                return;
+                adapterType = null;
+                return false;
             }
 
-            var adapterType = FindAdapterAttribute(adapterTypeName);
-            if (adapterType == null)
+            var adapterAttribute = FindAdapterAttribute(adapterTypeName);
+            if (adapterAttribute == null)
             {
-                return;
+                adapterType = null;
+                return false;
             }
-            var adapterOptionsType = adapterType.OptionsType;
+
+            adapterType = adapterAttribute.OptionsType;
 
             // Don't show selector unless the current adapter has its own overridden
             // adapter options type.
-            if (adapterOptionsType == typeof(AdapterOptions))
+            return adapterType != typeof(AdapterOptions);
+        }
+
+        /// <summary>
+        /// Show a field for selecting an AdapterOptions object matching the specified type of adapter.
+        /// </summary>
+        protected void ShowAdapterOptionsMenu(
+            string label, 
+            Type adapterOptionsType, 
+            Action<AdapterOptions> propertyValueSetter, 
+            AdapterOptions currentPropertyValue,
+            float fadeAmount
+        )
+        {
+            if (EditorGUILayout.BeginFadeGroup(fadeAmount))
             {
-                return;
+                EditorGUI.indentLevel++;
+
+                var newAdapterOptions = (AdapterOptions)EditorGUILayout.ObjectField(
+                    label, 
+                    currentPropertyValue, 
+                    adapterOptionsType, 
+                    false
+                );
+
+                EditorGUI.indentLevel--;
+
+                UpdateProperty(
+                    propertyValueSetter, 
+                    currentPropertyValue, 
+                    newAdapterOptions,
+                    "Set adapter options"
+                );
             }
-
-            EditorGUI.indentLevel++;
-
-            var newAdapterOptions = (AdapterOptions)EditorGUILayout.ObjectField(
-                label, 
-                currentPropertyValue, 
-                adapterOptionsType, 
-                false
-            );
-
-            EditorGUI.indentLevel--;
-
-            UpdateProperty(
-                propertyValueSetter, 
-                currentPropertyValue, 
-                newAdapterOptions,
-                "Set adapter options"
-            );
+            EditorGUILayout.EndFadeGroup();
         }
 
         /// <summary>

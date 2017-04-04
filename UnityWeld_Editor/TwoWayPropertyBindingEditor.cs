@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityWeld.Binding;
 using UnityWeld.Binding.Internal;
@@ -10,10 +11,41 @@ namespace UnityWeld_Editor
     [CustomEditor(typeof(TwoWayPropertyBinding))]
     class PropertyBindingEditor : BaseBindingEditor
     {
+        private TwoWayPropertyBinding targetScript;
+
+        private AnimBool viewAdapterOptionsFade;
+        private AnimBool viewModelAdapterOptionsFade;
+        private AnimBool exceptionAdapterOptionsFade;
+
+        private void OnEnable()
+        {
+            targetScript = (TwoWayPropertyBinding)target;
+
+            Type adapterType;
+            viewAdapterOptionsFade = new AnimBool(
+                ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType)
+            );
+            viewModelAdapterOptionsFade = new AnimBool(
+                ShouldShowAdapterOptions(targetScript.viewModelAdapterTypeName, out adapterType)
+            );
+            exceptionAdapterOptionsFade = new AnimBool(
+                ShouldShowAdapterOptions(targetScript.exceptionAdapterTypeName, out adapterType)
+            );
+
+            viewAdapterOptionsFade.valueChanged.AddListener(Repaint);
+            viewModelAdapterOptionsFade.valueChanged.AddListener(Repaint);
+            exceptionAdapterOptionsFade.valueChanged.AddListener(Repaint);
+        }
+
+        private void OnDisable()
+        {
+            viewAdapterOptionsFade.valueChanged.RemoveListener(Repaint);
+            viewModelAdapterOptionsFade.valueChanged.RemoveListener(Repaint);
+            exceptionAdapterOptionsFade.valueChanged.RemoveListener(Repaint);
+        }
+
         public override void OnInspectorGUI()
         {
-            var targetScript = (TwoWayPropertyBinding)target;
-
             ShowEventMenu(
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
@@ -61,11 +93,14 @@ namespace UnityWeld_Editor
                 }
             );
 
+            Type viewAdapterType;
+            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out viewAdapterType);
             ShowAdapterOptionsMenu(
                 "View adapter options",
-                targetScript.viewAdapterTypeName,
+                viewAdapterType,
                 options => targetScript.viewAdapterOptions = options,
-                targetScript.viewAdapterOptions
+                targetScript.viewAdapterOptions,
+                viewAdapterOptionsFade.faded
             );
 
             EditorGUILayout.Space();
@@ -105,11 +140,14 @@ namespace UnityWeld_Editor
                 }
             );
 
+            Type viewModelAdapterType;
+            viewModelAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.viewModelAdapterTypeName, out viewModelAdapterType);
             ShowAdapterOptionsMenu(
                 "View-model adapter options",
-                targetScript.viewModelAdapterTypeName,
+                viewModelAdapterType,
                 options => targetScript.viewModelAdapterOptions = options,
-                targetScript.viewModelAdapterOptions
+                targetScript.viewModelAdapterOptions,
+                viewModelAdapterOptionsFade.faded
             );
 
             EditorGUILayout.Space();
@@ -139,11 +177,14 @@ namespace UnityWeld_Editor
                 }
             );
 
+            Type exceptionAdapterType;
+            exceptionAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.exceptionAdapterTypeName, out exceptionAdapterType);
             ShowAdapterOptionsMenu(
                 "Exception adapter options",
-                targetScript.exceptionAdapterTypeName,
+                exceptionAdapterType,
                 options => targetScript.exceptionAdapterOptions = options,
-                targetScript.exceptionAdapterOptions
+                targetScript.exceptionAdapterOptions,
+                exceptionAdapterOptionsFade.faded
             );
 
             var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
