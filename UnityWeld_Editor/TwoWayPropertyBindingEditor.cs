@@ -9,7 +9,7 @@ using UnityWeld.Binding.Internal;
 namespace UnityWeld_Editor
 {
     [CustomEditor(typeof(TwoWayPropertyBinding))]
-    class PropertyBindingEditor : BaseBindingEditor
+    class TwoWayPropertyBindingEditor : BaseBindingEditor
     {
         private TwoWayPropertyBinding targetScript;
 
