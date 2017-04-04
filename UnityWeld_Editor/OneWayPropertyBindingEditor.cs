@@ -36,7 +36,6 @@ namespace UnityWeld_Editor
 
         public override void OnInspectorGUI()
         {
-
             Type viewPropertyType;
             ShowViewPropertyMenu(
                 new GUIContent("View property", "Property on the view to bind to"),
@@ -48,6 +47,12 @@ namespace UnityWeld_Editor
                 targetScript.uiPropertyName,
                 out viewPropertyType
             );
+
+            var guiPreviouslyEnabled = GUI.enabled;
+            if (string.IsNullOrEmpty(targetScript.uiPropertyName))
+            {
+                GUI.enabled = false;
+            }
 
             var viewAdapterTypeNames = GetAdapterTypeNames(
                 type => viewPropertyType == null || 
@@ -97,6 +102,8 @@ namespace UnityWeld_Editor
                 targetScript.viewModelPropertyName,
                 property => property.PropertyType == adaptedViewPropertyType
             );
+
+            GUI.enabled = guiPreviouslyEnabled;
         }
     }
 }
