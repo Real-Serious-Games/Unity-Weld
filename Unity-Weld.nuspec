@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
   <metadata>
     <id>RSG.UnityWeld</id>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <title>RSG.UnityWeld</title>
     <authors>Real Serious Games</authors>
     <owners>Real Serious Games</owners>
