@@ -161,7 +161,7 @@ namespace UnityWeld.Binding
 
         protected void Awake()
         {
-            Connect();
+            Init();
         }
 
         /// <summary>
