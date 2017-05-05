@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityWeld.Binding.Internal;
 
@@ -54,9 +55,17 @@ namespace UnityWeld.Binding
                     // Add items that were added to the bound collection.
                     if (e.NewItems != null)
                     {
+                        var list = viewModelCollectionValue as IList;
+
                         foreach (var item in e.NewItems)
                         {
-                            InstantiateTemplate(item);
+                            // Default to adding the new object at the last index.
+                            var index = transform.childCount;
+                            if (list != null)
+                            {
+                                index = list.IndexOf(item);
+                            }
+                            InstantiateTemplate(item, index);
                         }
                     }
 
@@ -113,9 +122,10 @@ namespace UnityWeld.Binding
             viewModelCollectionValue = (IEnumerable)viewModelValue;
 
             // Generate children
-            foreach (var value in viewModelCollectionValue)
+            var collectionAsList = viewModelCollectionValue.Cast<object>().ToList();
+            for (var index = 0; index < collectionAsList.Count; index++)
             {
-                InstantiateTemplate(value);
+                InstantiateTemplate(collectionAsList[index], index);
             }
 
             // Subscribe to collection changed events.
