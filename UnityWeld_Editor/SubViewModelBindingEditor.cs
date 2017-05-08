@@ -25,7 +25,7 @@ namespace UnityWeld_Editor
             var bindableProperties = FindBindableProperties();
 
             ShowViewModelPropertyMenu(
-                new GUIContent("Sub view-model property"),
+                new GUIContent("Sub view-model property", "The property on the top level view model containing the sub view-model"),
                 bindableProperties,
                 updatedValue => 
                 {

@@ -59,9 +59,13 @@ namespace UnityWeld.Binding
 
                         foreach (var item in e.NewItems)
                         {
-                            // Default to adding the new object at the last index.
-                            var index = transform.childCount;
-                            if (list != null)
+                            int index;
+                            if (list == null)
+                            {
+                                // Default to adding the new object at the last index.
+                                index = transform.childCount;
+                            }
+                            else
                             {
                                 index = list.IndexOf(item);
                             }
