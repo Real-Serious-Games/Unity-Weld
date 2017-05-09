@@ -78,6 +78,15 @@ namespace UnityWeld.Binding
         /// </summary>
         protected void InstantiateTemplate(object templateViewModel)
         {
+            InstantiateTemplate(templateViewModel, 0);
+        }
+
+        /// <summary>
+        /// Create a clone of the template object and bind it to the specified view model.
+        /// Place the new object under the parent at the specified index.
+        /// </summary>
+        protected void InstantiateTemplate(object templateViewModel, int index)
+        {
             Assert.IsNotNull(templateViewModel, "Cannot instantiate child with null view model");
             
             // Select template.
@@ -85,6 +94,8 @@ namespace UnityWeld.Binding
 
             var newObject = Instantiate(selectedTemplate);
             newObject.transform.SetParent(transform, false);
+
+            newObject.transform.SetSiblingIndex(index);
 
             instantiatedTemplates.Add(templateViewModel, newObject.gameObject);
 

@@ -70,6 +70,7 @@ namespace UnityWeld.Binding.Internal
             var bindableEventsFromProperties = type
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(propertyInfo => propertyInfo.PropertyType.IsSubclassOf(typeof(UnityEventBase)))
+                .Where(propertyInfo => !propertyInfo.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any())
                 .Select(propertyInfo => new BindableEvent()
                 {
                     UnityEvent = (UnityEventBase)propertyInfo.GetValue(component, null),
@@ -81,6 +82,7 @@ namespace UnityWeld.Binding.Internal
             var bindableEventsFromFields = type
                 .GetFields(BindingFlags.Instance | BindingFlags.Public)
                 .Where(fieldInfo => fieldInfo.FieldType.IsSubclassOf(typeof(UnityEventBase)))
+                .Where(fieldInfo => !fieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any())
                 .Select(fieldInfo => new BindableEvent()
                 {
                     UnityEvent = (UnityEventBase)fieldInfo.GetValue(component),

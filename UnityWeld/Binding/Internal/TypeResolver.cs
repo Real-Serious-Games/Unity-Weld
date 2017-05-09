@@ -204,8 +204,8 @@ namespace UnityWeld.Binding.Internal
             return FindAvailableViewModelTypes(target)
                 .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 .Where(property => property
-                    .GetCustomAttributes(false)
-                    .Any(attribute => attribute is BindingAttribute) // Filter out properties that don't have [Binding].
+                    .GetCustomAttributes(typeof(BindingAttribute), false)
+                    .Any() // Filter out properties that don't have [Binding].
                 )
                 .ToArray();
         }
