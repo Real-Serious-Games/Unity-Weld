@@ -19,18 +19,18 @@ namespace UnityWeld_Editor
 
         // Whether properties in the target script differ from the value in the prefab.
         // Needed to know which ones to display as bold in the inspector.
-        bool viewEventPrefabModified;
-        bool viewPropertyPrefabModified;
-        bool viewAdapterPrefabModified;
-        bool viewAdapterOptionsPrefabModified;
+        private bool viewEventPrefabModified;
+        private bool viewPropertyPrefabModified;
+        private bool viewAdapterPrefabModified;
+        private bool viewAdapterOptionsPrefabModified;
 
-        bool viewModelPropertyPrefabModified;
-        bool viewModelAdapterPrefabModified;
-        bool viewModelAdapterOptionsPrefabModified;
+        private bool viewModelPropertyPrefabModified;
+        private bool viewModelAdapterPrefabModified;
+        private bool viewModelAdapterOptionsPrefabModified;
 
-        bool exceptionPropertyPrefabModified;
-        bool exceptionAdapterPrefabModified;
-        bool exceptionAdapterOptionsPrefabModified;
+        private bool exceptionPropertyPrefabModified;
+        private bool exceptionAdapterPrefabModified;
+        private bool exceptionAdapterOptionsPrefabModified;
 
         private void OnEnable()
         {
