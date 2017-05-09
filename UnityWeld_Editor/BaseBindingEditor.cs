@@ -99,6 +99,71 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
+        /// Class used to wrap property infos
+        /// </summary>
+        private class OptionInfo
+        {
+            public OptionInfo(string menuName, PropertyInfo propertyInfo)
+            {
+                this.MenuName = menuName;
+                this.PropertyInfo = propertyInfo;
+            }
+
+            public string MenuName { get; private set; }
+
+            public PropertyInfo PropertyInfo { get; private set; }
+        }
+
+        /// <summary>
+        /// The string used to show that no option is selected in the property menu.
+        /// </summary>
+        private static readonly string NoneOptionString = "None";
+
+        /// <summary>
+        /// Display a popup menu for selecting a property from a view-model.
+        /// </summary>
+        protected void ShowViewModelPropertyMenuWithNone(
+            GUIContent label,
+            PropertyInfo[] bindableProperties,
+            Action<string> propertyValueSetter,
+            string curPropertyValue,
+            Func<PropertyInfo, bool> menuEnabled
+        )
+        {
+            var options = bindableProperties
+                .Select(property => new OptionInfo(string.Concat(property.ReflectedType, "/", property.Name, " : ", property.PropertyType.Name), property))
+                .OrderBy(option => option.PropertyInfo.ReflectedType.Name)
+                .ThenBy(option => option.PropertyInfo.Name);
+
+            var noneOption = new OptionInfo(NoneOptionString, null);
+
+            InspectorUtils.DoPopup(
+                new GUIContent(string.IsNullOrEmpty(curPropertyValue) ? NoneOptionString : curPropertyValue),
+                label,
+                option => option.MenuName,
+                option => option.MenuName == NoneOptionString ? true : menuEnabled(option.PropertyInfo),
+                option =>
+                {
+                    if (option == noneOption)
+                    {
+                        return string.IsNullOrEmpty(curPropertyValue);
+                    }
+                    
+                    return MemberInfoToString(option.PropertyInfo) == curPropertyValue;
+                },
+                option => UpdateProperty(
+                    propertyValueSetter,
+                    curPropertyValue,
+                    option.PropertyInfo == null ? string.Empty : MemberInfoToString(option.PropertyInfo),
+                    "Set view-model property"
+                ),
+                new[] { noneOption }
+                    .Concat(options)
+                    .ToArray()
+            );
+        }
+
+        /// <summary>
         /// Shows a dropdown for selecting a property in the UI to bind to.
         /// </summary>
         protected void ShowViewPropertyMenu(

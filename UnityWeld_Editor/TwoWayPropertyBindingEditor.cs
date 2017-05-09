@@ -164,7 +164,7 @@ namespace UnityWeld_Editor
             );
 
             var adaptedExceptionPropertyType = AdaptTypeForward(typeof(Exception), targetScript.exceptionAdapterTypeName);
-            ShowViewModelPropertyMenu(
+            ShowViewModelPropertyMenuWithNone(
                 new GUIContent("Exception property", "Property on the view-model to bind the exception to."),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.exceptionPropertyName = updatedValue,
