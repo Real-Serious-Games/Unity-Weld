@@ -15,6 +15,11 @@ namespace UnityWeld_Editor
     {
         private SubViewModelBinding targetScript;
 
+        /// <summary>
+        /// Whether or not the value on our target matches its prefab.
+        /// </summary>
+        private bool propertyPrefabModified;
+
         private void OnEnable()
         {
             targetScript = (SubViewModelBinding)target;
@@ -22,7 +27,12 @@ namespace UnityWeld_Editor
 
         public override void OnInspectorGUI()
         {
+            UpdatePrefabModifiedProperties();
+
             var bindableProperties = FindBindableProperties();
+
+            var defaultLabelStyle = EditorStyles.label.fontStyle;
+            EditorStyles.label.fontStyle = propertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             ShowViewModelPropertyMenu(
                 new GUIContent("Sub view-model property", "The property on the top level view model containing the sub view-model"),
@@ -39,6 +49,8 @@ namespace UnityWeld_Editor
                 targetScript.viewModelPropertyName,
                 p => true
             );
+
+            EditorStyles.label.fontStyle = defaultLabelStyle;
         }
 
         private PropertyInfo[] FindBindableProperties()
@@ -50,6 +62,26 @@ namespace UnityWeld_Editor
                     .Any()
                 )
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// </summary>
+        private void UpdatePrefabModifiedProperties()
+        {
+            var property = serializedObject.GetIterator();
+            property.Next(true);
+            do
+            {
+                switch (property.name)
+                {
+                    case "viewModelPropertyName":
+                    case "viewModelTypeName":
+                        propertyPrefabModified = property.prefabOverride;
+                        break;
+                }
+            }
+            while (property.Next(false));
         }
     }
 }
