@@ -8,10 +8,23 @@ namespace UnityWeld_Editor
     [CustomEditor(typeof(CollectionBinding))]
     class CollectionBindingEditor : BaseBindingEditor
     {
-        public override void OnInspectorGUI()
+        private CollectionBinding targetScript;
+
+        private bool viewModelPrefabModified;
+        private bool templatesRootPrefabModified;
+
+        private void OnEnable()
         {
             // Initialise everything
-            var targetScript = (CollectionBinding)target;
+            targetScript = (CollectionBinding)target;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            UpdatePrefabModifiedProperties();
+
+            var defaultLabelStyle = EditorStyles.label.fontStyle;
+            EditorStyles.label.fontStyle = viewModelPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
@@ -20,6 +33,8 @@ namespace UnityWeld_Editor
                 targetScript.viewModelPropertyName,
                 property => true
             );
+
+            EditorStyles.label.fontStyle = templatesRootPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             UpdateProperty(
                 updatedValue => targetScript.templatesRoot = updatedValue,
@@ -32,6 +47,33 @@ namespace UnityWeld_Editor
                 ),
                 "Set collection templates root"
             );
+
+            EditorStyles.label.fontStyle = defaultLabelStyle;
+        }
+
+        /// <summary>
+        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// </summary>
+        private void UpdatePrefabModifiedProperties()
+        {
+            var property = serializedObject.GetIterator();
+            // Need to call Next(true) to get the first child. Once we have it, Next(false)
+            // will iterate through the properties.
+            property.Next(true);
+            do
+            {
+                switch (property.name)
+                {
+                    case "viewModelPropertyName":
+                        viewModelPrefabModified = property.prefabOverride;
+                        break;
+
+                    case "templatesRoot":
+                        templatesRootPrefabModified = property.prefabOverride;
+                        break;
+                }
+            }
+            while (property.Next(false));
         }
     }
 }

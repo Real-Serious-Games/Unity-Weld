@@ -10,9 +10,23 @@ namespace UnityWeld_Editor
     [CustomEditor(typeof(EventBinding))]
     public class EventBindingEditor : BaseBindingEditor
     {
+        private EventBinding targetScript;
+
+        // Whether or not the values on our target match its prefab.
+        private bool viewEventPrefabModified;
+        private bool viewModelMethodPrefabModified;
+
+        private void OnEnable()
+        {
+            targetScript = (EventBinding)target;
+        }
+
         public override void OnInspectorGUI()
         {
-            var targetScript = (EventBinding)target;
+            UpdatePrefabModifiedProperties();
+
+            var defaultLabelStyle = EditorStyles.label.fontStyle;
+            EditorStyles.label.fontStyle = viewEventPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             ShowEventMenu(
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
@@ -22,7 +36,11 @@ namespace UnityWeld_Editor
                 targetScript.uiEventName
             );
 
+            EditorStyles.label.fontStyle = viewModelMethodPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+
             ShowMethodMenu(targetScript, TypeResolver.FindBindableMethods(targetScript));
+
+            EditorStyles.label.fontStyle = defaultLabelStyle;
         }
 
         /// <summary>
@@ -49,6 +67,31 @@ namespace UnityWeld_Editor
                     .ThenBy(method => method.Name)
                     .ToArray()
             );
+        }
+
+        /// <summary>
+        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// </summary>
+        private void UpdatePrefabModifiedProperties()
+        {
+            var property = serializedObject.GetIterator();
+            // Need to call Next(true) to get the first child. Once we have it, Next(false)
+            // will iterate through the properties.
+            property.Next(true);
+            do
+            {
+                switch (property.name)
+                {
+                    case "uiEventName":
+                        viewEventPrefabModified = property.prefabOverride;
+                        break;
+
+                    case "viewModelMethodName":
+                        viewModelMethodPrefabModified = property.prefabOverride;
+                        break;
+                }
+            }
+            while (property.Next(false));
         }
     }
 }
