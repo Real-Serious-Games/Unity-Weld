@@ -253,6 +253,8 @@ namespace UnityWeld_Editor
         private void UpdatePrefabModifiedProperties()
         {
             var property = serializedObject.GetIterator();
+            // Need to call Next(true) to get the first child. Once we have it, Next(false)
+            // will iterate through the properties.
             property.Next(true);
             do
             {
