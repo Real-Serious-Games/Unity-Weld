@@ -174,6 +174,13 @@ namespace UnityWeld.Binding.Internal
                     var viewModelBinding = component as IViewModelProvider;
                     if (viewModelBinding != null)
                     {
+                        var viewModelTypeName = viewModelBinding.GetViewModelTypeName();
+                        // Ignore view model bindings that haven't been set up yet.
+                        if (string.IsNullOrEmpty(viewModelTypeName))
+                        {
+                            continue;
+                        }
+
                         foundAtLeastOneBinding = true;
 
                         yield return GetViewModelType(viewModelBinding.GetViewModelTypeName());
