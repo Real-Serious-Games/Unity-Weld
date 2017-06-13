@@ -1,4 +1,4 @@
-# Unity-Weld
+# Unity-Weld [![NuGet](https://img.shields.io/nuget/dt/RSG.UnityWeld.svg)](https://www.nuget.org/packages/RSG.UnityWeld/)
 *[MVVM-style](https://msdn.microsoft.com/en-us/library/hh848246.aspx) data-binding system for Unity.*
 
 Unity-Weld is a library for Unity 5+ that enables two-way data binding between Unity UI widgets and game/business logic code. This reduces boiler-plate code that would otherwise be necessary for things like updating the UI when a property changes, removes the need for messy links between objects in the scene that can be broken easily, and allows easier unit testing of code by providing a layer of abstraction between the UI and your core logic code.
