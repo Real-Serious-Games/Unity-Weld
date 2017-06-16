@@ -72,6 +72,8 @@ namespace UnityWeld_Editor
             var property = serializedObject.GetIterator();
             // Need to call Next(true) to get the first child. Once we have it, Next(false)
             // will iterate through the properties.
+
+            propertyPrefabModified = false;
             property.Next(true);
             do
             {
@@ -79,7 +81,7 @@ namespace UnityWeld_Editor
                 {
                     case "viewModelPropertyName":
                     case "viewModelTypeName":
-                        propertyPrefabModified = property.prefabOverride;
+                        propertyPrefabModified = property.prefabOverride || propertyPrefabModified;
                         break;
                 }
             }
