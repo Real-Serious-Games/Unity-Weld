@@ -209,12 +209,29 @@ namespace UnityWeld.Binding.Internal
         public static PropertyInfo[] FindBindableProperties(AbstractMemberBinding target)
         {
             return FindAvailableViewModelTypes(target)
-                .SelectMany(type => type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                .SelectMany(type => GetPublicProperties(type))
                 .Where(property => property
                     .GetCustomAttributes(typeof(BindingAttribute), false)
                     .Any() // Filter out properties that don't have [Binding].
                 )
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Get all the declared and inherited public properties from a type or interface.
+        ///
+        /// https://stackoverflow.com/questions/358835/getproperties-to-return-all-properties-for-an-interface-inheritance-hierarchy#answer-26766221
+        /// </summary>
+        public static IEnumerable<PropertyInfo> GetPublicProperties(Type type)
+        {
+            if (!type.IsInterface)
+            {
+                return type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            }
+
+            return (new[] { type })
+                .Concat(type.GetInterfaces())
+                .SelectMany(i => i.GetProperties(BindingFlags.Public | BindingFlags.Instance));
         }
 
         /// <summary>
