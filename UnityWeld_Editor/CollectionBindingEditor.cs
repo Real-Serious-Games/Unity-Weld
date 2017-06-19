@@ -40,7 +40,7 @@ namespace UnityWeld_Editor
                 updatedValue => targetScript.templatesRoot = updatedValue,
                 targetScript.templatesRoot,
                 (GameObject)EditorGUILayout.ObjectField(
-                    new GUIContent("Collection templates", "Object to create instances of for each item in the collection."), 
+                    new GUIContent("Collection templates", "Parent object for all templates to copy and bind to items in the collection."), 
                     targetScript.templatesRoot, 
                     typeof(GameObject), 
                     true
