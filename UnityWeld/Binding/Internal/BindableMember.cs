@@ -14,12 +14,12 @@ namespace UnityWeld.Binding.Internal
         /// <summary>
         /// The bindable member info (usually a PropertyInfo or MethodInfo)
         /// </summary>
-        public MemberType Member { get; private set; }
+        public readonly MemberType Member;
 
         /// <summary>
         /// View model that the property or method belongs to.
         /// </summary>
-        public Type ViewModelType { get; private set; }
+        public readonly Type ViewModelType;
 
         public BindableMember(MemberType member, Type viewModelType)
         {
