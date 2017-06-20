@@ -93,8 +93,6 @@ namespace UnityWeld_Editor
                         prop.ToString(),
                         "Set view-model property"
                     );
-
-                    Repaint();
                 },
                 bindableProperties
                     .OrderBy(property => property.ViewModelType.Name)
@@ -157,12 +155,12 @@ namespace UnityWeld_Editor
                         return string.IsNullOrEmpty(curPropertyValue);
                     }
                     
-                    return option.Property.ToString() == curPropertyValue;
+                    return option.ToString() == curPropertyValue;
                 },
                 option => UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    option.Property == null ? string.Empty : option.Property.ToString(),
+                    option.Property == null ? string.Empty : option.ToString(),
                     "Set view-model property"
                 ),
                 new[] { noneOption }
