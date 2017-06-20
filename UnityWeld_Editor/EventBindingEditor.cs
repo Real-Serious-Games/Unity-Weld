@@ -46,25 +46,25 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Draws the dropdown for selecting a method from bindableViewModelMethods
         /// </summary>
-        private void ShowMethodMenu(EventBinding targetScript, MethodInfo[] bindableMethods)
+        private void ShowMethodMenu(EventBinding targetScript, BindableMember<MethodInfo>[] bindableMethods)
         {
             var tooltip = "Method on the view-model to bind to.";
 
             InspectorUtils.DoPopup(
                 new GUIContent(targetScript.viewModelMethodName),
                 new GUIContent("View-model method", tooltip),
-                method => method.ReflectedType + "/" + method.Name,
-                method => true,
-                method => MemberInfoToString(method) == targetScript.viewModelMethodName,
-                method => UpdateProperty(
+                m => m.ViewModelType + "/" + m.Member.Name,
+                m => true,
+                m => m.ToString() == targetScript.viewModelMethodName,
+                m => UpdateProperty(
                     updatedValue => targetScript.viewModelMethodName = updatedValue,
                     targetScript.viewModelMethodName,
-                    MemberInfoToString(method),
+                    m.ToString(),
                     "Set bound view-model method"
                 ),
                 bindableMethods
-                    .OrderBy(method => method.ReflectedType.Name)
-                    .ThenBy(method => method.Name)
+                    .OrderBy(m => m.ViewModelType.Name)
+                    .ThenBy(m => m.Member.Name)
                     .ToArray()
             );
         }

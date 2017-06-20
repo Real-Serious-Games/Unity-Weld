@@ -73,7 +73,7 @@ namespace UnityWeld_Editor
         /// </summary>
         protected void ShowViewModelPropertyMenu(
             GUIContent label,
-            BindableProperty[] bindableProperties,
+            BindableMember<PropertyInfo>[] bindableProperties,
             Action<string> propertyValueSetter,
             string curPropertyValue,
             Func<PropertyInfo, bool> menuEnabled
@@ -82,8 +82,8 @@ namespace UnityWeld_Editor
             InspectorUtils.DoPopup(
                 new GUIContent(curPropertyValue),
                 label,
-                prop => string.Concat(prop.ViewModelType, "/", prop.Property.Name, " : ", prop.Property.PropertyType.Name),
-                prop => menuEnabled(prop.Property),
+                prop => string.Concat(prop.ViewModelType, "/", prop.Member.Name, " : ", prop.Member.PropertyType.Name),
+                prop => menuEnabled(prop.Member),
                 prop => prop.ToString() == curPropertyValue,
                 prop =>
                 {
@@ -98,7 +98,7 @@ namespace UnityWeld_Editor
                 },
                 bindableProperties
                     .OrderBy(property => property.ViewModelType.Name)
-                    .ThenBy(property => property.Property.Name)
+                    .ThenBy(property => property.Member.Name)
                     .ToArray()
             );
         }
@@ -108,7 +108,7 @@ namespace UnityWeld_Editor
         /// </summary>
         private class OptionInfo
         {
-            public OptionInfo(string menuName, BindableProperty property)
+            public OptionInfo(string menuName, BindableMember<PropertyInfo> property)
             {
                 this.MenuName = menuName;
                 this.Property = property;
@@ -116,7 +116,7 @@ namespace UnityWeld_Editor
 
             public string MenuName { get; private set; }
 
-            public BindableProperty Property { get; private set; }
+            public BindableMember<PropertyInfo> Property { get; private set; }
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace UnityWeld_Editor
         /// </summary>
         protected void ShowViewModelPropertyMenuWithNone(
             GUIContent label,
-            BindableProperty[] bindableProperties,
+            BindableMember<PropertyInfo>[] bindableProperties,
             Action<string> propertyValueSetter,
             string curPropertyValue,
             Func<PropertyInfo, bool> menuEnabled
@@ -137,11 +137,11 @@ namespace UnityWeld_Editor
         {
             var options = bindableProperties
                 .Select(prop => new OptionInfo(
-                    string.Concat(prop.ViewModelType, "/", prop.Property.Name, " : ", prop.Property.PropertyType.Name), 
+                    string.Concat(prop.ViewModelType, "/", prop.Member.Name, " : ", prop.Member.PropertyType.Name), 
                     prop
                 ))
                 .OrderBy(option => option.Property.ViewModelType.Name)
-                .ThenBy(option => option.Property.Property.Name);
+                .ThenBy(option => option.Property.Member.Name);
 
             var noneOption = new OptionInfo(NoneOptionString, null);
 
@@ -149,7 +149,7 @@ namespace UnityWeld_Editor
                 new GUIContent(string.IsNullOrEmpty(curPropertyValue) ? NoneOptionString : curPropertyValue),
                 label,
                 option => option.MenuName,
-                option => option.MenuName == NoneOptionString ? true : menuEnabled(option.Property.Property),
+                option => option.MenuName == NoneOptionString ? true : menuEnabled(option.Property.Member),
                 option =>
                 {
                     if (option == noneOption)

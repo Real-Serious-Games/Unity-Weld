@@ -206,13 +206,13 @@ namespace UnityWeld.Binding.Internal
         /// <summary>
         /// Find bindable properties in available view models.
         /// </summary>
-        public static BindableProperty[] FindBindableProperties(AbstractMemberBinding target)
+        public static BindableMember<PropertyInfo>[] FindBindableProperties(AbstractMemberBinding target)
         {
             return FindAvailableViewModelTypes(target)
                 .SelectMany(type => GetPublicProperties(type)
-                    .Select(p => new BindableProperty(p, type))
+                    .Select(p => new BindableMember<PropertyInfo>(p, type))
                 )
-                .Where(p => p.Property
+                .Where(p => p.Member
                     .GetCustomAttributes(typeof(BindingAttribute), false)
                     .Any() // Filter out properties that don't have [Binding].
                 )
@@ -254,23 +254,26 @@ namespace UnityWeld.Binding.Internal
         /// <summary>
         /// Get a list of methods in the view model that we can bind to.
         /// </summary>
-        public static MethodInfo[] FindBindableMethods(EventBinding targetScript)
+        public static BindableMember<MethodInfo>[] FindBindableMethods(EventBinding targetScript)
         {
             return FindAvailableViewModelTypes(targetScript)
-                .SelectMany(type => GetPublicMethods(type))
-                .Where(method => method.GetParameters().Length == 0)
-                .Where(method => method.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !method.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
+                .SelectMany(type => GetPublicMethods(type)
+                    .Select(m => new BindableMember<MethodInfo>(m, type))
+                )
+                .Where(m => m.Member.GetParameters().Length == 0)
+                .Where(m => m.Member.GetCustomAttributes(typeof(BindingAttribute), false).Any() 
+                    && !m.Member.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
                 .ToArray();
         }
 
         /// <summary>
         /// Find collection properties that can be data-bound.
         /// </summary>
-        public static BindableProperty[] FindBindableCollectionProperties(CollectionBinding target)
+        public static BindableMember<PropertyInfo>[] FindBindableCollectionProperties(CollectionBinding target)
         {
             return FindBindableProperties(target)
-                .Where(p => typeof(IEnumerable).IsAssignableFrom(p.Property.PropertyType))
-                .Where(p => !typeof(string).IsAssignableFrom(p.Property.PropertyType))
+                .Where(p => typeof(IEnumerable).IsAssignableFrom(p.Member.PropertyType))
+                .Where(p => !typeof(string).IsAssignableFrom(p.Member.PropertyType))
                 .ToArray();
         }
     }

@@ -44,7 +44,7 @@ namespace UnityWeld_Editor
                     targetScript.viewModelTypeName = bindableProperties
                         .Where(prop => prop.ToString() == updatedValue)
                         .Single()
-                        .Property.PropertyType.ToString();
+                        .Member.PropertyType.ToString();
                 },
                 targetScript.viewModelPropertyName,
                 p => true
@@ -53,10 +53,10 @@ namespace UnityWeld_Editor
             EditorStyles.label.fontStyle = defaultLabelStyle;
         }
 
-        private BindableProperty[] FindBindableProperties()
+        private BindableMember<PropertyInfo>[] FindBindableProperties()
         {
             return TypeResolver.FindBindableProperties(targetScript)
-                .Where(prop => prop.Property.PropertyType
+                .Where(prop => prop.Member.PropertyType
                     .GetCustomAttributes(typeof(BindingAttribute), false)
                     .Any()
                 )
