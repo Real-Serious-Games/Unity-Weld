@@ -218,11 +218,11 @@ namespace UnityWeld.Binding.Internal
         }
 
         /// <summary>
-        /// Get all the declared and inherited public properties from a type or interface.
+        /// Get all the declared and inherited public properties from a class or interface.
         ///
         /// https://stackoverflow.com/questions/358835/getproperties-to-return-all-properties-for-an-interface-inheritance-hierarchy#answer-26766221
         /// </summary>
-        public static IEnumerable<PropertyInfo> GetPublicProperties(Type type)
+        private static IEnumerable<PropertyInfo> GetPublicProperties(Type type)
         {
             if (!type.IsInterface)
             {
@@ -235,12 +235,27 @@ namespace UnityWeld.Binding.Internal
         }
 
         /// <summary>
+        /// Get all the declared and inherited public methods from a class or interface.
+        /// </summary>
+        private static IEnumerable<MethodInfo> GetPublicMethods(Type type)
+        {
+            if (!type.IsInterface)
+            {
+                return type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+            }
+
+            return (new[] { type })
+                .Concat(type.GetInterfaces())
+                .SelectMany(i => i.GetMethods(BindingFlags.Public | BindingFlags.Instance));
+        }
+
+        /// <summary>
         /// Get a list of methods in the view model that we can bind to.
         /// </summary>
         public static MethodInfo[] FindBindableMethods(EventBinding targetScript)
         {
             return FindAvailableViewModelTypes(targetScript)
-                .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+                .SelectMany(type => GetPublicMethods(type))
                 .Where(method => method.GetParameters().Length == 0)
                 .Where(method => method.GetCustomAttributes(typeof(BindingAttribute), false).Any() && !method.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
                 .ToArray();
