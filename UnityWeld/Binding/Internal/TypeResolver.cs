@@ -206,11 +206,13 @@ namespace UnityWeld.Binding.Internal
         /// <summary>
         /// Find bindable properties in available view models.
         /// </summary>
-        public static PropertyInfo[] FindBindableProperties(AbstractMemberBinding target)
+        public static BindableProperty[] FindBindableProperties(AbstractMemberBinding target)
         {
             return FindAvailableViewModelTypes(target)
-                .SelectMany(type => GetPublicProperties(type))
-                .Where(property => property
+                .SelectMany(type => GetPublicProperties(type)
+                    .Select(p => new BindableProperty(p, type))
+                )
+                .Where(p => p.Property
                     .GetCustomAttributes(typeof(BindingAttribute), false)
                     .Any() // Filter out properties that don't have [Binding].
                 )
@@ -264,11 +266,11 @@ namespace UnityWeld.Binding.Internal
         /// <summary>
         /// Find collection properties that can be data-bound.
         /// </summary>
-        public static PropertyInfo[] FindBindableCollectionProperties(CollectionBinding target)
+        public static BindableProperty[] FindBindableCollectionProperties(CollectionBinding target)
         {
             return FindBindableProperties(target)
-                .Where(property => typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
-                .Where(property => !typeof(string).IsAssignableFrom(property.PropertyType))
+                .Where(p => typeof(IEnumerable).IsAssignableFrom(p.Property.PropertyType))
+                .Where(p => !typeof(string).IsAssignableFrom(p.Property.PropertyType))
                 .ToArray();
         }
     }

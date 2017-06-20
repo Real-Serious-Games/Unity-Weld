@@ -42,9 +42,9 @@ namespace UnityWeld_Editor
                     targetScript.viewModelPropertyName = updatedValue;
 
                     targetScript.viewModelTypeName = bindableProperties
-                        .Where(prop => MemberInfoToString(prop) == updatedValue)
+                        .Where(prop => prop.ToString() == updatedValue)
                         .Single()
-                        .PropertyType.ToString();
+                        .Property.PropertyType.ToString();
                 },
                 targetScript.viewModelPropertyName,
                 p => true
@@ -53,11 +53,10 @@ namespace UnityWeld_Editor
             EditorStyles.label.fontStyle = defaultLabelStyle;
         }
 
-        private PropertyInfo[] FindBindableProperties()
+        private BindableProperty[] FindBindableProperties()
         {
             return TypeResolver.FindBindableProperties(targetScript)
-                .Where(property => property
-                    .PropertyType
+                .Where(prop => prop.Property.PropertyType
                     .GetCustomAttributes(typeof(BindingAttribute), false)
                     .Any()
                 )
@@ -79,7 +78,7 @@ namespace UnityWeld_Editor
             {
                 switch (property.name)
                 {
-                    case "viewModelPropertyName":
+                    case "viewModelPropertyName": 
                     case "viewModelTypeName":
                         propertyPrefabModified = property.prefabOverride || propertyPrefabModified;
                         break;

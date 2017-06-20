@@ -64,6 +64,7 @@
     <Compile Include="Binding\IAdapter.cs" />
     <Compile Include="Binding\IMemberBinding.cs" />
     <Compile Include="Binding\INotifyCollectionChanged.cs" />
+    <Compile Include="Binding\Internal\BindableProperty.cs" />
     <Compile Include="Binding\Internal\PropertyEndPoint.cs" />
     <Compile Include="Binding\Internal\PropertyFinder.cs" />
     <Compile Include="Binding\Internal\PropertySync.cs" />
