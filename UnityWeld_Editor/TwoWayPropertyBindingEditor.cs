@@ -81,8 +81,8 @@ namespace UnityWeld_Editor
             ShowViewPropertyMenu(
                 new GUIContent("View property", "Property on the view to bind to"),
                 PropertyFinder.GetBindableProperties(targetScript.gameObject)
-                    .OrderBy(prop => prop.ReflectedType.Name)
-                    .ThenBy(prop => prop.Name)
+                    .OrderBy(prop => prop.ViewModelTypeName)
+                    .ThenBy(prop => prop.MemberName)
                     .ToArray(),
                 updatedValue => targetScript.uiPropertyName = updatedValue,
                 targetScript.uiPropertyName,

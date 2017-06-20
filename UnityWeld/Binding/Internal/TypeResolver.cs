@@ -262,7 +262,7 @@ namespace UnityWeld.Binding.Internal
                 )
                 .Where(m => m.Member.GetParameters().Length == 0)
                 .Where(m => m.Member.GetCustomAttributes(typeof(BindingAttribute), false).Any() 
-                    && !m.Member.Name.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
+                    && !m.MemberName.StartsWith("get_")) // Exclude property getters, since we aren't doing anything with the return value of the bound method anyway.
                 .ToArray();
         }
 

@@ -21,6 +21,28 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         public readonly Type ViewModelType;
 
+        /// <summary>
+        /// Name of the view model type.
+        /// </summary>
+        public string ViewModelTypeName
+        {
+            get
+            {
+                return ViewModelType.Name;
+            }
+        }
+
+        /// <summary>
+        /// Name of the member.
+        /// </summary>
+        public string MemberName
+        {
+            get
+            {
+                return Member.Name;
+            }
+        }
+
         public BindableMember(MemberType member, Type viewModelType)
         {
             Member = member;
@@ -29,7 +51,7 @@ namespace UnityWeld.Binding.Internal
 
         public override string ToString()
         {
-            return string.Concat(ViewModelType.ToString(), ".", Member.Name);
+            return string.Concat(ViewModelType.ToString(), ".", MemberName);
         }
     }
 }

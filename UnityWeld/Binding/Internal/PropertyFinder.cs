@@ -23,13 +23,18 @@ namespace UnityWeld.Binding.Internal
         /// <summary>
         /// Use reflection to find all components with properties we can bind to.
         /// </summary>
-        public static IEnumerable<PropertyInfo> GetBindableProperties(GameObject gameObject) //todo: Maybe move this to the TypeResolver.
+        public static IEnumerable<BindableMember<PropertyInfo>> GetBindableProperties(GameObject gameObject) //todo: Maybe move this to the TypeResolver.
         {
             return gameObject.GetComponents<Component>()
-                .SelectMany(component => component.GetType()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public))
-                .Where(prop => !hiddenTypes.Contains(prop.ReflectedType))
-                .Where(prop => !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any());
+                .SelectMany(component =>
+                {
+                    var type = component.GetType();
+                    return type
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                        .Select(p => new BindableMember<PropertyInfo>(p, type));
+                })
+                .Where(prop => !hiddenTypes.Contains(prop.ViewModelType))
+                .Where(prop => !prop.Member.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any());
         }
     }
 }

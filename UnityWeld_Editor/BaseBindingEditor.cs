@@ -82,7 +82,7 @@ namespace UnityWeld_Editor
             InspectorUtils.DoPopup(
                 new GUIContent(curPropertyValue),
                 label,
-                prop => string.Concat(prop.ViewModelType, "/", prop.Member.Name, " : ", prop.Member.PropertyType.Name),
+                prop => string.Concat(prop.ViewModelType, "/", prop.MemberName, " : ", prop.Member.PropertyType.Name),
                 prop => menuEnabled(prop.Member),
                 prop => prop.ToString() == curPropertyValue,
                 prop =>
@@ -95,8 +95,8 @@ namespace UnityWeld_Editor
                     );
                 },
                 bindableProperties
-                    .OrderBy(property => property.ViewModelType.Name)
-                    .ThenBy(property => property.Member.Name)
+                    .OrderBy(property => property.ViewModelTypeName)
+                    .ThenBy(property => property.MemberName)
                     .ToArray()
             );
         }
@@ -135,11 +135,11 @@ namespace UnityWeld_Editor
         {
             var options = bindableProperties
                 .Select(prop => new OptionInfo(
-                    string.Concat(prop.ViewModelType, "/", prop.Member.Name, " : ", prop.Member.PropertyType.Name), 
+                    string.Concat(prop.ViewModelType, "/", prop.MemberName, " : ", prop.Member.PropertyType.Name), 
                     prop
                 ))
-                .OrderBy(option => option.Property.ViewModelType.Name)
-                .ThenBy(option => option.Property.Member.Name);
+                .OrderBy(option => option.Property.ViewModelTypeName)
+                .ThenBy(option => option.Property.MemberName);
 
             var noneOption = new OptionInfo(NoneOptionString, null);
 
@@ -174,22 +174,22 @@ namespace UnityWeld_Editor
         /// </summary>
         protected void ShowViewPropertyMenu(
             GUIContent label, 
-            PropertyInfo[] properties, 
+            BindableMember<PropertyInfo>[] properties, 
             Action<string> propertyValueSetter,
             string curPropertyValue,
             out Type selectedPropertyType
         )
         {
             var propertyNames = properties
-                .Select(MemberInfoToString)
+                .Select(m => m.ToString())
                 .ToArray();
             var selectedIndex = Array.IndexOf(propertyNames, curPropertyValue);
             var content = properties.Select(prop => new GUIContent(string.Concat(
-                    prop.ReflectedType.Name, 
+                    prop.ViewModelTypeName, 
                     "/",
-                    prop.Name, 
+                    prop.MemberName, 
                     " : ",
-                    prop.PropertyType.Name
+                    prop.Member.PropertyType.Name
                 )))
                 .ToArray();
 
@@ -201,11 +201,11 @@ namespace UnityWeld_Editor
                 UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    MemberInfoToString(newSelectedProperty),
+                    newSelectedProperty.ToString(),
                     "Set view property"
                 );
 
-                selectedPropertyType = newSelectedProperty.PropertyType;
+                selectedPropertyType = newSelectedProperty.Member.PropertyType;
             }
             else
             {
@@ -215,7 +215,7 @@ namespace UnityWeld_Editor
                     return;
                 }
 
-                selectedPropertyType = properties[selectedIndex].PropertyType;
+                selectedPropertyType = properties[selectedIndex].Member.PropertyType;
             }
         }
 
@@ -352,14 +352,6 @@ namespace UnityWeld_Editor
             var adapterAttribute = FindAdapterAttribute(adapterName);
 
             return adapterAttribute != null ? adapterAttribute.OutputType : inputType;
-        }
-
-        /// <summary>
-        /// Convert a MemberInfo to a uniquely identifiable string.
-        /// </summary>
-        protected static string MemberInfoToString(MemberInfo member)
-        {
-            return string.Concat(member.ReflectedType.ToString(), ".", member.Name);
         }
 
         /// <summary>

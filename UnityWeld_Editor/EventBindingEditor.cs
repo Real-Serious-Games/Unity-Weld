@@ -53,7 +53,7 @@ namespace UnityWeld_Editor
             InspectorUtils.DoPopup(
                 new GUIContent(targetScript.viewModelMethodName),
                 new GUIContent("View-model method", tooltip),
-                m => m.ViewModelType + "/" + m.Member.Name,
+                m => m.ViewModelType + "/" + m.MemberName,
                 m => true,
                 m => m.ToString() == targetScript.viewModelMethodName,
                 m => UpdateProperty(
@@ -63,8 +63,8 @@ namespace UnityWeld_Editor
                     "Set bound view-model method"
                 ),
                 bindableMethods
-                    .OrderBy(m => m.ViewModelType.Name)
-                    .ThenBy(m => m.Member.Name)
+                    .OrderBy(m => m.ViewModelTypeName)
+                    .ThenBy(m => m.MemberName)
                     .ToArray()
             );
         }
