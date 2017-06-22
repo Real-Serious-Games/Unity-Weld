@@ -79,6 +79,7 @@
     <Compile Include="Binding\OneWayPropertyBinding.cs" />
     <Compile Include="Binding\SubViewModelBinding.cs" />
     <Compile Include="Binding\TemplateBinding.cs" />
+    <Compile Include="Binding\ToggleActiveBinding.cs" />
     <Compile Include="Binding\TwoWayPropertyBinding.cs" />
     <Compile Include="Binding\AbstractMemberBinding.cs" />
     <Compile Include="Binding\Internal\UnityEventBinder.cs" />
