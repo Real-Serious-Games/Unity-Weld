@@ -154,6 +154,9 @@ namespace UnityWeld_Editor
                     case "uiPropertyName":
                         viewPropertyPrefabModified = property.prefabOverride;
                         break;
+
+                    default:
+                        break;
                 }
             }
             while (property.Next(false));

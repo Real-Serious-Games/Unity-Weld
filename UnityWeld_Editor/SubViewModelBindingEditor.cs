@@ -82,6 +82,9 @@ namespace UnityWeld_Editor
                     case "viewModelTypeName":
                         propertyPrefabModified = property.prefabOverride || propertyPrefabModified;
                         break;
+
+                    default:
+                        break;
                 }
             }
             while (property.Next(false));

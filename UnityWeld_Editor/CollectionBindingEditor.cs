@@ -71,6 +71,9 @@ namespace UnityWeld_Editor
                     case "templatesRoot":
                         templatesRootPrefabModified = property.prefabOverride;
                         break;
+
+                    default:
+                        break;
                 }
             }
             while (property.Next(false));

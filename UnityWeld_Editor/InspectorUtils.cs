@@ -77,6 +77,9 @@ namespace UnityWeld_Editor
                         currentEvent.Use();
                     }
                     break;
+
+                default:
+                    break;
             }
         }
 
