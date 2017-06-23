@@ -39,7 +39,7 @@ namespace UnityWeld_Editor
             property.Next(true);
             do
             {
-                if (property.name != "viewModelPropertyName")
+                if (property.name == "viewModelPropertyName")
                 {
                     return property.prefabOverride;
                 }
