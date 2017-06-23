@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityWeld.Binding;
+using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld_Editor
@@ -46,7 +47,7 @@ namespace UnityWeld_Editor
             }
             while (property.Next(false));
 
-            return false;
+            throw new MemberNotFoundException("Field \"viewModelPropertyName\" not found on ToggleActiveBindingEditor.");
         }
     }
 }
