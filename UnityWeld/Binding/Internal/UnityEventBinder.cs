@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine.Events;
+using UnityWeld.Binding.Exceptions;
 
 namespace UnityWeld.Binding.Internal
 {
@@ -33,7 +34,7 @@ namespace UnityWeld.Binding.Internal
             {
                 // There are only UnityEvents and UnityActions that support up to 5 arguments. 
                 // MakeGenericType will throw an ArgumentException if it is used to try and create a type with arguments that don't match any generic type.
-                throw new ApplicationException("Cannot bind event with more than 5 arguments", ex);
+                throw new InvalidEventException("Cannot bind event with more than 5 arguments", ex);
             }
             
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -114,7 +115,7 @@ namespace UnityWeld.Binding
 
             if (!possibleMatches.Any())
             {
-                throw new ApplicationException("Could not find any template matching type " + templateType);
+                throw new TemplateNotFoundException("Could not find any template matching type " + templateType);
             }
 
             var sorted = possibleMatches.OrderBy(m => m.Key);
@@ -122,7 +123,7 @@ namespace UnityWeld.Binding
 
             if (sorted.Skip(1).Any(m => m.Key == selectedType.Key))
             {
-                throw new ApplicationException("Multiple templates were found that match type " + templateType
+                throw new AmbiguousTypeException("Multiple templates were found that match type " + templateType
                     + ". This can be caused by providing multiple templates that match types " + templateType
                     + " inherits from at the same level. Remove one or provide a template that more specifically matches the type.");
             }

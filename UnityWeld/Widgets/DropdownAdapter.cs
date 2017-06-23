@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityWeld.Binding.Exceptions;
 
 namespace UnityWeld.Widgets
 {
@@ -22,7 +23,7 @@ namespace UnityWeld.Widgets
                     dropdown = GetComponent<Dropdown>();
                     if (dropdown == null)
                     {
-                        throw new ApplicationException("DropdownAdapter must be placed on an object with a Dropdown");
+                        throw new ComponentNotFoundException("DropdownAdapter must be placed on an object with a Dropdown");
                     }
 
                     // Dropdown should start with empty list of options

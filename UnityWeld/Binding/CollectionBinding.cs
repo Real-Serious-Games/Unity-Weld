@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -109,19 +110,19 @@ namespace UnityWeld.Binding
             var viewModelCollectionProperty = viewModelType.GetProperty(propertyName);
             if (viewModelCollectionProperty == null)
             {
-                throw new ApplicationException("Expected property " + viewModelPropertyName + ", but it wasn't found on type " + viewModelType + ".");
+                throw new MemberNotFoundException("Expected property " + viewModelPropertyName + ", but it wasn't found on type " + viewModelType + ".");
             }
 
             // Get value from view model.
             var viewModelValue = viewModelCollectionProperty.GetValue(viewModel, null);
             if (viewModelValue == null)
             {
-                throw new ApplicationException("Cannot bind to null property in view: " + viewModelPropertyName);
+                throw new PropertyNullException("Cannot bind to null property in view: " + viewModelPropertyName);
             }
 
             if (!(viewModelValue is IEnumerable))
             {
-                throw new ApplicationException("Property " + viewModelPropertyName + " is not a collection and cannot be used to bind collections.");
+                throw new InvalidTypeException("Property " + viewModelPropertyName + " is not a collection and cannot be used to bind collections.");
             }
             viewModelCollectionValue = (IEnumerable)viewModelValue;
 

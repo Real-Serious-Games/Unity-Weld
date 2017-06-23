@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityWeld.Binding.Exceptions;
 
 namespace UnityWeld.Binding.Internal
 {
@@ -116,7 +117,7 @@ namespace UnityWeld.Binding.Internal
 
             if (matchingTypes.Skip(1).Any())
             {
-                throw new ApplicationException("Multiple types match: " + typeName);
+                throw new AmbiguousTypeException("Multiple types match: " + typeName);
             }
 
             return matchingTypes.First();
@@ -144,7 +145,7 @@ namespace UnityWeld.Binding.Internal
 
             if (type == null)
             {
-                throw new ApplicationException("Could not find the specified view model \"" + viewModelTypeName + "\"");
+                throw new ViewModelNotFoundException("Could not find the specified view model \"" + viewModelTypeName + "\"");
             }
 
             return type;

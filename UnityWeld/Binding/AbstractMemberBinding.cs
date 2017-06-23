@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -56,7 +57,7 @@ namespace UnityWeld.Binding
                 trans = trans.parent;
             }
 
-            throw new ApplicationException(string.Format("Tried to get view model {0} but it could not be found on "
+            throw new ViewModelNotFoundException(string.Format("Tried to get view model {0} but it could not be found on "
                 + "object {1}. Check that a ViewModelBinding for that view model exists further up in "
                 + "the scene hierarchy. ", viewModelName, gameObject.name)
             );
@@ -75,12 +76,12 @@ namespace UnityWeld.Binding
             var adapterType = TypeResolver.FindAdapterType(adapterTypeName);
             if (adapterType == null)
             {
-                throw new ApplicationException("Could not find adapter type '" + adapterTypeName + "'.");
+                throw new NoSuchAdapterException(adapterTypeName);
             }
 
             if (!typeof(IAdapter).IsAssignableFrom(adapterType))
             {
-                throw new ApplicationException("Type '" + adapterTypeName + "' does not implement IAdapter and cannot be used as an adapter.");
+                throw new NoSuchAdapterException(string.Format("Type '{0}' does not implement IAdapter and cannot be used as an adapter.", adapterTypeName));
             }
 
             return (IAdapter)Activator.CreateInstance(adapterType);
@@ -108,14 +109,20 @@ namespace UnityWeld.Binding
             var lastPeriodIndex = endPointReference.LastIndexOf('.');
             if (lastPeriodIndex == -1)
             {
-                throw new ApplicationException("No period was found, expected end-point reference in the following format: <type-name>.<member-name>.");
+                throw new InvalidEndPointException(
+                    "No period was found, expected end-point reference in the following format: <type-name>.<member-name>. " +
+                    "Provided end-point reference: " + endPointReference
+                );
             }
 
             typeName = endPointReference.Substring(0, lastPeriodIndex);
             memberName = endPointReference.Substring(lastPeriodIndex + 1);
             if (typeName.Length == 0 || memberName.Length == 0)
             {
-                throw new ApplicationException("Bad format for end-point reference, expected the following format: <type-name>.<member-name>.");
+                throw new InvalidEndPointException(
+                    "Bad format for end-point reference, expected the following format: <type-name>.<member-name>. " +
+                    "Provided end-point reference: " + endPointReference
+                );
             }
         }
 
@@ -130,7 +137,7 @@ namespace UnityWeld.Binding
             viewModel = FindViewModel(viewModelName);
             if (viewModel == null)
             {
-                throw new ApplicationException("Failed to find view-model in hierarchy: " + viewModelName);
+                throw new ViewModelNotFoundException("Failed to find view-model in hierarchy: " + viewModelName);
             }
         }
 
@@ -145,7 +152,7 @@ namespace UnityWeld.Binding
             view = GetComponent(boundComponentType);
             if (view == null)
             {
-                throw new ApplicationException("Failed to find component on current game object: " + boundComponentType);
+                throw new ComponentNotFoundException("Failed to find component on current game object: " + boundComponentType);
             }
         }
 

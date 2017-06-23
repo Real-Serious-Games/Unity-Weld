@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityWeld.Binding.Exceptions;
 
 namespace UnityWeld.Binding.Internal
 {
@@ -121,7 +122,7 @@ namespace UnityWeld.Binding.Internal
 
             if (boundEvent == null)
             {
-                throw new ApplicationException(string.Format("Could not bind to event \"{0}\" on component \"{1}\".", boundEventName, componentType));
+                throw new InvalidEventException(string.Format("Could not bind to event \"{0}\" on component \"{1}\".", boundEventName, componentType));
             }
 
             return boundEvent;

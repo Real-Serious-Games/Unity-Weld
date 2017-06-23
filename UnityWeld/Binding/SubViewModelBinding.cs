@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -63,7 +64,7 @@ namespace UnityWeld.Binding
             var propertyInfo = parentViewModel.GetType().GetProperty(propertyName);
             if (propertyInfo == null)
             {
-                throw new ApplicationException(string.Format("Could not find property \"{0}\" on view model \"{1}\".", propertyName, parentViewModel.GetType()));
+                throw new MemberNotFoundException(string.Format("Could not find property \"{0}\" on view model \"{1}\".", propertyName, parentViewModel.GetType()));
             }
 
             viewModel = propertyInfo.GetValue(parentViewModel, null);

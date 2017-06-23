@@ -63,6 +63,17 @@
     <Compile Include="Binding\BoundObservableList.cs" />
     <Compile Include="Binding\CollectionBinding.cs" />
     <Compile Include="Binding\DropdownBinding.cs" />
+    <Compile Include="Binding\Exceptions\AmbiguousTypeException.cs" />
+    <Compile Include="Binding\Exceptions\ComponentNotFoundException.cs" />
+    <Compile Include="Binding\Exceptions\InvalidAdapterException.cs" />
+    <Compile Include="Binding\Exceptions\InvalidEndPointException.cs" />
+    <Compile Include="Binding\Exceptions\InvalidEventException.cs" />
+    <Compile Include="Binding\Exceptions\InvalidTypeException.cs" />
+    <Compile Include="Binding\Exceptions\MemberNotFoundException.cs" />
+    <Compile Include="Binding\Exceptions\NoSuchAdapterException.cs" />
+    <Compile Include="Binding\Exceptions\PropertyNullException.cs" />
+    <Compile Include="Binding\Exceptions\TemplateNotFoundException.cs" />
+    <Compile Include="Binding\Exceptions\ViewModelNotFoundException.cs" />
     <Compile Include="Binding\IAdapter.cs" />
     <Compile Include="Binding\IMemberBinding.cs" />
     <Compile Include="Binding\INotifyCollectionChanged.cs" />
