@@ -260,7 +260,7 @@ namespace UnityWeld_Editor
         /// Returns whether or not we should show an adapter options selector for the specified 
         /// adapter type and finds the type for the specified type name.
         /// </summary>
-        protected bool ShouldShowAdapterOptions(string adapterTypeName, out Type adapterType)
+        protected static bool ShouldShowAdapterOptions(string adapterTypeName, out Type adapterType)
         {
             // Don't show selector until an adapter has been selected.
             if (string.IsNullOrEmpty(adapterTypeName))
@@ -320,7 +320,7 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Find the adapter attribute for a named adapter type.
         /// </summary>
-        protected AdapterAttribute FindAdapterAttribute(string adapterName)
+        protected static AdapterAttribute FindAdapterAttribute(string adapterName)
         {
             if (!string.IsNullOrEmpty(adapterName))
             {
@@ -337,7 +337,7 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Pass a type through an adapter and get the result.
         /// </summary>
-        protected Type AdaptTypeBackward(Type inputType, string adapterName)
+        protected static Type AdaptTypeBackward(Type inputType, string adapterName)
         {
             var adapterAttribute = FindAdapterAttribute(adapterName);
 
@@ -347,7 +347,7 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Pass a type through an adapter and get the result.
         /// </summary>
-        protected Type AdaptTypeForward(Type inputType, string adapterName)
+        protected static Type AdaptTypeForward(Type inputType, string adapterName)
         {
             var adapterAttribute = FindAdapterAttribute(adapterName);
 
