@@ -56,8 +56,8 @@ namespace UnityWeld.Binding
                 trans = trans.parent;
             }
 
-            throw new ApplicationException(string.Format("Tried to get view {0} but it could not be found on "
-                + "object {1}. Check that a ViewModelBinding for that view exists further up in "
+            throw new ApplicationException(string.Format("Tried to get view model {0} but it could not be found on "
+                + "object {1}. Check that a ViewModelBinding for that view model exists further up in "
                 + "the scene hierarchy. ", viewModelName, gameObject.name)
             );
         }
