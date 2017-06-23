@@ -23,6 +23,8 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         private readonly Action action;
 
+        private bool disposed;
+
         public PropertyWatcher(object propertyOwner, string propertyName, Action action)
         {
             this.propertyOwner = propertyOwner;
@@ -38,7 +40,18 @@ namespace UnityWeld.Binding.Internal
 
         public void Dispose()
         {
-            if (propertyOwner != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            if (disposing && propertyOwner != null)
             {
                 var notifyPropertyChanged = propertyOwner as INotifyPropertyChanged;
                 if (notifyPropertyChanged != null)
@@ -48,6 +61,8 @@ namespace UnityWeld.Binding.Internal
 
                 propertyOwner = null;
             }
+
+            disposed = true;
         }
 
         private void propertyOwner_PropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -41,6 +41,8 @@ namespace UnityWeld.Binding
         /// </summary>
         private readonly List<DestT> cache;
 
+        private bool disposed;
+
         public BoundObservableList(ObservableList<SourceT> source, Func<SourceT, DestT> itemMap) :
             base(source.Select(itemMap))
         {
@@ -205,8 +207,24 @@ namespace UnityWeld.Binding
 
         public void Dispose()
         {
-            source.CollectionChanged -= source_CollectionChanged;
-            CollectionChanged -= BoundObservableList_CollectionChanged;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                source.CollectionChanged -= source_CollectionChanged;
+                CollectionChanged -= BoundObservableList_CollectionChanged;
+            }
+
+            disposed = true;
         }
     }
 }

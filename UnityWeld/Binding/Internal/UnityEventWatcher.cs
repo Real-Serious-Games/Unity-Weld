@@ -46,6 +46,8 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         private UnityEventBinderBase unityEventBinder;
 
+        private bool disposed;
+
         public UnityEventWatcher(Component component, string eventName, Action action)
         {
             unityEventBinder = UnityEventBinderFactory.Create(GetBoundEvent(eventName, component).UnityEvent, action);
@@ -53,12 +55,26 @@ namespace UnityWeld.Binding.Internal
 
         public void Dispose()
         {
-            if (unityEventBinder != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            if (disposing && unityEventBinder != null)
             {
                 unityEventBinder.Dispose();
                 unityEventBinder = null;
             }
+
+            disposed = true;
         }
+
 
         /// <summary>
         /// Get all bindable Unity events from a particular component.
@@ -83,7 +99,7 @@ namespace UnityWeld.Binding.Internal
                 .GetFields(BindingFlags.Instance | BindingFlags.Public)
                 .Where(fieldInfo => fieldInfo.FieldType.IsSubclassOf(typeof(UnityEventBase)))
                 .Where(fieldInfo => !fieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any())
-                .Select(fieldInfo => new BindableEvent()
+                .Select(fieldInfo => new BindableEvent
                 {
                     UnityEvent = (UnityEventBase)fieldInfo.GetValue(component),
                     Name = fieldInfo.Name,
