@@ -81,7 +81,7 @@ namespace UnityWeld.Binding
 
             if (!typeof(IAdapter).IsAssignableFrom(adapterType))
             {
-                throw new NoSuchAdapterException(string.Format("Type '{0}' does not implement IAdapter and cannot be used as an adapter.", adapterTypeName));
+                throw new InvalidAdapterException(string.Format("Type '{0}' does not implement IAdapter and cannot be used as an adapter.", adapterTypeName));
             }
 
             return (IAdapter)Activator.CreateInstance(adapterType);
