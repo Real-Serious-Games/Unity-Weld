@@ -13,11 +13,13 @@ namespace UnityWeld.Binding.Adapters
         /// <summary>
         /// The value used when the bool is false.
         /// </summary>
+        [Header("False colors")]
         public ColorBlock FalseColors;
 
         /// <summary>
         /// The value used when the bool is true.
         /// </summary>
+        [Header("True colors")]
         public ColorBlock TrueColors;
     }
 }
