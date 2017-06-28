@@ -6,6 +6,7 @@ namespace UnityWeld.Binding.Adapters
     /// Options for converting from a bool to a string.
     /// </summary>
     [CreateAssetMenu(menuName = "Unity Weld/Adapter options/Bool to string adapter")]
+    [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class BoolToStringAdapterOptions : AdapterOptions
     {
         /// <summary>
