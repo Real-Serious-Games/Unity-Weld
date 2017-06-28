@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace UnityWeld.Binding.Internal
 {
@@ -25,7 +26,10 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         public static IEnumerable<BindableMember<PropertyInfo>> GetBindableProperties(GameObject gameObject) //todo: Maybe move this to the TypeResolver.
         {
+            Assert.IsNotNull(gameObject);
+
             return gameObject.GetComponents<Component>()
+                .Where(component => component != null)
                 .SelectMany(component =>
                 {
                     var type = component.GetType();
