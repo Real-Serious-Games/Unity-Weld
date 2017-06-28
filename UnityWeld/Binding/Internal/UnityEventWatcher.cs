@@ -134,6 +134,7 @@ namespace UnityWeld.Binding.Internal
         public static BindableEvent[] GetBindableEvents(GameObject gameObject) //todo: Consider moving this to TypeResolver.
         {
             return gameObject.GetComponents(typeof(Component))
+                .Where(component => component != null)
                 .SelectMany(GetBindableEvents)
                 .ToArray();
         }
