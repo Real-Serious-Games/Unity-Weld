@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityWeld.Binding.Exceptions;
 
@@ -51,6 +52,10 @@ namespace UnityWeld.Binding.Internal
 
         public UnityEventWatcher(Component component, string eventName, Action action)
         {
+            Assert.IsNotNull(component);
+            Assert.IsFalse(string.IsNullOrEmpty(eventName));
+            Assert.IsNotNull(action);
+
             unityEventBinder = UnityEventBinderFactory.Create(GetBoundEvent(eventName, component).UnityEvent, action);
         }
 
@@ -82,6 +87,8 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         private static IEnumerable<BindableEvent> GetBindableEvents(Component component)
         {
+            Assert.IsNotNull(component, "Cannot get bindinable events of a null component.");
+
             var type = component.GetType();
 
             var bindableEventsFromProperties = type
@@ -116,6 +123,9 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         private static BindableEvent GetBoundEvent(string boundEventName, Component component)
         {
+            Assert.IsNotNull(component);
+            Assert.IsFalse(string.IsNullOrEmpty(boundEventName));
+
             var componentType = component.GetType();
             var boundEvent = GetBindableEvents(component)
                 .FirstOrDefault();
@@ -133,6 +143,8 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         public static BindableEvent[] GetBindableEvents(GameObject gameObject) //todo: Consider moving this to TypeResolver.
         {
+            Assert.IsNotNull(gameObject);
+
             return gameObject.GetComponents(typeof(Component))
                 .Where(component => component != null)
                 .SelectMany(GetBindableEvents)
