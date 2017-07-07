@@ -52,6 +52,7 @@
     <Compile Include="AOTOptimisationHelper.cs" />
     <Compile Include="Binding\AdapterAttribute.cs" />
     <Compile Include="Binding\AdapterOptions.cs" />
+    <Compile Include="Binding\Adapters\BoolInversionAdapter.cs" />
     <Compile Include="Binding\Adapters\BoolToColorAdapter.cs" />
     <Compile Include="Binding\Adapters\BoolToColorAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\BoolToColorBlockAdapter.cs" />
