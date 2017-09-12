@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -37,8 +37,11 @@ namespace UnityWeld.Binding.Internal
                         .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                         .Select(p => new BindableMember<PropertyInfo>(p, type));
                 })
-                .Where(prop => !hiddenTypes.Contains(prop.ViewModelType))
-                .Where(prop => !prop.Member.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any());
+                .Where(prop => prop.Member.GetSetMethod(false) != null 
+                    && prop.Member.GetGetMethod(false) != null
+                    && !hiddenTypes.Contains(prop.ViewModelType)
+                    && !prop.Member.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any()
+                );
         }
     }
 }
