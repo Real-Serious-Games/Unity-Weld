@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+using System;
+using UnityEditor;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityWeld.Binding;
 using UnityWeld.Binding.Exceptions;
@@ -11,14 +13,61 @@ namespace UnityWeld_Editor
     {
         private ToggleActiveBinding targetScript;
 
+        private AnimBool viewAdapterOptionsFade;
+
         private void OnEnable()
         {
             targetScript = (ToggleActiveBinding)target;
+
+            Type adapterType;
+
+            viewAdapterOptionsFade = new AnimBool(
+                ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType)
+            );
+
+            viewAdapterOptionsFade.valueChanged.AddListener(Repaint);
+        }
+
+        private void OnDisable()
+        {
+            viewAdapterOptionsFade.valueChanged.RemoveListener(Repaint);
         }
 
         public override void OnInspectorGUI()
         {
             var defaultLabelStyle = EditorStyles.label.fontStyle;
+
+            Type viewPropertyType = typeof(bool);
+
+            var viewAdapterTypeNames = GetAdapterTypeNames(
+                type => viewPropertyType == null ||
+                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
+            );
+
+            EditorStyles.label.fontStyle = DoesFieldOverridePrefab() ? FontStyle.Bold : defaultLabelStyle;
+
+            ShowAdapterMenu(
+                new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
+                viewAdapterTypeNames,
+                targetScript.viewAdapterTypeName,
+                newValue =>
+                {
+                    // Get rid of old adapter options if we changed the type of the adapter.
+                    if (newValue != targetScript.viewAdapterTypeName)
+                    {
+                        Undo.RecordObject(targetScript, "Set view adapter options");
+                        targetScript.viewAdapterOptions = null;
+                    }
+
+                    UpdateProperty(
+                        updatedValue => targetScript.viewAdapterTypeName = updatedValue,
+                        targetScript.viewAdapterTypeName,
+                        newValue,
+                        "Set view adapter"
+                    );
+                }
+            );
+
             EditorStyles.label.fontStyle = DoesFieldOverridePrefab() ? FontStyle.Bold : defaultLabelStyle;
 
             ShowViewModelPropertyMenu(

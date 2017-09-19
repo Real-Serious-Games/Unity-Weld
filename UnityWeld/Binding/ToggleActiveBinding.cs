@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -14,6 +14,16 @@ namespace UnityWeld.Binding
     public class ToggleActiveBinding : AbstractMemberBinding
     {
         /// <summary>
+        /// Type of the adapter we're using to adapt between the view model property and UI property.
+        /// </summary>
+        public string viewAdapterTypeName;
+
+        /// <summary>
+        /// Options for adapting from the view model to the UI property.
+        /// </summary>
+        public AdapterOptions viewAdapterOptions;
+
+        /// <summary>
         /// Name of the property in the view model to bind.
         /// </summary>
         public string viewModelPropertyName;
@@ -23,12 +33,20 @@ namespace UnityWeld.Binding
         /// </summary>
         private PropertyWatcher viewModelWatcher;
 
+        /// <summary>
+        /// Adapter for converting values that are set on the property.
+        /// </summary>
+        private IAdapter adapter;
+
+
         public override void Connect()
         {
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
 
+            adapter = CreateAdapter(viewAdapterTypeName);
+
             Assert.IsTrue(
-                viewModelEndPoint.GetValue() is bool, 
+                viewModelEndPoint.GetValue() is bool,
                 "ToggleActiveBinding can only be bound to a boolean property."
             );
 
@@ -48,15 +66,12 @@ namespace UnityWeld.Binding
 
         private void SyncFromSource(PropertyEndPoint viewModelEndPoint)
         {
-            SetAllChildrenActive((bool)viewModelEndPoint.GetValue());
-        }
-
-        private void SetAllChildrenActive(bool active)
-        {
-            foreach (Transform child in transform)
+            bool input = (bool)viewModelEndPoint.GetValue();
+            if (adapter != null)
             {
-                child.gameObject.SetActive(active);
+                input = (bool)adapter.Convert(input, viewAdapterOptions);
             }
+            gameObject.SetActive(input);
         }
     }
 }
