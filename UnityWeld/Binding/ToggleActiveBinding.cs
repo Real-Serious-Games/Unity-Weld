@@ -34,25 +34,52 @@ namespace UnityWeld.Binding
         private PropertyWatcher viewModelWatcher;
 
         /// <summary>
-        /// Adapter for converting values that are set on the property.
+        /// Preoprty for the propertySync to set in order to activate and deactivate all children
         /// </summary>
-        private IAdapter adapter;
+        public bool ChildrenActive
+        {
+            set
+            {
+                SetAllChildrenActive(value);
+            }
+        }
 
 
         public override void Connect()
         {
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
 
-            adapter = CreateAdapter(viewAdapterTypeName);
-
             Assert.IsTrue(
                 viewModelEndPoint.GetValue() is bool,
                 "ToggleActiveBinding can only be bound to a boolean property."
             );
 
-            viewModelWatcher = viewModelEndPoint.Watch(() => SyncFromSource(viewModelEndPoint));
+            var propertySync = new PropertySync(
+                // Source
+                viewModelEndPoint,
 
-            SyncFromSource(viewModelEndPoint);
+                // Dest
+                new PropertyEndPoint(
+                    this,
+                    "ChildrenActive",
+                    CreateAdapter(viewAdapterTypeName),
+                    viewAdapterOptions,
+                    "view",
+                    this
+                ),
+
+                // Errors, exceptions and validation.
+                null, // Validation not needed
+
+                this
+            );
+
+            viewModelWatcher = viewModelEndPoint.Watch(
+                () => propertySync.SyncFromSource()
+            );
+
+            // Copy the initial value over from the view-model.
+            propertySync.SyncFromSource();
         }
 
         public override void Disconnect()
@@ -64,14 +91,12 @@ namespace UnityWeld.Binding
             }
         }
 
-        private void SyncFromSource(PropertyEndPoint viewModelEndPoint)
+        private void SetAllChildrenActive(bool active)
         {
-            bool input = (bool)viewModelEndPoint.GetValue();
-            if (adapter != null)
+            foreach (Transform child in transform)
             {
-                input = (bool)adapter.Convert(input, viewAdapterOptions);
+                child.gameObject.SetActive(active);
             }
-            gameObject.SetActive(input);
         }
     }
 }
