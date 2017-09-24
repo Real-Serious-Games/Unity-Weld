@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -14,6 +14,16 @@ namespace UnityWeld.Binding
     public class ToggleActiveBinding : AbstractMemberBinding
     {
         /// <summary>
+        /// Type of the adapter we're using to adapt between the view model property and UI property.
+        /// </summary>
+        public string viewAdapterTypeName;
+
+        /// <summary>
+        /// Options for adapting from the view model to the UI property.
+        /// </summary>
+        public AdapterOptions viewAdapterOptions;
+
+        /// <summary>
         /// Name of the property in the view model to bind.
         /// </summary>
         public string viewModelPropertyName;
@@ -23,18 +33,53 @@ namespace UnityWeld.Binding
         /// </summary>
         private PropertyWatcher viewModelWatcher;
 
+        /// <summary>
+        /// Preoprty for the propertySync to set in order to activate and deactivate all children
+        /// </summary>
+        public bool ChildrenActive
+        {
+            set
+            {
+                SetAllChildrenActive(value);
+            }
+        }
+
+
         public override void Connect()
         {
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
 
             Assert.IsTrue(
-                viewModelEndPoint.GetValue() is bool, 
+                viewModelEndPoint.GetValue() is bool,
                 "ToggleActiveBinding can only be bound to a boolean property."
             );
 
-            viewModelWatcher = viewModelEndPoint.Watch(() => SyncFromSource(viewModelEndPoint));
+            var propertySync = new PropertySync(
+                // Source
+                viewModelEndPoint,
 
-            SyncFromSource(viewModelEndPoint);
+                // Dest
+                new PropertyEndPoint(
+                    this,
+                    "ChildrenActive",
+                    CreateAdapter(viewAdapterTypeName),
+                    viewAdapterOptions,
+                    "view",
+                    this
+                ),
+
+                // Errors, exceptions and validation.
+                null, // Validation not needed
+
+                this
+            );
+
+            viewModelWatcher = viewModelEndPoint.Watch(
+                () => propertySync.SyncFromSource()
+            );
+
+            // Copy the initial value over from the view-model.
+            propertySync.SyncFromSource();
         }
 
         public override void Disconnect()
@@ -44,11 +89,6 @@ namespace UnityWeld.Binding
                 viewModelWatcher.Dispose();
                 viewModelWatcher = null;
             }
-        }
-
-        private void SyncFromSource(PropertyEndPoint viewModelEndPoint)
-        {
-            SetAllChildrenActive((bool)viewModelEndPoint.GetValue());
         }
 
         private void SetAllChildrenActive(bool active)
