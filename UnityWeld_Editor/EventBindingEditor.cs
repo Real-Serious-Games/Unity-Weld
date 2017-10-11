@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -32,8 +32,8 @@ namespace UnityWeld_Editor
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
                     .ToArray(),
-                updatedValue => targetScript.uiEventName = updatedValue,
-                targetScript.uiEventName
+                updatedValue => targetScript.UiEventName = updatedValue,
+                targetScript.UiEventName
             );
 
             EditorStyles.label.fontStyle = viewModelMethodPrefabModified ? FontStyle.Bold : defaultLabelStyle;
@@ -51,14 +51,14 @@ namespace UnityWeld_Editor
             var tooltip = "Method on the view-model to bind to.";
 
             InspectorUtils.DoPopup(
-                new GUIContent(targetScript.viewModelMethodName),
+                new GUIContent(targetScript.ViewModelMethodName),
                 new GUIContent("View-model method", tooltip),
                 m => m.ViewModelType + "/" + m.MemberName,
                 m => true,
-                m => m.ToString() == targetScript.viewModelMethodName,
+                m => m.ToString() == targetScript.ViewModelMethodName,
                 m => UpdateProperty(
-                    updatedValue => targetScript.viewModelMethodName = updatedValue,
-                    targetScript.viewModelMethodName,
+                    updatedValue => targetScript.ViewModelMethodName = updatedValue,
+                    targetScript.ViewModelMethodName,
                     m.ToString(),
                     "Set bound view-model method"
                 ),

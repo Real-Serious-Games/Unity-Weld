@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityWeld.Binding.Internal;
 
@@ -13,12 +13,26 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Name of the method in the view model to bind to.
         /// </summary>
-        public string viewModelMethodName;
+        public string ViewModelMethodName
+        {
+            get { return viewModelMethodName; }
+            set { viewModelMethodName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelMethodName;
 
         /// <summary>
         /// Name of the event to bind to.
         /// </summary>
-        public string uiEventName;
+        public string UiEventName
+        {
+            get { return uiEventName; }
+            set { uiEventName = value; }
+        }
+
+        [SerializeField]
+        private string uiEventName;
 
         /// <summary>
         /// Watches a Unity event for updates.
