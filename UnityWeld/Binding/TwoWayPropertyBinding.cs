@@ -27,14 +27,14 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Event in the UI to bind to.
         /// </summary>
-        public string UiEventName
+        public string ViewEventName
         {
-            get { return uiEventName; }
-            set { uiEventName = value; }
+            get { return viewEventName; }
+            set { viewEventName = value; }
         }
 
-        [SerializeField]
-        private string uiEventName;
+        [SerializeField, FormerlySerializedAs("uiEventName")]
+        private string viewEventName;
 
         /// <summary>
         /// UI Property to update when value changes.
@@ -181,7 +181,7 @@ namespace UnityWeld.Binding
 
             string eventName;
             string eventComponentType;
-            ParseEndPointReference(uiEventName, out eventName, out eventComponentType);
+            ParseEndPointReference(viewEventName, out eventName, out eventComponentType);
 
             var eventView = GetComponent(eventComponentType);
 

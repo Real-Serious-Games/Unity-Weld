@@ -71,8 +71,8 @@ namespace UnityWeld_Editor
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
                     .ToArray(),
-                updatedValue => targetScript.UiEventName = updatedValue,
-                targetScript.UiEventName
+                updatedValue => targetScript.ViewEventName = updatedValue,
+                targetScript.ViewEventName
             );
 
             EditorStyles.label.fontStyle = viewPropertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
@@ -91,7 +91,7 @@ namespace UnityWeld_Editor
 
             // Don't let the user set other options until they've set the event and view property.
             var guiPreviouslyEnabled = GUI.enabled;
-            if (string.IsNullOrEmpty(targetScript.UiEventName) || string.IsNullOrEmpty(targetScript.ViewPropertName))
+            if (string.IsNullOrEmpty(targetScript.ViewEventName) || string.IsNullOrEmpty(targetScript.ViewPropertName))
             {
                 GUI.enabled = false;
             }
