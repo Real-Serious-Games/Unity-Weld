@@ -25,7 +25,7 @@ namespace UnityWeld.Binding
         private string viewModelPropertyName;
 
         /// <summary>
-        /// Event in the UI to bind to.
+        /// Event in the view to bind to.
         /// </summary>
         public string ViewEventName
         {
@@ -37,7 +37,7 @@ namespace UnityWeld.Binding
         private string viewEventName;
 
         /// <summary>
-        /// UI Property to update when value changes.
+        /// Property on the view to update when value changes.
         /// </summary>
         public string ViewPropertName
         {
@@ -50,7 +50,7 @@ namespace UnityWeld.Binding
 
         /// <summary>
         /// Name of the type of the adapter we're using to convert values from the 
-        /// view model to the UI. Can be empty for no adapter.
+        /// view model to the view. Can be empty for no adapter.
         /// </summary>
         public string ViewAdapterTypeName
         {
@@ -62,7 +62,7 @@ namespace UnityWeld.Binding
         private string viewAdapterTypeName;
 
         /// <summary>
-        /// Options for the adapter from the view model to the UI.
+        /// Options for the adapter from the view model to the view.
         /// </summary>
         public AdapterOptions ViewAdapterOptions
         {
@@ -75,7 +75,7 @@ namespace UnityWeld.Binding
 
         /// <summary>
         /// Name of the type of the adapter we're using to conver values from the
-        /// UI back to the view model. Can be empty for no adapter.
+        /// view back to the view model. Can be empty for no adapter.
         /// </summary>
         public string ViewModelAdapterTypeName
         {
@@ -87,7 +87,7 @@ namespace UnityWeld.Binding
         private string viewModelAdapterTypeName;
 
         /// <summary>
-        /// Options for the adapter from the UI to the view model.
+        /// Options for the adapter from the view to the view model.
         /// </summary>
         public AdapterOptions ViewModelAdapterOptions
         {
