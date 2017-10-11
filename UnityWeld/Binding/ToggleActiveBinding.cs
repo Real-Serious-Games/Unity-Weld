@@ -16,17 +16,38 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Type of the adapter we're using to adapt between the view model property and UI property.
         /// </summary>
-        public string viewAdapterTypeName;
+        public string ViewAdapterTypeName
+        {
+            get { return viewAdapterTypeName; }
+            set { viewAdapterTypeName = value; }
+        }
+
+        [SerializeField]
+        private string viewAdapterTypeName;
 
         /// <summary>
         /// Options for adapting from the view model to the UI property.
         /// </summary>
-        public AdapterOptions viewAdapterOptions;
+        public AdapterOptions ViewAdapterOptions
+        {
+            get { return viewAdapterOptions; }
+            set { viewAdapterOptions = value; }
+        }
+
+        [SerializeField]
+        private AdapterOptions viewAdapterOptions;
 
         /// <summary>
         /// Name of the property in the view model to bind.
         /// </summary>
-        public string viewModelPropertyName;
+        public string ViewModelPropertyName
+        {
+            get { return viewModelPropertyName; }
+            set { viewModelPropertyName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelPropertyName;
 
         /// <summary>
         /// Watcher the view-model for changes that must be propagated to the view.

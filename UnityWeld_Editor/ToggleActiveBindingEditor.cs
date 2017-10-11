@@ -22,7 +22,7 @@ namespace UnityWeld_Editor
             Type adapterType;
 
             viewAdapterOptionsFade = new AnimBool(
-                ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType)
+                ShouldShowAdapterOptions(targetScript.ViewAdapterTypeName, out adapterType)
             );
 
             viewAdapterOptionsFade.valueChanged.AddListener(Repaint);
@@ -49,19 +49,19 @@ namespace UnityWeld_Editor
             ShowAdapterMenu(
                 new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
                 viewAdapterTypeNames,
-                targetScript.viewAdapterTypeName,
+                targetScript.ViewAdapterTypeName,
                 newValue =>
                 {
                     // Get rid of old adapter options if we changed the type of the adapter.
-                    if (newValue != targetScript.viewAdapterTypeName)
+                    if (newValue != targetScript.ViewAdapterTypeName)
                     {
                         Undo.RecordObject(targetScript, "Set view adapter options");
-                        targetScript.viewAdapterOptions = null;
+                        targetScript.ViewAdapterOptions = null;
                     }
 
                     UpdateProperty(
-                        updatedValue => targetScript.viewAdapterTypeName = updatedValue,
-                        targetScript.viewAdapterTypeName,
+                        updatedValue => targetScript.ViewAdapterTypeName = updatedValue,
+                        targetScript.ViewAdapterTypeName,
                         newValue,
                         "Set view adapter"
                     );
@@ -73,8 +73,8 @@ namespace UnityWeld_Editor
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
                 TypeResolver.FindBindableProperties(targetScript),
-                updatedValue => targetScript.viewModelPropertyName = updatedValue,
-                targetScript.viewModelPropertyName,
+                updatedValue => targetScript.ViewModelPropertyName = updatedValue,
+                targetScript.ViewModelPropertyName,
                 property => property.PropertyType == typeof(bool)
             );
 
