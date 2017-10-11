@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
@@ -29,7 +29,7 @@ namespace UnityWeld_Editor
             Type adapterType;
 
             viewAdapterOptionsFade = new AnimBool(
-                ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType)
+                ShouldShowAdapterOptions(targetScript.ViewAdapterTypeName, out adapterType)
             );
 
             viewAdapterOptionsFade.valueChanged.AddListener(Repaint);
@@ -54,14 +54,14 @@ namespace UnityWeld_Editor
                     .OrderBy(prop => prop.ViewModelTypeName)
                     .ThenBy(prop => prop.MemberName)
                     .ToArray(),
-                updatedValue => targetScript.uiPropertyName = updatedValue,
-                targetScript.uiPropertyName,
+                updatedValue => targetScript.UiPropertyName = updatedValue,
+                targetScript.UiPropertyName,
                 out viewPropertyType
             );
 
             // Don't let the user set anything else until they've chosen a view property.
             var guiPreviouslyEnabled = GUI.enabled;
-            if (string.IsNullOrEmpty(targetScript.uiPropertyName))
+            if (string.IsNullOrEmpty(targetScript.UiPropertyName))
             {
                 GUI.enabled = false;
             }
@@ -76,19 +76,19 @@ namespace UnityWeld_Editor
             ShowAdapterMenu(
                 new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
                 viewAdapterTypeNames,
-                targetScript.viewAdapterTypeName,
+                targetScript.ViewAdapterTypeName,
                 newValue =>
                 {
                     // Get rid of old adapter options if we changed the type of the adapter.
-                    if (newValue != targetScript.viewAdapterTypeName)
+                    if (newValue != targetScript.ViewAdapterTypeName)
                     {
                         Undo.RecordObject(targetScript, "Set view adapter options");
-                        targetScript.viewAdapterOptions = null;
+                        targetScript.ViewAdapterOptions = null;
                     }
 
                     UpdateProperty(
-                        updatedValue => targetScript.viewAdapterTypeName = updatedValue,
-                        targetScript.viewAdapterTypeName,
+                        updatedValue => targetScript.ViewAdapterTypeName = updatedValue,
+                        targetScript.ViewAdapterTypeName,
                         newValue,
                         "Set view adapter"
                     );
@@ -96,15 +96,15 @@ namespace UnityWeld_Editor
             );
 
             Type adapterType;
-            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.viewAdapterTypeName, out adapterType);
+            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.ViewAdapterTypeName, out adapterType);
 
             EditorStyles.label.fontStyle = viewAdapterOptionsPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             ShowAdapterOptionsMenu(
                 "View adapter options", 
                 adapterType, 
-                options => targetScript.viewAdapterOptions = options,
-                targetScript.viewAdapterOptions,
+                options => targetScript.ViewAdapterOptions = options,
+                targetScript.ViewAdapterOptions,
                 viewAdapterOptionsFade.faded
             );
 
@@ -112,12 +112,12 @@ namespace UnityWeld_Editor
 
             EditorStyles.label.fontStyle = viewModelPropertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
-            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.viewAdapterTypeName);
+            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.ViewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
                 TypeResolver.FindBindableProperties(targetScript),
-                updatedValue => targetScript.viewModelPropertyName = updatedValue,
-                targetScript.viewModelPropertyName,
+                updatedValue => targetScript.ViewModelPropertyName = updatedValue,
+                targetScript.ViewModelPropertyName,
                 property => property.PropertyType == adaptedViewPropertyType
             );
 
