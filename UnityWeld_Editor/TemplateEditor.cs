@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -35,7 +35,7 @@ namespace UnityWeld_Editor
                 .OrderBy(name => name)
                 .ToArray();
 
-            var selectedIndex = Array.IndexOf(availableViewModels, targetScript.viewModelTypeName);
+            var selectedIndex = Array.IndexOf(availableViewModels, targetScript.ViewModelTypeName);
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
             EditorStyles.label.fontStyle = propertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
@@ -48,7 +48,7 @@ namespace UnityWeld_Editor
 
             EditorStyles.label.fontStyle = defaultLabelStyle;
 
-            UpdateProperty(newValue => targetScript.viewModelTypeName = newValue,
+            UpdateProperty(newValue => targetScript.ViewModelTypeName = newValue,
                 selectedIndex < 0 ? string.Empty : availableViewModels[selectedIndex],
                 newSelectedIndex < 0 ? string.Empty : availableViewModels[newSelectedIndex],
                 "Set bound view-model for template"

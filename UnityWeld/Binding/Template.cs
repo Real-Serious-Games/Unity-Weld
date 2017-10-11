@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace UnityWeld.Binding
@@ -36,7 +36,14 @@ namespace UnityWeld.Binding
             return viewModelTypeName;
         }
 
-        public string viewModelTypeName = string.Empty;
+        public string ViewModelTypeName
+        {
+            get { return viewModelTypeName; }
+            set { viewModelTypeName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelTypeName = string.Empty;
 
         /// <summary>
         /// Cached view-model object.
