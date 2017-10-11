@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -38,14 +39,14 @@ namespace UnityWeld.Binding
         /// <summary>
         /// UI Property to update when value changes.
         /// </summary>
-        public string UiPropertyName
+        public string ViewPropertName
         {
-            get { return uiPropertyName; }
-            set { uiPropertyName = value; }
+            get { return viewPropertyName; }
+            set { viewPropertyName = value; }
         }
 
-        [SerializeField]
-        private string uiPropertyName;
+        [SerializeField, FormerlySerializedAs("uiPropertyName")]
+        private string viewPropertyName;
 
         /// <summary>
         /// Name of the type of the adapter we're using to convert values from the 
@@ -147,7 +148,7 @@ namespace UnityWeld.Binding
         {
             string propertyName;
             Component view;
-            ParseViewEndPointReference(uiPropertyName, out propertyName, out view);
+            ParseViewEndPointReference(viewPropertyName, out propertyName, out view);
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName, viewModelAdapterOptions);
 
