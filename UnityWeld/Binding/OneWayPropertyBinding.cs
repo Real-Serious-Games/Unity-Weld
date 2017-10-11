@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -48,16 +49,16 @@ namespace UnityWeld.Binding
         private string viewModelPropertyName;
 
         /// <summary>
-        /// UI Property to update when value changes.
+        /// Property on the view to update when value changes.
         /// </summary>
-        public string UiPropertyName
+        public string ViewPropertyName
         {
-            get { return uiPropertyName; }
-            set { uiPropertyName = value; }
+            get { return viewPropertyName; }
+            set { viewPropertyName = value; }
         }
 
-        [SerializeField]
-        private string uiPropertyName;
+        [SerializeField, FormerlySerializedAs("uiPropertyName")]
+        private string viewPropertyName;
 
         /// <summary>
         /// Watches the view-model for changes that must be propagated to the view.
@@ -68,7 +69,7 @@ namespace UnityWeld.Binding
         {
             string propertyName;
             Component view;
-            ParseViewEndPointReference(uiPropertyName, out propertyName, out view);
+            ParseViewEndPointReference(viewPropertyName, out propertyName, out view);
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
 
