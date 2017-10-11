@@ -32,8 +32,8 @@ namespace UnityWeld_Editor
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
                     .ToArray(),
-                updatedValue => targetScript.UiEventName = updatedValue,
-                targetScript.UiEventName
+                updatedValue => targetScript.ViewEventName = updatedValue,
+                targetScript.ViewEventName
             );
 
             EditorStyles.label.fontStyle = viewModelMethodPrefabModified ? FontStyle.Bold : defaultLabelStyle;

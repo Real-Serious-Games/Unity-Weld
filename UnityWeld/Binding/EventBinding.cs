@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -23,16 +24,16 @@ namespace UnityWeld.Binding
         private string viewModelMethodName;
 
         /// <summary>
-        /// Name of the event to bind to.
+        /// Name of the event in the view to bind to.
         /// </summary>
-        public string UiEventName
+        public string ViewEventName
         {
-            get { return uiEventName; }
-            set { uiEventName = value; }
+            get { return viewEventName; }
+            set { viewEventName = value; }
         }
 
-        [SerializeField]
-        private string uiEventName;
+        [SerializeField, FormerlySerializedAs("uiEventName")]
+        private string viewEventName;
 
         /// <summary>
         /// Watches a Unity event for updates.
@@ -48,7 +49,7 @@ namespace UnityWeld.Binding
 
             string eventName;
             Component view;
-            ParseViewEndPointReference(uiEventName, out eventName, out view);
+            ParseViewEndPointReference(viewEventName, out eventName, out view);
 
             eventWatcher = new UnityEventWatcher(view, eventName, 
                 () => viewModelMethod.Invoke(viewModel, new object[0])
