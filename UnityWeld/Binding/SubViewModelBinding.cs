@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
@@ -35,12 +35,26 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Name of the property in the view-model that contains the sub-viewmodel.
         /// </summary>
-        public string viewModelPropertyName;
+        public string ViewModelPropertyName
+        {
+            get { return viewModelPropertyName; }
+            set { viewModelPropertyName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelPropertyName;
 
         /// <summary>
         /// Name of the type of the view model we're binding to. Set from the Unity inspector.
         /// </summary>
-        public string viewModelTypeName;
+        public string ViewModelTypeName
+        {
+            get { return viewModelTypeName; }
+            set { viewModelTypeName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelTypeName;
 
         /// <summary>
         /// Watches the view-model proper for changes.

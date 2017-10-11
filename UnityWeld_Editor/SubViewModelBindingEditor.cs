@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using UnityWeld.Binding;
 using UnityWeld.Binding.Internal;
@@ -39,14 +39,14 @@ namespace UnityWeld_Editor
                 bindableProperties,
                 updatedValue => 
                 {
-                    targetScript.viewModelPropertyName = updatedValue;
+                    targetScript.ViewModelPropertyName = updatedValue;
 
-                    targetScript.viewModelTypeName = bindableProperties
+                    targetScript.ViewModelTypeName = bindableProperties
                         .Where(prop => prop.ToString() == updatedValue)
                         .Single()
                         .Member.PropertyType.ToString();
                 },
-                targetScript.viewModelPropertyName,
+                targetScript.ViewModelPropertyName,
                 p => true
             );
 
