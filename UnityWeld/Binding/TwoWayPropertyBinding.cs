@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -14,54 +14,124 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Name of the property in the view model to bind.
         /// </summary>
-        public string viewModelPropertyName;
+        public string ViewModelPropertyName
+        {
+            get { return viewModelPropertyName; }
+            set { viewModelPropertyName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelPropertyName;
 
         /// <summary>
         /// Event in the UI to bind to.
         /// </summary>
-        public string uiEventName;
+        public string UiEventName
+        {
+            get { return uiEventName; }
+            set { uiEventName = value; }
+        }
+
+        [SerializeField]
+        private string uiEventName;
 
         /// <summary>
         /// UI Property to update when value changes.
         /// </summary>
-        public string uiPropertyName;
+        public string UiPropertyName
+        {
+            get { return uiPropertyName; }
+            set { uiPropertyName = value; }
+        }
+
+        [SerializeField]
+        private string uiPropertyName;
 
         /// <summary>
         /// Name of the type of the adapter we're using to convert values from the 
         /// view model to the UI. Can be empty for no adapter.
         /// </summary>
-        public string viewAdapterTypeName;
+        public string ViewAdapterTypeName
+        {
+            get { return viewAdapterTypeName; }
+            set { viewAdapterTypeName = value; }
+        }
+
+        [SerializeField]
+        private string viewAdapterTypeName;
 
         /// <summary>
         /// Options for the adapter from the view model to the UI.
         /// </summary>
-        public AdapterOptions viewAdapterOptions;
+        public AdapterOptions ViewAdapterOptions
+        {
+            get { return viewAdapterOptions; }
+            set { viewAdapterOptions = value; }
+        }
+
+        [SerializeField]
+        private AdapterOptions viewAdapterOptions;
 
         /// <summary>
         /// Name of the type of the adapter we're using to conver values from the
         /// UI back to the view model. Can be empty for no adapter.
         /// </summary>
-        public string viewModelAdapterTypeName;
+        public string ViewModelAdapterTypeName
+        {
+            get { return viewModelAdapterTypeName; }
+            set { viewModelAdapterTypeName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelAdapterTypeName;
 
         /// <summary>
         /// Options for the adapter from the UI to the view model.
         /// </summary>
-        public AdapterOptions viewModelAdapterOptions;
+        public AdapterOptions ViewModelAdapterOptions
+        {
+            get { return viewModelAdapterOptions; }
+            set { viewModelAdapterOptions = value; }
+        }
+
+        [SerializeField]
+        private AdapterOptions viewModelAdapterOptions;
 
         /// <summary>
         /// The name of the property to assign an exception to when adapter/validation fails.
         /// </summary>
-        public string exceptionPropertyName;
+        public string ExceptionPropertyName
+        {
+            get { return exceptionPropertyName; }
+            set { exceptionPropertyName = value; }
+        }
+
+        [SerializeField]
+        private string exceptionPropertyName;
 
         /// <summary>
         /// Adapter to apply to any adapter/validation exception that is assigned to the view model.
         /// </summary>
-        public string exceptionAdapterTypeName;
+        public string ExceptionAdapterTypeName
+        {
+            get { return exceptionAdapterTypeName; }
+            set { exceptionAdapterTypeName = value; }
+        }
+
+        [SerializeField]
+        private string exceptionAdapterTypeName;
 
         /// <summary>
         /// Adapter options for an exception.
         /// </summary>
-        public AdapterOptions exceptionAdapterOptions;
+        public AdapterOptions ExceptionAdapterOptions
+        {
+            get { return exceptionAdapterOptions; }
+            set { exceptionAdapterOptions = value; }
+        }
+
+        [SerializeField]
+        private AdapterOptions exceptionAdapterOptions;
 
         /// <summary>
         /// Watches the view-model for changes that must be propagated to the view.
