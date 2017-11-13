@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityWeld.Binding.Exceptions;
@@ -117,6 +117,11 @@ namespace UnityWeld.Binding
 
             typeName = endPointReference.Substring(0, lastPeriodIndex);
             memberName = endPointReference.Substring(lastPeriodIndex + 1);
+            if (typeName.StartsWith("UnityEngine."))
+            {
+                lastPeriodIndex = typeName.LastIndexOf('.');
+                typeName = typeName.Substring(lastPeriodIndex + 1);
+            }
             if (typeName.Length == 0 || memberName.Length == 0)
             {
                 throw new InvalidEndPointException(
