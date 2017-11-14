@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityWeld.Binding.Exceptions;
@@ -117,6 +117,12 @@ namespace UnityWeld.Binding
 
             typeName = endPointReference.Substring(0, lastPeriodIndex);
             memberName = endPointReference.Substring(lastPeriodIndex + 1);
+            //Due to (undocumented) unity behaviour, some of their components do not work with the namespace when using GetComponent(""), and all of them work without the namespace
+            //So to be safe, we remove all namespaces from any component that starts with UnityEngine
+            if (typeName.StartsWith("UnityEngine."))
+            {
+                typeName = typeName.Substring(typeName.LastIndexOf('.') + 1);
+            }
             if (typeName.Length == 0 || memberName.Length == 0)
             {
                 throw new InvalidEndPointException(
