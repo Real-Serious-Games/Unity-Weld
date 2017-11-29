@@ -70,12 +70,13 @@ namespace UnityWeld_Editor
 
             EditorStyles.label.fontStyle = DoesFieldOverridePrefab() ? FontStyle.Bold : defaultLabelStyle;
 
+            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.ViewAdapterTypeName);
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
-                property => property.PropertyType == typeof(bool)
+                property => property.PropertyType == adaptedViewPropertyType
             );
 
             EditorStyles.label.fontStyle = defaultLabelStyle;
