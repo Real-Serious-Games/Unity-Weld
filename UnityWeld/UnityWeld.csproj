@@ -64,6 +64,8 @@
     <Compile Include="Binding\Adapters\IntToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\StringToFloatAdapter.cs" />
     <Compile Include="Binding\Adapters\StringToIntAdapter.cs" />
+    <Compile Include="Binding\AnimatorParameterBinding.cs" />
+    <Compile Include="Binding\AnimatorParameterTrigger.cs" />
     <Compile Include="Binding\BindingAttribute.cs" />
     <Compile Include="Binding\BoundObservableList.cs" />
     <Compile Include="Binding\CollectionBinding.cs" />
