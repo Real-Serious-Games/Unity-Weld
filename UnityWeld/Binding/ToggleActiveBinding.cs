@@ -70,11 +70,6 @@ namespace UnityWeld.Binding
         {
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
 
-            Assert.IsTrue(
-                viewModelEndPoint.GetValue() is bool,
-                "ToggleActiveBinding can only be bound to a boolean property."
-            );
-
             var propertySync = new PropertySync(
                 // Source
                 viewModelEndPoint,
