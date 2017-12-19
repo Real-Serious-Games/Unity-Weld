@@ -7,6 +7,13 @@ using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
 {
+    /// <summary>
+    /// Binds a property in the view-model that is a collection and instantiates copies
+    /// of template objects to bind to the items of the collection.
+    /// 
+    /// Creates and destroys child objects when items are added and removed from a 
+    /// collection that implements INotifyCollectionChanged, like ObservableList.
+    /// </summary>
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class CollectionBinding : AbstractTemplateSelector
     {
