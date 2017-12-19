@@ -89,6 +89,7 @@
     <Compile Include="Binding\Internal\PropertyWatcher.cs" />
     <Compile Include="Binding\Internal\TypeResolver.cs" />
     <Compile Include="Binding\Internal\UnityEventWatcher.cs" />
+    <Compile Include="Binding\ITypedList.cs" />
     <Compile Include="Binding\IViewModelProvider.cs" />
     <Compile Include="Binding\NotifyCollectionChangedEventArgs.cs" />
     <Compile Include="Binding\ObservableList.cs" />
