@@ -13,7 +13,8 @@ namespace UnityWeld.Binding
     public class OneWayPropertyBinding : AbstractMemberBinding
     {
         /// <summary>
-        /// Type of the adapter we're using to adapt between the view model property and UI property.
+        /// Type of the adapter we're using to adapt between the view model property 
+        /// and UI property.
         /// </summary>
         public string ViewAdapterTypeName
         {

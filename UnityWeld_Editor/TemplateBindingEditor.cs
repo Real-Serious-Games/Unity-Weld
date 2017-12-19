@@ -23,23 +23,33 @@ namespace UnityWeld_Editor
             UpdatePrefabModifiedProperties();
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
-            EditorStyles.label.fontStyle = viewModelPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewModelPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowViewModelPropertyMenu(
-                new GUIContent("Template property", "Property on the view model to use for selecting templates."),
+                new GUIContent(
+                    "Template property", 
+                    "Property on the view model to use for selecting templates."
+                ),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
                 property => true
             );
 
-            EditorStyles.label.fontStyle = templatesRootPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = templatesRootPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             UpdateProperty(
                 updatedValue => targetScript.TemplatesRoot = updatedValue,
                 targetScript.TemplatesRoot,
                 (GameObject)EditorGUILayout.ObjectField(
-                    new GUIContent("Templates root object", "Parent object to the objects we want to use as templates."),
+                    new GUIContent(
+                        "Templates root object", 
+                        "Parent object to the objects we want to use as templates."
+                    ),
                     targetScript.TemplatesRoot, 
                     typeof(GameObject), 
                     true
@@ -51,7 +61,8 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// Check whether each of the properties on the object have been changed 
+        /// from the value in the prefab.
         /// </summary>
         private void UpdatePrefabModifiedProperties()
         {

@@ -45,7 +45,9 @@ namespace UnityWeld_Editor
             UpdatePrefabModifiedProperties();
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
-            EditorStyles.label.fontStyle = viewPropertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewPropertyPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             Type viewPropertyType;
             ShowViewPropertyMenu(
@@ -71,10 +73,15 @@ namespace UnityWeld_Editor
                     TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
             );
 
-            EditorStyles.label.fontStyle = viewAdapterPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewAdapterPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowAdapterMenu(
-                new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
+                new GUIContent(
+                    "View adapter", 
+                    "Adapter that converts values sent from the view-model to the view."
+                ),
                 viewAdapterTypeNames,
                 targetScript.ViewAdapterTypeName,
                 newValue =>
@@ -96,9 +103,14 @@ namespace UnityWeld_Editor
             );
 
             Type adapterType;
-            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(targetScript.ViewAdapterTypeName, out adapterType);
+            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(
+                targetScript.ViewAdapterTypeName, 
+                out adapterType
+            );
 
-            EditorStyles.label.fontStyle = viewAdapterOptionsPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewAdapterOptionsPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowAdapterOptionsMenu(
                 "View adapter options", 
@@ -110,11 +122,19 @@ namespace UnityWeld_Editor
 
             EditorGUILayout.Space();
 
-            EditorStyles.label.fontStyle = viewModelPropertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewModelPropertyPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
-            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.ViewAdapterTypeName);
+            var adaptedViewPropertyType = AdaptTypeBackward(
+                viewPropertyType, 
+                targetScript.ViewAdapterTypeName
+            );
             ShowViewModelPropertyMenu(
-                new GUIContent("View-model property", "Property on the view-model to bind to."),
+                new GUIContent(
+                    "View-model property", 
+                    "Property on the view-model to bind to."
+                ),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
@@ -127,7 +147,8 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// Check whether each of the properties on the object have been changed 
+        /// from the value in the prefab.
         /// </summary>
         private void UpdatePrefabModifiedProperties()
         {

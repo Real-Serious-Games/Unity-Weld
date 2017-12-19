@@ -150,7 +150,11 @@ namespace UnityWeld.Binding
             Component view;
             ParseViewEndPointReference(viewPropertyName, out propertyName, out view);
 
-            var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, viewModelAdapterTypeName, viewModelAdapterOptions);
+            var viewModelEndPoint = MakeViewModelEndPoint(
+                viewModelPropertyName, 
+                viewModelAdapterTypeName, 
+                viewModelAdapterOptions
+            );
 
             var propertySync = new PropertySync(
                 // Source
@@ -168,7 +172,11 @@ namespace UnityWeld.Binding
 
                 // Errors, exceptions and validation.
                 !string.IsNullOrEmpty(exceptionPropertyName)
-                    ? MakeViewModelEndPoint(exceptionPropertyName, exceptionAdapterTypeName, exceptionAdapterOptions)
+                    ? MakeViewModelEndPoint(
+                        exceptionPropertyName, 
+                        exceptionAdapterTypeName, 
+                        exceptionAdapterOptions
+                      )
                     : null
                     ,
                 

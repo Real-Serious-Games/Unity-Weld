@@ -32,10 +32,15 @@ namespace UnityWeld_Editor
             var bindableProperties = FindBindableProperties();
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
-            EditorStyles.label.fontStyle = propertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = propertyPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowViewModelPropertyMenu(
-                new GUIContent("Sub view-model property", "The property on the top level view model containing the sub view-model"),
+                new GUIContent(
+                    "Sub view-model property", 
+                    "The property on the top level view model containing the sub view-model"
+                ),
                 bindableProperties,
                 updatedValue => 
                 {
@@ -64,7 +69,8 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// Check whether each of the properties on the object have been changed 
+        /// from the value in the prefab.
         /// </summary>
         private void UpdatePrefabModifiedProperties()
         {
@@ -80,7 +86,8 @@ namespace UnityWeld_Editor
                 {
                     case "viewModelPropertyName": 
                     case "viewModelTypeName":
-                        propertyPrefabModified = property.prefabOverride || propertyPrefabModified;
+                        propertyPrefabModified = property.prefabOverride 
+                            || propertyPrefabModified;
                         break;
 
                     default:

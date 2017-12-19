@@ -44,10 +44,15 @@ namespace UnityWeld_Editor
                     TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
             );
 
-            EditorStyles.label.fontStyle = DoesFieldOverridePrefab() ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = DoesFieldOverridePrefab() 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowAdapterMenu(
-                new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
+                new GUIContent(
+                    "View adapter", 
+                    "Adapter that converts values sent from the view-model to the view."
+                ),
                 viewAdapterTypeNames,
                 targetScript.ViewAdapterTypeName,
                 newValue =>
@@ -68,11 +73,19 @@ namespace UnityWeld_Editor
                 }
             );
 
-            EditorStyles.label.fontStyle = DoesFieldOverridePrefab() ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = DoesFieldOverridePrefab() 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
-            var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.ViewAdapterTypeName);
+            var adaptedViewPropertyType = AdaptTypeBackward(
+                viewPropertyType, 
+                targetScript.ViewAdapterTypeName
+            );
             ShowViewModelPropertyMenu(
-                new GUIContent("View-model property", "Property on the view-model to bind to."),
+                new GUIContent(
+                    "View-model property", 
+                    "Property on the view-model to bind to."
+                ),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
@@ -97,7 +110,9 @@ namespace UnityWeld_Editor
             }
             while (property.Next(false));
 
-            throw new MemberNotFoundException("Field \"viewModelPropertyName\" not found on ToggleActiveBindingEditor.");
+            throw new MemberNotFoundException(
+                "Field \"viewModelPropertyName\" not found on ToggleActiveBindingEditor."
+            );
         }
     }
 }
