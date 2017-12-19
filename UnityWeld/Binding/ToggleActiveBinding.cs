@@ -14,7 +14,8 @@ namespace UnityWeld.Binding
     public class ToggleActiveBinding : AbstractMemberBinding
     {
         /// <summary>
-        /// Type of the adapter we're using to adapt between the view model property and UI property.
+        /// Type of the adapter we're using to adapt between the view model property 
+        /// and view property.
         /// </summary>
         public string ViewAdapterTypeName
         {
@@ -26,7 +27,7 @@ namespace UnityWeld.Binding
         private string viewAdapterTypeName;
 
         /// <summary>
-        /// Options for adapting from the view model to the UI property.
+        /// Options for adapting from the view model to the view property.
         /// </summary>
         public AdapterOptions ViewAdapterOptions
         {

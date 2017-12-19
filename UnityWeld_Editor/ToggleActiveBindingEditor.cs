@@ -79,6 +79,26 @@ namespace UnityWeld_Editor
                 }
             );
 
+            Type adapterType;
+            viewAdapterOptionsFade.target = ShouldShowAdapterOptions(
+                targetScript.ViewAdapterTypeName,
+                out adapterType
+            );
+
+            EditorStyles.label.fontStyle = viewAdapterOptionsPrefabModified
+                ? FontStyle.Bold
+                : defaultLabelStyle;
+
+            ShowAdapterOptionsMenu(
+                "View adapter options",
+                adapterType,
+                options => targetScript.ViewAdapterOptions = options,
+                targetScript.ViewAdapterOptions,
+                viewAdapterOptionsFade.faded
+            );
+
+            EditorGUILayout.Space();
+
             EditorStyles.label.fontStyle = viewModelPropertyPrefabModified
                 ? FontStyle.Bold 
                 : defaultLabelStyle;
