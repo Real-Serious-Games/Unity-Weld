@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,7 +18,14 @@ namespace UnityWeld.Binding
         /// <summary>
         /// The name of the property we are binding to on the view model.
         /// </summary>
-        public string viewModelPropertyName = string.Empty;
+        public string ViewModelPropertyName
+        {
+            get { return viewModelPropertyName; }
+            set { viewModelPropertyName = value; }
+        }
+
+        [SerializeField]
+        private string viewModelPropertyName = string.Empty;
 
         /// <summary>
         /// Watches the view-model property for changes.
@@ -26,9 +33,16 @@ namespace UnityWeld.Binding
         protected PropertyWatcher viewModelPropertyWatcher;
 
         /// <summary>
-        /// The gameobject in the scene that is the parent object for the tenplates.
+        /// The GameObject in the scene that is the parent object for the tenplates.
         /// </summary>
-        public GameObject templatesRoot;
+        public GameObject TemplatesRoot
+        {
+            get { return templatesRoot; }
+            set { templatesRoot = value; }
+        }
+
+        [SerializeField]
+        private GameObject templatesRoot;
 
         /// <summary>
         /// All available templates indexed by the view model the are for.

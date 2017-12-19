@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using UnityWeld.Binding;
 using UnityWeld.Binding.Internal;
@@ -28,19 +28,19 @@ namespace UnityWeld_Editor
             ShowViewModelPropertyMenu(
                 new GUIContent("Template property", "Property on the view model to use for selecting templates."),
                 TypeResolver.FindBindableProperties(targetScript),
-                updatedValue => targetScript.viewModelPropertyName = updatedValue,
-                targetScript.viewModelPropertyName,
+                updatedValue => targetScript.ViewModelPropertyName = updatedValue,
+                targetScript.ViewModelPropertyName,
                 property => true
             );
 
             EditorStyles.label.fontStyle = templatesRootPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             UpdateProperty(
-                updatedValue => targetScript.templatesRoot = updatedValue,
-                targetScript.templatesRoot,
+                updatedValue => targetScript.TemplatesRoot = updatedValue,
+                targetScript.TemplatesRoot,
                 (GameObject)EditorGUILayout.ObjectField(
                     new GUIContent("Templates root object", "Parent object to the objects we want to use as templates."),
-                    targetScript.templatesRoot, 
+                    targetScript.TemplatesRoot, 
                     typeof(GameObject), 
                     true
                 ),

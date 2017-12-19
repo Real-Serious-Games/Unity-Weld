@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using UnityWeld.Binding;
 using UnityWeld.Binding.Internal;
@@ -29,19 +29,19 @@ namespace UnityWeld_Editor
             ShowViewModelPropertyMenu(
                 new GUIContent("View-model property", "Property on the view-model to bind to."),
                 TypeResolver.FindBindableCollectionProperties(targetScript),
-                updatedValue => targetScript.viewModelPropertyName = updatedValue,
-                targetScript.viewModelPropertyName,
+                updatedValue => targetScript.ViewModelPropertyName = updatedValue,
+                targetScript.ViewModelPropertyName,
                 property => true
             );
 
             EditorStyles.label.fontStyle = templatesRootPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
             UpdateProperty(
-                updatedValue => targetScript.templatesRoot = updatedValue,
-                targetScript.templatesRoot,
+                updatedValue => targetScript.TemplatesRoot = updatedValue,
+                targetScript.TemplatesRoot,
                 (GameObject)EditorGUILayout.ObjectField(
                     new GUIContent("Collection templates", "Parent object for all templates to copy and bind to items in the collection."), 
-                    targetScript.templatesRoot, 
+                    targetScript.TemplatesRoot, 
                     typeof(GameObject), 
                     true
                 ),
