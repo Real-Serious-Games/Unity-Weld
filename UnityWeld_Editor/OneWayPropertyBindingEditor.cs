@@ -172,7 +172,7 @@ namespace UnityWeld_Editor
                         viewModelPropertyPrefabModified = property.prefabOverride;
                         break;
 
-                    case "uiPropertyName":
+                    case "viewPropertyName":
                         viewPropertyPrefabModified = property.prefabOverride;
                         break;
 

@@ -315,11 +315,11 @@ namespace UnityWeld_Editor
             {
                 switch (property.name)
                 {
-                    case "uiEventName":
+                    case "viewEventName":
                         viewEventPrefabModified = property.prefabOverride;
                         break;
 
-                    case "uiPropertyName":
+                    case "viewPropertyName":
                         viewPropertyPrefabModified = property.prefabOverride;
                         break;
 
