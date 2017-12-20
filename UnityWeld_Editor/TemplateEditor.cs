@@ -35,22 +35,36 @@ namespace UnityWeld_Editor
                 .OrderBy(name => name)
                 .ToArray();
 
-            var selectedIndex = Array.IndexOf(availableViewModels, targetScript.ViewModelTypeName);
+            var selectedIndex = Array.IndexOf(
+                availableViewModels, 
+                targetScript.ViewModelTypeName
+            );
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
-            EditorStyles.label.fontStyle = propertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = propertyPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             var newSelectedIndex = EditorGUILayout.Popup(
-                new GUIContent("Template view model", "Type of the view model that this template will be bound to when it is instantiated."),
+                new GUIContent(
+                    "Template view model", 
+                    "Type of the view model that this template will be bound to when it is instantiated."
+                ),
                 selectedIndex,
-                availableViewModels.Select(viewModel => new GUIContent(viewModel)).ToArray()
+                availableViewModels
+                    .Select(viewModel => new GUIContent(viewModel))
+                    .ToArray()
             );
 
             EditorStyles.label.fontStyle = defaultLabelStyle;
 
             UpdateProperty(newValue => targetScript.ViewModelTypeName = newValue,
-                selectedIndex < 0 ? string.Empty : availableViewModels[selectedIndex],
-                newSelectedIndex < 0 ? string.Empty : availableViewModels[newSelectedIndex],
+                selectedIndex < 0 
+                    ? string.Empty 
+                    : availableViewModels[selectedIndex],
+                newSelectedIndex < 0 
+                    ? string.Empty 
+                    : availableViewModels[newSelectedIndex],
                 "Set bound view-model for template"
             );
         }

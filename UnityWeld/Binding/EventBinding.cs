@@ -44,7 +44,11 @@ namespace UnityWeld.Binding
         {
             string methodName;
             object viewModel;
-            ParseViewModelEndPointReference(viewModelMethodName, out methodName, out viewModel);
+            ParseViewModelEndPointReference(
+                viewModelMethodName, 
+                out methodName, 
+                out viewModel
+            );
             var viewModelMethod = viewModel.GetType().GetMethod(methodName, new Type[0]);
 
             string eventName;
