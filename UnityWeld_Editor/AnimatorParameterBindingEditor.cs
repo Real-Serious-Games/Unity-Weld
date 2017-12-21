@@ -332,7 +332,7 @@ namespace UnityWeld_Editor
 
             public override int GetHashCode()
             {
-                return new { Name = Name, Type = Type }.GetHashCode();
+                return new { Name, Type }.GetHashCode();
             }
         }
     }
