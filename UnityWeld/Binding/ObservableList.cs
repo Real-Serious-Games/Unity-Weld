@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace UnityWeld.Binding
 {
-    public class ObservableList<T> : IList<T>, IList, INotifyCollectionChanged
+    public class ObservableList<T> : IList<T>, IList, INotifyCollectionChanged, ITypedList
     {
         /// <summary>
         /// Inner (non-obsevable) list.
@@ -108,6 +108,17 @@ namespace UnityWeld.Binding
             get
             {
                 return innerList.Count;
+            }
+        }
+
+        /// <summary>
+        /// Specifies the type of items in the list.
+        /// </summary>
+        public Type ItemType
+        {
+            get
+            {
+                return typeof(T);
             }
         }
 
