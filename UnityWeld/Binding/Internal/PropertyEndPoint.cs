@@ -50,18 +50,6 @@ namespace UnityWeld.Binding.Internal
             this.propertyName = propertyName;
             this.property = type.GetProperty(propertyName);
 
-            // If the binding property is an AnimatorParameterTrigger,
-            // we change the owner to the instance of the property
-            // and change the property to "TriggerSetOrReset"
-            if(this.property.PropertyType == typeof(AnimatorParameterTrigger))
-            {
-                var animatorParamaterTrigger = this.property.GetValue(propertyOwner, null) as AnimatorParameterTrigger;
-                this.propertyName = "TriggerSetOrReset";
-                this.propertyOwner = animatorParamaterTrigger;
-                type = this.propertyOwner.GetType();
-                this.property = type.GetProperty(this.propertyName);
-            }
-
             if (this.property == null)
             {
                 Debug.LogError("Property '" + propertyName + "' not found on " + endPointType  + " '" + type + "'.", context);

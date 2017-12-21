@@ -84,16 +84,16 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Animator to use
         /// </summary>
-        private Animator _animator;
+        private Animator boundAnimator;
 
         //Properties to bind to
         public float FloatParameter
         {
             set
             {
-                if(_animator != null)
+                if(boundAnimator != null)
                 {
-                    _animator.SetFloat(AnimatorParameterName, value);
+                    boundAnimator.SetFloat(AnimatorParameterName, value);
                 }
             }
         }
@@ -102,9 +102,9 @@ namespace UnityWeld.Binding
         {
             set
             {
-                if(_animator != null)
+                if(boundAnimator != null)
                 {
-                    _animator.SetInteger(AnimatorParameterName, value);
+                    boundAnimator.SetInteger(AnimatorParameterName, value);
                 }
             }
         }
@@ -113,9 +113,9 @@ namespace UnityWeld.Binding
         {
             set
             {
-                if(_animator != null)
+                if(boundAnimator != null)
                 {
-                    _animator.SetBool(AnimatorParameterName, value);
+                    boundAnimator.SetBool(AnimatorParameterName, value);
                 }
             }
         }
@@ -124,15 +124,15 @@ namespace UnityWeld.Binding
         {
             set
             {
-                if (_animator != null)
+                if (boundAnimator != null)
                 {
                     if (value)
                     {
-                        _animator.SetTrigger(AnimatorParameterName);
+                        boundAnimator.SetTrigger(AnimatorParameterName);
                     }
                     else
                     {
-                        _animator.ResetTrigger(AnimatorParameterName);
+                        boundAnimator.ResetTrigger(AnimatorParameterName);
                     }
                 }
             }
@@ -140,13 +140,13 @@ namespace UnityWeld.Binding
 
         public override void Connect()
         {
-            if (_animator == null)
+            if (boundAnimator == null)
             {
-                _animator = GetComponent<Animator>();
+                boundAnimator = GetComponent<Animator>();
             }
 
             Assert.IsTrue(
-                _animator != null,
+                boundAnimator != null,
                 "Animator is null!"
             );
 
@@ -159,33 +159,31 @@ namespace UnityWeld.Binding
             switch (AnimatorParameterType)
             {
                 case AnimatorControllerParameterType.Float:
-                    {
                         propertyName = "FloatParameter";
                         break;
-                    }
                 case AnimatorControllerParameterType.Int:
-                    {
                         propertyName = "IntParameter";
                         break;
-                    }
                 case AnimatorControllerParameterType.Bool:
-                    {
                         propertyName = "BoolParameter";
                         break;
-                    }
                 case AnimatorControllerParameterType.Trigger:
-                    {
                         propertyName = "TriggerParameter";
                         break;
-                    }
                 default:
-                    {
                         propertyName = "";
                         break;
-                    }
             }
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
+
+            // If the binding property is an AnimatorParameterTrigger,
+            // we change the owner to the instance of the property
+            // and change the property to "TriggerSetOrReset"
+            if (AnimatorParameterType == AnimatorControllerParameterType.Trigger)
+            {
+                viewModelEndPoint = new PropertyEndPoint(viewModelEndPoint.GetValue(), "TriggerSetOrReset", null, null, "view-model", this);
+            }
 
             var propertySync = new PropertySync(
                 // Source

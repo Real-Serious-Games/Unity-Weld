@@ -56,6 +56,14 @@ namespace UnityWeld_Editor
             var defaultLabelStyle = EditorStyles.label.fontStyle;
             EditorStyles.label.fontStyle = viewPropertyPrefabModified ? FontStyle.Bold : defaultLabelStyle;
 
+            var animatorParameters = GetAnimatorParameters();
+
+            if (animatorParameters == null || animatorParameters.Count() <= 0)
+            {
+                EditorGUILayout.HelpBox("Animator has no parameters!", MessageType.Warning);
+                return;
+            }
+
             Type viewPropertyType;
             ShowAnimatorParametersMenu(
                 new GUIContent("View property", "Property on the view to bind to"),
@@ -65,6 +73,7 @@ namespace UnityWeld_Editor
                     targetScript.AnimatorParameterType = updatedValue.Type;
                 },
                 new AnimatorParameterTypeAndName(targetScript.AnimatorParameterName, targetScript.AnimatorParameterType),
+                animatorParameters,
                 out viewPropertyType
                 );
 
@@ -142,12 +151,89 @@ namespace UnityWeld_Editor
             GUIContent label,
             Action<AnimatorParameterTypeAndName> propertyValueSetter,
             AnimatorParameterTypeAndName curPropertyValue,
+            AnimatorControllerParameter[] properties,
             out Type selectedPropertyType
         )
         {
+            if(properties == null || properties.Count() <= 0)
+            {
+                selectedPropertyType = null;
+                return;
+            }
+
+            var propertyNamesAndTypes = properties
+                .Select(m => new AnimatorParameterTypeAndName(m.name, m.type))
+                .ToArray();
+            var selectedIndex = Array.IndexOf(propertyNamesAndTypes, curPropertyValue);
+            var content = properties.Select(prop => new GUIContent(string.Concat(
+                    prop.name,
+                    " : ",
+                    prop.type.ToString()
+                )))
+                .ToArray();
+
+            var newSelectedIndex = EditorGUILayout.Popup(label, selectedIndex, content);
+            if (newSelectedIndex != selectedIndex)
+            {
+                var newSelectedProperty = properties[newSelectedIndex];
+
+                UpdateProperty(
+                    propertyValueSetter,
+                    curPropertyValue,
+                    new AnimatorParameterTypeAndName(newSelectedProperty.name, newSelectedProperty.type),
+                    "Set Animator parameter"
+                );
+
+                selectedPropertyType = AnimatorControllerParameterTypeToType(newSelectedProperty.type);
+            }
+            else
+            {
+                if (selectedIndex < 0)
+                {
+                    selectedPropertyType = null;
+                    return;
+                }
+
+                selectedPropertyType = AnimatorControllerParameterTypeToType(properties[selectedIndex].type);
+            }
+        }
+
+        /// <summary>
+        /// Returns the corresponding System.Type from AnimatorControllerParameterType
+        /// </summary>
+        /// <param name="parameterType">The type of parameter</param>
+        /// <returns>The System.Type corresponding to paramter type</returns>
+        private Type AnimatorControllerParameterTypeToType(AnimatorControllerParameterType parameterType)
+        {
+            switch (parameterType)
+            {
+                case AnimatorControllerParameterType.Bool:
+                        return typeof(bool);
+                case AnimatorControllerParameterType.Float:
+                        return typeof(float);
+                case AnimatorControllerParameterType.Int:
+                        return typeof(int);
+                case AnimatorControllerParameterType.Trigger:
+                        return typeof(AnimatorParameterTrigger);
+                default:
+                        return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Animator component on the targetScript and returns it's parameters
+        /// </summary>
+        /// <returns>An array of the Animator components parameters as UnityEngine.AnimatorControllerParameter</returns>
+        private AnimatorControllerParameter[] GetAnimatorParameters()
+        {
             var animator = targetScript.GetComponent<Animator>();
 
-            AnimatorControllerParameter[] properties = new AnimatorControllerParameter[] { };
+            AnimatorControllerParameter[] properties;
+
+            if(animator.runtimeAnimatorController == null)
+            {
+                return null;
+            }
 
             // For whatever reason, accessing Animator.parameters while the GameObject the
             // Animator is on is inactive causes it to return an empty array, aswell as fill
@@ -181,95 +267,7 @@ namespace UnityWeld_Editor
                 }
             }
 
-            var propertyNamesAndTypes = properties
-                .Select(m => new AnimatorParameterTypeAndName(m.name, m.type))
-                .ToArray();
-            var selectedIndex = Array.IndexOf(propertyNamesAndTypes, curPropertyValue);
-            var content = properties.Select(prop => new GUIContent(string.Concat(
-                    prop.name,
-                    " : ",
-                    prop.type.ToString()
-                )))
-                .ToArray();
-
-            var newSelectedIndex = EditorGUILayout.Popup(label, selectedIndex, content);
-            if (newSelectedIndex != selectedIndex)
-            {
-                var newSelectedProperty = properties[newSelectedIndex];
-
-                UpdateProperty(
-                    propertyValueSetter,
-                    curPropertyValue,
-                    new AnimatorParameterTypeAndName(newSelectedProperty.name, newSelectedProperty.type),
-                    "Set Animator parameter"
-                );
-
-                switch (newSelectedProperty.type)
-                {
-                    case AnimatorControllerParameterType.Bool:
-                        {
-                            selectedPropertyType = typeof(bool);
-                            break;
-                        }
-                    case AnimatorControllerParameterType.Float:
-                        {
-                            selectedPropertyType = typeof(float);
-                            break;
-                        }
-                    case AnimatorControllerParameterType.Int:
-                        {
-                            selectedPropertyType = typeof(int);
-                            break;
-                        }
-                    case AnimatorControllerParameterType.Trigger:
-                        {
-                            selectedPropertyType = typeof(AnimatorParameterTrigger);
-                            break;
-                        }
-                    default:
-                        {
-                            selectedPropertyType = null;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                if (selectedIndex < 0)
-                {
-                    selectedPropertyType = null;
-                    return;
-                }
-
-                switch (properties[selectedIndex].type)
-                {
-                    case AnimatorControllerParameterType.Bool:
-                        {
-                            selectedPropertyType = typeof(bool);
-                            break;
-                        }
-                    case AnimatorControllerParameterType.Float:
-                        {
-                            selectedPropertyType = typeof(float);
-                            break;
-                        }
-                    case AnimatorControllerParameterType.Int:
-                        {
-                            selectedPropertyType = typeof(int);
-                            break;
-                        }
-                    case AnimatorControllerParameterType.Trigger:
-                        {
-                            selectedPropertyType = typeof(AnimatorParameterTrigger);
-                            break;
-                        }
-                    default:
-                        {
-                            selectedPropertyType = null;
-                            break;
-                        }
-                }
-            }
+            return properties;
         }
 
         /// <summary>
@@ -297,7 +295,11 @@ namespace UnityWeld_Editor
                         viewModelPropertyPrefabModified = property.prefabOverride;
                         break;
 
-                    case "uiPropertyName":
+                    case "animatorParameterType":
+                        viewPropertyPrefabModified = property.prefabOverride;
+                        break;
+
+                    case "animatorParameterName":
                         viewPropertyPrefabModified = property.prefabOverride;
                         break;
 
