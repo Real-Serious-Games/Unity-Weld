@@ -42,12 +42,8 @@ namespace UnityWeld_Editor
 
         public override void OnInspectorGUI()
         {
-            // Because of some of the work arounds done due to Unity's undocumented behaviour,
-            // When testing in the editor, some of this may run and can produce unexpected results
-            // So we disable this all while in play mode
-            if (EditorApplication.isPlaying)
+            if(CannotModifyInPlayMode())
             {
-                EditorGUILayout.HelpBox("Cannot modify in play mode!", MessageType.Warning);
                 return;
             }
 
@@ -241,7 +237,10 @@ namespace UnityWeld_Editor
             // a work around which seems to work fine
             if (!animator.gameObject.activeInHierarchy)
             {
-                UnityEditorInternal.ComponentUtility.CopyComponent(animator.transform);
+                var tPos = animator.transform.position;
+                var tScale = animator.transform.localScale;
+                var tRotation = animator.transform.rotation;
+
                 var parent = animator.transform.parent;
                 var siblingIndex = animator.transform.GetSiblingIndex();
                 var isActive = animator.gameObject.activeSelf;
@@ -251,12 +250,17 @@ namespace UnityWeld_Editor
                 animator.transform.SetParent(parent);
                 animator.transform.SetSiblingIndex(siblingIndex);
                 animator.gameObject.SetActive(isActive);
-                UnityEditorInternal.ComponentUtility.PasteComponentValues(animator.transform);
+
+                animator.transform.position = tPos;
+                animator.transform.localScale = tScale;
+                animator.transform.rotation = tRotation;
             }
             else
             {
                 properties = animator.parameters;
                 //Another odd fix to refresh the parameters
+                //When the animator is active, & you add a trigger, or modify it's triggers, the parameters property
+                //on the animator comes back empty, toggling it unactive, then back seems to fix the list of parameters returned.
                 if (properties == null || properties.Length == 0)
                 {
                     var isActive = animator.gameObject.activeSelf;
