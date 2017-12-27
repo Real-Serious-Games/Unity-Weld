@@ -212,7 +212,7 @@ namespace UnityWeld_Editor
                 case AnimatorControllerParameterType.Trigger:
                         return typeof(AnimatorParameterTrigger);
                 default:
-                        return null;
+                        throw new ArgumentOutOfRangeException();
             }
         }
 
