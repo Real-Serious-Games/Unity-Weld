@@ -159,20 +159,19 @@ namespace UnityWeld.Binding
             switch (AnimatorParameterType)
             {
                 case AnimatorControllerParameterType.Float:
-                        propertyName = "FloatParameter";
-                        break;
+                    propertyName = "FloatParameter";
+                    break;
                 case AnimatorControllerParameterType.Int:
-                        propertyName = "IntParameter";
-                        break;
+                    propertyName = "IntParameter";
+                    break;
                 case AnimatorControllerParameterType.Bool:
-                        propertyName = "BoolParameter";
-                        break;
+                    propertyName = "BoolParameter";
+                    break;
                 case AnimatorControllerParameterType.Trigger:
-                        propertyName = "TriggerParameter";
-                        break;
+                    propertyName = "TriggerParameter";
+                    break;
                 default:
-                        propertyName = "";
-                        break;
+                    throw new ArgumentOutOfRangeException("Unexpected animator parameter type");
             }
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
