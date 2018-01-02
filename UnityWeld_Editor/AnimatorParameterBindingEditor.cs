@@ -199,20 +199,22 @@ namespace UnityWeld_Editor
         /// </summary>
         /// <param name="parameterType">The type of parameter</param>
         /// <returns>The System.Type corresponding to paramter type</returns>
-        private Type AnimatorControllerParameterTypeToType(AnimatorControllerParameterType parameterType)
+        private static Type AnimatorControllerParameterTypeToType(
+            AnimatorControllerParameterType parameterType
+        )
         {
             switch (parameterType)
             {
                 case AnimatorControllerParameterType.Bool:
-                        return typeof(bool);
+                    return typeof(bool);
                 case AnimatorControllerParameterType.Float:
-                        return typeof(float);
+                    return typeof(float);
                 case AnimatorControllerParameterType.Int:
-                        return typeof(int);
+                    return typeof(int);
                 case AnimatorControllerParameterType.Trigger:
-                        return typeof(AnimatorParameterTrigger);
+                    return typeof(AnimatorParameterTrigger);
                 default:
-                        throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -300,14 +302,8 @@ namespace UnityWeld_Editor
                         break;
 
                     case "animatorParameterType":
-                        viewPropertyPrefabModified = property.prefabOverride;
-                        break;
-
                     case "animatorParameterName":
                         viewPropertyPrefabModified = property.prefabOverride;
-                        break;
-
-                    default:
                         break;
                 }
             }
