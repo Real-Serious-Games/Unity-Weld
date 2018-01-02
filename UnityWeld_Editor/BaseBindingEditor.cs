@@ -320,12 +320,11 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Displays helpbox in inspector if the editor is playing, and returns the same thing
         /// </summary>
-        /// <returns></returns>
-        protected bool CannotModifyInPlayMode()
+        protected static bool CannotModifyInPlayMode()
         {
             if (EditorApplication.isPlaying)
             {
-                EditorGUILayout.HelpBox("Cannot modify in play mode!", MessageType.Warning);
+                EditorGUILayout.HelpBox("Exit play mode to make changes.", MessageType.Info);
                 return true;
             }
             return false;
