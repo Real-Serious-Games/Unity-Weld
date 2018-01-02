@@ -146,7 +146,8 @@ namespace UnityWeld.Binding
                 );
             }
 
-            if (!(viewModelValue is IEnumerable))
+            viewModelCollectionValue = viewModelValue as IEnumerable;
+            if (viewModelCollectionValue == null)
             {
                 throw new InvalidTypeException(
                     "Property " 
@@ -154,7 +155,6 @@ namespace UnityWeld.Binding
                     + " is not a collection and cannot be used to bind collections."
                 );
             }
-            viewModelCollectionValue = (IEnumerable)viewModelValue;
 
             // Generate children
             var collectionAsList = viewModelCollectionValue.Cast<object>().ToList();
