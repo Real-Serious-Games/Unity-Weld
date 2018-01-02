@@ -28,6 +28,11 @@ namespace UnityWeld_Editor
 
         public override void OnInspectorGUI()
         {
+            if (CannotModifyInPlayMode())
+            {
+                GUI.enabled = false;
+            }
+
             UpdatePrefabModifiedProperties();
 
             var availableViewModels = TypeResolver.TypesWithBindingAttribute

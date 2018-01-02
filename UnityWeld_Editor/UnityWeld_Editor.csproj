@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatorParameterBindingEditor.cs" />
     <Compile Include="BaseBindingEditor.cs" />
     <Compile Include="CollectionBindingEditor.cs" />
     <Compile Include="SubViewModelBindingEditor.cs" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -49,6 +49,7 @@ namespace UnityWeld.Binding.Internal
 
             this.propertyName = propertyName;
             this.property = type.GetProperty(propertyName);
+
             if (this.property == null)
             {
                 Debug.LogError("Property '" + propertyName + "' not found on " + endPointType  + " '" + type + "'.", context);

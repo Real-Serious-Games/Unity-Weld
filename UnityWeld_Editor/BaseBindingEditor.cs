@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -315,6 +315,19 @@ namespace UnityWeld_Editor
                 );
             }
             EditorGUILayout.EndFadeGroup();
+        }
+
+        /// <summary>
+        /// Displays helpbox in inspector if the editor is playing, and returns the same thing
+        /// </summary>
+        protected static bool CannotModifyInPlayMode()
+        {
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.HelpBox("Exit play mode to make changes.", MessageType.Info);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
