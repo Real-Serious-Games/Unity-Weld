@@ -314,7 +314,7 @@ namespace UnityWeld_Editor
             while (property.Next(false));
         }
 
-        private class AnimatorParameterTypeAndName
+        private class AnimatorParameterTypeAndName : IEquatable<AnimatorParameterTypeAndName>
         {
             public string Name { get; private set; }
             public AnimatorControllerParameterType Type { get; private set; }
@@ -324,19 +324,24 @@ namespace UnityWeld_Editor
                 Type = type;
             }
 
+            public override int GetHashCode()
+            {
+                return new { Name, Type }.GetHashCode();
+            }
+
             public override bool Equals(object obj)
             {
-                if (obj is AnimatorParameterTypeAndName)
+                var objAsThis = obj as AnimatorParameterTypeAndName;
+                if (objAsThis != null)
                 {
-                    var objAsThis = obj as AnimatorParameterTypeAndName;
-                    return objAsThis.Name == Name && objAsThis.Type == Type;
+                    return Equals(objAsThis);
                 }
                 return false;
             }
 
-            public override int GetHashCode()
+            public bool Equals(AnimatorParameterTypeAndName other)
             {
-                return new { Name, Type }.GetHashCode();
+                return other.Name == Name && other.Type == Type;
             }
         }
     }
