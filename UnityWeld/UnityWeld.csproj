@@ -57,6 +57,8 @@
     <Compile Include="Binding\Adapters\BoolToColorAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\BoolToColorBlockAdapter.cs" />
     <Compile Include="Binding\Adapters\BoolToColorBlockAdapterOptions.cs" />
+    <Compile Include="Binding\Adapters\ColorToColorBlockAdapter.cs" />
+    <Compile Include="Binding\Adapters\ColorToColorBlockAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\DateTimeToFloatAdapter.cs" />
     <Compile Include="Binding\Adapters\DateTimeToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\DateTimeToStringAdapterOptions.cs" />
