@@ -31,7 +31,9 @@ namespace UnityWeld_Editor
             UpdatePrefabModifiedProperties();
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
-            EditorStyles.label.fontStyle = viewEventPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewEventPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowEventMenu(
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
@@ -41,7 +43,9 @@ namespace UnityWeld_Editor
                 targetScript.ViewEventName
             );
 
-            EditorStyles.label.fontStyle = viewModelMethodPrefabModified ? FontStyle.Bold : defaultLabelStyle;
+            EditorStyles.label.fontStyle = viewModelMethodPrefabModified 
+                ? FontStyle.Bold 
+                : defaultLabelStyle;
 
             ShowMethodMenu(targetScript, TypeResolver.FindBindableMethods(targetScript));
 
@@ -51,7 +55,10 @@ namespace UnityWeld_Editor
         /// <summary>
         /// Draws the dropdown for selecting a method from bindableViewModelMethods
         /// </summary>
-        private void ShowMethodMenu(EventBinding targetScript, BindableMember<MethodInfo>[] bindableMethods)
+        private void ShowMethodMenu(
+            EventBinding targetScript, 
+            BindableMember<MethodInfo>[] bindableMethods
+        )
         {
             var tooltip = "Method on the view-model to bind to.";
 
@@ -75,13 +82,14 @@ namespace UnityWeld_Editor
         }
 
         /// <summary>
-        /// Check whether each of the properties on the object have been changed from the value in the prefab.
+        /// Check whether each of the properties on the object have been changed 
+        /// from the value in the prefab.
         /// </summary>
         private void UpdatePrefabModifiedProperties()
         {
             var property = serializedObject.GetIterator();
-            // Need to call Next(true) to get the first child. Once we have it, Next(false)
-            // will iterate through the properties.
+            // Need to call Next(true) to get the first child. Once we have it, 
+            // Next(false) will iterate through the properties.
             property.Next(true);
             do
             {
