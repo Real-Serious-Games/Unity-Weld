@@ -57,11 +57,13 @@
     <Compile Include="Binding\Adapters\BoolToColorAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\BoolToColorBlockAdapter.cs" />
     <Compile Include="Binding\Adapters\BoolToColorBlockAdapterOptions.cs" />
+    <Compile Include="Binding\Adapters\DateTimeToFloatAdapter.cs" />
     <Compile Include="Binding\Adapters\DateTimeToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\DateTimeToStringAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\FloatToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\FloatToStringAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\IntToStringAdapter.cs" />
+    <Compile Include="Binding\Adapters\FloatToDateTimeAdapter.cs" />
     <Compile Include="Binding\Adapters\StringCultureToDateTimeAdapter.cs" />
     <Compile Include="Binding\Adapters\StringCultureToDateTimeAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\StringToFloatAdapter.cs" />
