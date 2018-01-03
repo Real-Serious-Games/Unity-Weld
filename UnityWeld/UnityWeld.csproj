@@ -62,6 +62,8 @@
     <Compile Include="Binding\Adapters\FloatToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\FloatToStringAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\IntToStringAdapter.cs" />
+    <Compile Include="Binding\Adapters\StringCultureToDateTimeAdapter.cs" />
+    <Compile Include="Binding\Adapters\StringCultureToDateTimeAdapterOptions.cs" />
     <Compile Include="Binding\Adapters\StringToFloatAdapter.cs" />
     <Compile Include="Binding\Adapters\StringToIntAdapter.cs" />
     <Compile Include="Binding\AnimatorParameterBinding.cs" />

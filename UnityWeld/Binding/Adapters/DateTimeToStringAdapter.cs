@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace UnityWeld.Binding.Adapters
 {
@@ -6,7 +6,7 @@ namespace UnityWeld.Binding.Adapters
     /// Adapter for converting from a DateTime to a string.
     /// </summary>
     [Adapter(typeof(DateTime), typeof(string), typeof(DateTimeToStringAdapterOptions))]
-    class DateTimeToStringAdapter : IAdapter
+    public class DateTimeToStringAdapter : IAdapter
     {
         public object Convert(object valueIn, AdapterOptions options)
         {
