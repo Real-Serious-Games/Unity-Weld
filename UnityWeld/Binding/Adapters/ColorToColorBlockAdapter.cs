@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnityWeld.Binding.Adapters
@@ -21,13 +21,13 @@ namespace UnityWeld.Binding.Adapters
                     colorBlock.disabledColor = color;
                     break;
                 case ColorToColorBlockAdapterOptions.Role.Highlighed:
-                    colorBlock.disabledColor = color;
+                    colorBlock.highlightedColor = color;
                     break;
                 case ColorToColorBlockAdapterOptions.Role.Normal:
-                    colorBlock.disabledColor = color;
+                    colorBlock.normalColor = color;
                     break;
                 case ColorToColorBlockAdapterOptions.Role.Pressed:
-                    colorBlock.disabledColor = color;
+                    colorBlock.pressedColor = color;
                     break;
             }
 
