@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,6 +10,7 @@ namespace UnityWeld.Widgets
     /// <summary>
     /// Adapter to set up and bind to a Dropdown using strings instead of OptionData.
     /// </summary>
+    [Obsolete("Use DropdownBinding instead")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class DropdownAdapter : MonoBehaviour
     {
