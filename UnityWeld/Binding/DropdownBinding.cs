@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -126,8 +126,8 @@ namespace UnityWeld.Binding
             );
 
             // Copy the initial value from view-model to view.
-            selectionPropertySync.SyncFromSource();
             optionsPropertySync.SyncFromSource();
+            selectionPropertySync.SyncFromSource();
             UpdateOptions();
         }
 
