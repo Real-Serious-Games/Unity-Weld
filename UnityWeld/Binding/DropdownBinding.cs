@@ -208,8 +208,6 @@ namespace UnityWeld.Binding
             dropdown.options = options
                 .Select(option => new Dropdown.OptionData(option))
                 .ToList();
-
-            UpdateSelectedOption();
         }
 
         /// <summary>
