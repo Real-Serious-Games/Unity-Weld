@@ -96,7 +96,7 @@ namespace UnityWeld.Binding.Internal
             }
 
             //Fixing the boxed type again
-            var propertyType = property.GetValue(propertyOwner, null).GetType();
+            var propertyType = property.PropertyType;
             try
             {
                 input = Convert.ChangeType(input, propertyType);
