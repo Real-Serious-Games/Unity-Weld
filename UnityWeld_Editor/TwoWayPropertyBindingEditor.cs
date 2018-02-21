@@ -111,7 +111,8 @@ namespace UnityWeld_Editor
 
             var viewAdapterTypeNames = GetAdapterTypeNames(
                 type => viewPropertyType == null ||
-                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
+                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType ||
+                    TypeResolver.IsTypeCastableTo(TypeResolver.FindAdapterAttribute(type).OutputType, viewPropertyType, true)
             );
 
             EditorStyles.label.fontStyle = viewAdapterPrefabModified 
@@ -178,12 +179,14 @@ namespace UnityWeld_Editor
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
-                prop => prop.PropertyType == adaptedViewPropertyType
+                prop => prop.PropertyType == adaptedViewPropertyType ||
+                TypeResolver.IsTypeCastableTo(prop.PropertyType, adaptedViewPropertyType, true)
             );
 
             var viewModelAdapterTypeNames = GetAdapterTypeNames(
                 type => adaptedViewPropertyType == null ||
-                    TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType
+                    TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType ||
+                    TypeResolver.IsTypeCastableTo(TypeResolver.FindAdapterAttribute(type).OutputType, adaptedViewPropertyType, true)
             );
 
             EditorStyles.label.fontStyle = viewModelAdapterPrefabModified 
@@ -234,7 +237,8 @@ namespace UnityWeld_Editor
             EditorGUILayout.Space();
 
             var expectionAdapterTypeNames = GetAdapterTypeNames(
-                type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception)
+                type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception) ||
+                TypeResolver.IsTypeCastableTo(TypeResolver.FindAdapterAttribute(type).InputType, typeof(Exception), true)
             );
 
             EditorStyles.label.fontStyle = exceptionPropertyPrefabModified 
@@ -253,7 +257,8 @@ namespace UnityWeld_Editor
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ExceptionPropertyName = updatedValue,
                 targetScript.ExceptionPropertyName,
-                prop => prop.PropertyType == adaptedExceptionPropertyType
+                prop => prop.PropertyType == adaptedExceptionPropertyType ||
+                TypeResolver.IsTypeCastableTo(prop.PropertyType, adaptedExceptionPropertyType, true)
             );
 
             EditorStyles.label.fontStyle = exceptionAdapterPrefabModified 
