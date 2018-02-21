@@ -85,7 +85,7 @@ namespace UnityWeld.Binding.Internal
                     {
                         input = Convert.ChangeType(input, adapterAttribute.InputType);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Debug.LogError(string.Format("Failed to convert value from {0} to {1}.", input.GetType(), adapterAttribute.InputType));
                         Debug.LogException(ex);
@@ -93,6 +93,18 @@ namespace UnityWeld.Binding.Internal
                 }
 
                 input = adapter.Convert(input, adapterOptions);
+            }
+
+            //Fixing the boxed type again
+            var propertyType = property.GetValue(propertyOwner, null).GetType();
+            try
+            {
+                input = Convert.ChangeType(input, propertyType);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(string.Format("Failed to convert value from {0} to {1}.", input.GetType(), propertyType));
+                Debug.LogException(ex);
             }
 
             property.SetValue(propertyOwner, input, null);
