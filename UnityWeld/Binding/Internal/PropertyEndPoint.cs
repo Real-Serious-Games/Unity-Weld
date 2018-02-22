@@ -77,10 +77,9 @@ namespace UnityWeld.Binding.Internal
             if (adapter != null)
             {
                 //Because C# uses the same syntax for unboxing & casting, We have to change the boxed type first just incase we are casting
-                var adapterAttributes = adapter.GetType().GetCustomAttributes(typeof(AdapterAttribute), false);
-                if (adapterAttributes.Length > 0)
+                var adapterAttribute = TypeResolver.FindAdapterAttribute(adapter.GetType());
+                if (adapterAttribute != null)
                 {
-                    var adapterAttribute = (AdapterAttribute)(adapterAttributes[0]);
                     try
                     {
                         input = Convert.ChangeType(input, adapterAttribute.InputType);

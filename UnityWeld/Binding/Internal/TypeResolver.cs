@@ -283,47 +283,41 @@ namespace UnityWeld.Binding.Internal
         /// 
         /// Found on: https://stackoverflow.com/questions/2119441/check-if-types-are-castable-subclasses
         /// </summary>
-        public static bool IsTypeCastableTo(Type from, Type to, bool implicitly = false)
+        public static bool IsTypeCastableTo(Type from, Type to)
         {
-            return to.IsAssignableFrom(from) || HasCastDefined(from, to, implicitly);
+            return from == to || to.IsAssignableFrom(from) || HasCastDefined(from, to);
         }
 
-        private static bool HasCastDefined(Type from, Type to, bool implicitly)
+        private static bool HasCastDefined(Type from, Type to)
         {
             if ((from.IsPrimitive || from.IsEnum) && (to.IsPrimitive || to.IsEnum))
             {
-                if (!implicitly)
-                    return from == to || (from != typeof(Boolean) && to != typeof(Boolean));
-
                 Type[][] typeHierarchy = {
-                    new Type[] { typeof(Byte),  typeof(SByte), typeof(Char) },
-                    new Type[] { typeof(Int16), typeof(UInt16) },
-                    new Type[] { typeof(Int32), typeof(UInt32) },
-                    new Type[] { typeof(Int64), typeof(UInt64) },
-                    new Type[] { typeof(Single) },
-                    new Type[] { typeof(Double) }
+                    new [] { typeof(Byte),  typeof(SByte), typeof(Char) },
+                    new [] { typeof(Int16), typeof(UInt16) },
+                    new [] { typeof(Int32), typeof(UInt32) },
+                    new [] { typeof(Int64), typeof(UInt64) },
+                    new [] { typeof(Single) },
+                    new [] { typeof(Double) }
                 };
                 IEnumerable<Type> lowerTypes = Enumerable.Empty<Type>();
-                foreach (Type[] types in typeHierarchy)
-                {
-                    if (types.Any(t => t == to))
-                        return lowerTypes.Any(t => t == from);
-                    lowerTypes = lowerTypes.Concat(types);
-                }
 
-                return false;   // IntPtr, UIntPtr, Enum, Boolean
+                return typeHierarchy.Any(types => types.Contains(to)) &&
+                    typeHierarchy
+                    .TakeWhile(types => !types.Contains(to))
+                    .Any(types => types.Contains(from));
             }
-            return IsCastDefined(to, m => m.GetParameters()[0].ParameterType, _ => from, implicitly, false)
-                || IsCastDefined(from, _ => to, m => m.ReturnType, implicitly, true);
+            return IsCastDefined(to, m => m.GetParameters()[0].ParameterType, _ => from, false)
+                || IsCastDefined(from, _ => to, m => m.ReturnType, true);
         }
 
         private static bool IsCastDefined(Type type, Func<MethodInfo, Type> baseType,
-                                Func<MethodInfo, Type> derivedType, bool implicitly, bool lookInBase)
+                                Func<MethodInfo, Type> derivedType, bool lookInBase)
         {
-            var bindinFlags = BindingFlags.Public | BindingFlags.Static
+            var bindingFlags = BindingFlags.Public | BindingFlags.Static
                             | (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
-            return type.GetMethods(bindinFlags).Any(
-                m => (m.Name == "op_Implicit" || (!implicitly && m.Name == "op_Explicit"))
+            return type.GetMethods(bindingFlags).Any(
+                m => (m.Name == "op_Implicit")
                     && baseType(m).IsAssignableFrom(derivedType(m)));
         }
     }
