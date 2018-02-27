@@ -52,8 +52,7 @@ namespace UnityWeld_Editor
                     targetScript.ViewModelPropertyName = updatedValue;
 
                     targetScript.ViewModelTypeName = bindableProperties
-                        .Where(prop => prop.ToString() == updatedValue)
-                        .Single()
+                        .Single(prop => prop.ToString() == updatedValue)
                         .Member.PropertyType.ToString();
                 },
                 targetScript.ViewModelPropertyName,
@@ -93,9 +92,6 @@ namespace UnityWeld_Editor
                     case "viewModelTypeName":
                         propertyPrefabModified = property.prefabOverride 
                             || propertyPrefabModified;
-                        break;
-
-                    default:
                         break;
                 }
             }

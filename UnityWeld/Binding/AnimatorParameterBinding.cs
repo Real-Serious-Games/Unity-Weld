@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding

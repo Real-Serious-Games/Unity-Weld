@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine.Events;
 using UnityWeld.Binding.Exceptions;
@@ -18,9 +18,12 @@ namespace UnityWeld.Binding.Internal
         {
             // Note that to find the paramaters of events on the UI, we need to see what 
             // generic arguments were passed to the UnityEvent they inherit from.
-            var eventArgumentTypes = unityEvent.GetType().BaseType.GetGenericArguments();
+            var baseType = unityEvent.GetType().BaseType;
+            var eventArgumentTypes = baseType != null
+                ? baseType.GetGenericArguments()
+                : null;
 
-            if (!eventArgumentTypes.Any())
+            if (eventArgumentTypes == null || !eventArgumentTypes.Any())
             {
                 return new UnityEventBinder(unityEvent, action);
             }
@@ -28,7 +31,11 @@ namespace UnityWeld.Binding.Internal
             try
             {
                 var genericType = typeof(UnityEventBinder<>).MakeGenericType(eventArgumentTypes);
-                return (UnityEventBinderBase)Activator.CreateInstance(genericType, unityEvent, action);
+                return (UnityEventBinderBase)Activator.CreateInstance(
+                    genericType, 
+                    unityEvent, 
+                    action
+                );
             }
             catch (ArgumentException ex)
             {

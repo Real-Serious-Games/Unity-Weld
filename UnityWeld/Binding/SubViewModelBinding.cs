@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;

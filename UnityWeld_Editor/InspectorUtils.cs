@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -76,9 +76,6 @@ namespace UnityWeld_Editor
                         GUIUtility.keyboardControl = controlId;
                         currentEvent.Use();
                     }
-                    break;
-
-                default:
                     break;
             }
         }

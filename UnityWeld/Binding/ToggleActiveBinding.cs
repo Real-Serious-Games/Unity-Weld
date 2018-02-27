@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding

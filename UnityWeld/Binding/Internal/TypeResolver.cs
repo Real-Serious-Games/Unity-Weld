@@ -300,7 +300,6 @@ namespace UnityWeld.Binding.Internal
                     new [] { typeof(Single) },
                     new [] { typeof(Double) }
                 };
-                IEnumerable<Type> lowerTypes = Enumerable.Empty<Type>();
 
                 return typeHierarchy.Any(types => types.Contains(to)) &&
                     typeHierarchy
