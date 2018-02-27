@@ -171,7 +171,7 @@ namespace UnityWeld.Binding
                     propertyName = "TriggerParameter";
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("Unexpected animator parameter type");
+                    throw new IndexOutOfRangeException("Unexpected animator parameter type");
             }
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);
