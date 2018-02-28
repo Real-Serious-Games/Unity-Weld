@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld.Binding
@@ -171,7 +167,7 @@ namespace UnityWeld.Binding
                     propertyName = "TriggerParameter";
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("Unexpected animator parameter type");
+                    throw new IndexOutOfRangeException("Unexpected animator parameter type");
             }
 
             var viewModelEndPoint = MakeViewModelEndPoint(viewModelPropertyName, null, null);

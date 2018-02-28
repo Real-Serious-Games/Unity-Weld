@@ -54,7 +54,7 @@ namespace UnityWeld_Editor
 
             var animatorParameters = GetAnimatorParameters();
 
-            if (animatorParameters == null || animatorParameters.Count() <= 0)
+            if (animatorParameters == null || !animatorParameters.Any())
             {
                 EditorGUILayout.HelpBox("Animator has no parameters!", MessageType.Warning);
                 return;
@@ -151,7 +151,7 @@ namespace UnityWeld_Editor
             out Type selectedPropertyType
         )
         {
-            if(properties == null || properties.Count() <= 0)
+            if(properties == null || !properties.Any())
             {
                 selectedPropertyType = null;
                 return;
@@ -337,7 +337,7 @@ namespace UnityWeld_Editor
 
             public bool Equals(AnimatorParameterTypeAndName other)
             {
-                return other.Name == Name && other.Type == Type;
+                return other != null && other.Name == Name && other.Type == Type;
             }
         }
     }

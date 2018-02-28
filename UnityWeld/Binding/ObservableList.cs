@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace UnityWeld.Binding
 {
-    public class ObservableList<T> : IList<T>, IList, INotifyCollectionChanged, ITypedList
+    public class ObservableList<T> : IList<T>, INotifyCollectionChanged, ITypedList
     {
         /// <summary>
         /// Inner (non-obsevable) list.
