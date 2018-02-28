@@ -118,17 +118,18 @@ namespace UnityWeld.Binding
         /// </summary>
         private Template FindTemplateForType(Type templateType)
         {
-            var possibleMatches = FindTypesMatchingTemplate(templateType).ToList();
+            var possibleMatches = FindTypesMatchingTemplate(templateType)
+                .OrderBy(m => m.Key)
+                .ToList();
 
             if (!possibleMatches.Any())
             {
                 throw new TemplateNotFoundException("Could not find any template matching type " + templateType);
             }
 
-            var sorted = possibleMatches.OrderBy(m => m.Key).ToList();
-            var selectedType = sorted.First();
+            var selectedType = possibleMatches.First();
 
-            if (sorted.Skip(1).Any(m => m.Key == selectedType.Key))
+            if (possibleMatches.Skip(1).Any(m => m.Key == selectedType.Key))
             {
                 throw new AmbiguousTypeException("Multiple templates were found that match type " + templateType
                     + ". This can be caused by providing multiple templates that match types " + templateType
