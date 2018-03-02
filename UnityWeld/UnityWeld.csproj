@@ -90,6 +90,7 @@
     <Compile Include="Binding\IAdapter.cs" />
     <Compile Include="Binding\IMemberBinding.cs" />
     <Compile Include="Binding\INotifyCollectionChanged.cs" />
+    <Compile Include="Binding\Internal\AdapterResolver.cs" />
     <Compile Include="Binding\Internal\BindableMember.cs" />
     <Compile Include="Binding\Internal\PropertyEndPoint.cs" />
     <Compile Include="Binding\Internal\PropertyFinder.cs" />
@@ -112,6 +113,9 @@
     <Compile Include="Binding\Template.cs" />
     <Compile Include="Binding\Adapters\BoolToStringAdapter.cs" />
     <Compile Include="Binding\Adapters\BoolToStringAdapterOptions.cs" />
+    <Compile Include="Ioc\DefaultWeldContainer.cs" />
+    <Compile Include="Ioc\IWeldContainerIoc.cs" />
+    <Compile Include="Ioc\WeldContainerAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Binding\AbstractTemplateSelector.cs" />
     <Compile Include="Widgets\DropdownAdapter.cs" />

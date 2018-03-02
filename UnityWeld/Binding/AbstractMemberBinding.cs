@@ -84,7 +84,7 @@ namespace UnityWeld.Binding
                 throw new InvalidAdapterException(string.Format("Type '{0}' does not implement IAdapter and cannot be used as an adapter.", adapterTypeName));
             }
 
-            return (IAdapter)Activator.CreateInstance(adapterType);
+            return AdapterResolver.CreateAdapter(adapterType);
         }
 
         /// <summary>
