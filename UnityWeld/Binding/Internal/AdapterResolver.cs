@@ -10,26 +10,18 @@ namespace UnityWeld.Binding.Internal
     /// </summary>
     public class AdapterResolver
     {
-        private static AdapterResolver _instance;
-        private static AdapterResolver Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new AdapterResolver();
-                }
-                return _instance;
-            }
-        }
+        private static IWeldContainerIoC _container;
 
         public static IAdapter CreateAdapter(Type adapterType)
         {
-            return Instance._container.Resolve<IAdapter>(adapterType);
+            if(_container == null)
+            {
+                SetupWeldContainer();
+            }
+            return _container.Resolve<IAdapter>(adapterType);
         }
 
-        private IWeldContainerIoC _container;
-        public AdapterResolver()
+        private static void SetupWeldContainer()
         {
             var containerTypes = TypeResolver.TypesWithWeldContainerAttribute.Where(t => typeof(IWeldContainerIoC).IsAssignableFrom(t));
             if (containerTypes.Any())
@@ -49,6 +41,10 @@ namespace UnityWeld.Binding.Internal
                     {
                         _container = Activator.CreateInstance(containerType) as IWeldContainerIoC;
                     }
+                }
+                else
+                {
+                    _container = Activator.CreateInstance(containerType) as IWeldContainerIoC;
                 }
             }
 
