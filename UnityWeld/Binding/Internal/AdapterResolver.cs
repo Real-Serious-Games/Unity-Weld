@@ -24,8 +24,14 @@ namespace UnityWeld.Binding.Internal
         private static void SetupWeldContainer()
         {
             var containerTypes = TypeResolver.TypesWithWeldContainerAttribute.Where(t => typeof(IWeldContainerIoC).IsAssignableFrom(t));
-            if (containerTypes.Any())
+            var containerTypesCount = containerTypes.Count();
+            if (containerTypesCount > 0)
             {
+                if(containerTypesCount > 1)
+                {
+                    UnityEngine.Debug.LogWarningFormat("You have multiple classes marked with the WeldContainer Attribute, only one can be used!");
+                }
+
                 var containerType = containerTypes.First();
 
                 var useableMethods = containerType.GetMethods(BindingFlags.Public | BindingFlags.Static)
