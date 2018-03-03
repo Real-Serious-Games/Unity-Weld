@@ -8,7 +8,7 @@ namespace UnityWeld.Binding.Internal
     /// <summary>
     /// Helper class for creating adapters
     /// </summary>
-    public class AdapterResolver
+    public static class AdapterResolver
     {
         private static IWeldContainerIoC container;
 
