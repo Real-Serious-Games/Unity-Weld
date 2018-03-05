@@ -102,9 +102,6 @@ namespace UnityWeld_Editor
                     case "viewModelMethodName":
                         viewModelMethodPrefabModified = property.prefabOverride;
                         break;
-
-                    default:
-                        break;
                 }
             }
             while (property.Next(false));

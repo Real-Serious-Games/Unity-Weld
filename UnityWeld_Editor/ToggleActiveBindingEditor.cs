@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityWeld.Binding;
-using UnityWeld.Binding.Exceptions;
 using UnityWeld.Binding.Internal;
 
 namespace UnityWeld_Editor
@@ -48,11 +47,12 @@ namespace UnityWeld_Editor
 
             var defaultLabelStyle = EditorStyles.label.fontStyle;
 
-            Type viewPropertyType = typeof(bool);
+            var viewPropertyType = typeof(bool);
 
             var viewAdapterTypeNames = GetAdapterTypeNames(
-                type => viewPropertyType == null ||
-                    TypeResolver.IsTypeCastableTo(TypeResolver.FindAdapterAttribute(type).OutputType, viewPropertyType)
+                type => TypeResolver.IsTypeCastableTo(
+                    TypeResolver.FindAdapterAttribute(type).OutputType, viewPropertyType
+                )
             );
 
             EditorStyles.label.fontStyle = viewAdapterPrefabModified
@@ -146,9 +146,6 @@ namespace UnityWeld_Editor
 
                     case "viewModelPropertyName":
                         viewModelPropertyPrefabModified = property.prefabOverride;
-                        break;
-
-                    default:
                         break;
                 }
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace UnityWeld.Binding.Internal
@@ -9,12 +9,12 @@ namespace UnityWeld.Binding.Internal
     /// returning the type of the view model if the property or method was declared in an 
     /// interface that the view model inherits from.
     /// </summary>
-    public class BindableMember<MemberType> where MemberType : MemberInfo
+    public class BindableMember<TMemberType> where TMemberType : MemberInfo
     {
         /// <summary>
         /// The bindable member info (usually a PropertyInfo or MethodInfo)
         /// </summary>
-        public readonly MemberType Member;
+        public readonly TMemberType Member;
 
         /// <summary>
         /// View model that the property or method belongs to.
@@ -43,7 +43,7 @@ namespace UnityWeld.Binding.Internal
             }
         }
 
-        public BindableMember(MemberType member, Type viewModelType)
+        public BindableMember(TMemberType member, Type viewModelType)
         {
             Member = member;
             ViewModelType = viewModelType;

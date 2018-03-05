@@ -359,9 +359,6 @@ namespace UnityWeld_Editor
                     case "exceptionAdapterOptions":
                         exceptionAdapterOptionsPrefabModified = property.prefabOverride;
                         break;
-
-                    default:
-                        break;
                 }
             }
             while (property.Next(false));

@@ -56,8 +56,13 @@ namespace UnityWeld.Binding
             ParseViewEndPointReference(viewEventName, out eventName, out view);
 
             eventWatcher = new UnityEventWatcher(view, eventName, 
-                () => viewModelMethod.Invoke(viewModel, new object[0])
-            );
+                () =>
+                {
+                    if (viewModelMethod != null)
+                    {
+                        viewModelMethod.Invoke(viewModel, new object[0]);
+                    }
+                });
         }
 
         public override void Disconnect()
