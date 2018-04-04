@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityWeld.Binding.Exceptions;
+using UnityWeld.Ioc;
 
 namespace UnityWeld.Binding.Internal
 {
@@ -40,6 +41,20 @@ namespace UnityWeld.Binding.Internal
                 }
 
                 return typesWithAdapterAttribute;
+            }
+        }
+
+        private static Type[] typesWithWeldContainerAttribute;
+        public static IEnumerable<Type> TypesWithWeldContainerAttribute
+        {
+            get
+            {
+                if (typesWithWeldContainerAttribute == null)
+                {
+                    typesWithWeldContainerAttribute = FindTypesMarkedByAttribute(typeof(WeldContainerAttribute));
+                }
+
+                return typesWithWeldContainerAttribute;
             }
         }
 
