@@ -9,12 +9,12 @@ namespace UnityWeld.Ioc
     /// </summary>
     public class DefaultWeldContainer : IWeldContainerIoC
     {
-        public T Resolve<T>() where T : IAdapter
+        public T Resolve<T>() where T : class, IAdapter
         {
             return Activator.CreateInstance<T>();
         }
 
-        public T Resolve<T>(Type type) where T : IAdapter
+        public T Resolve<T>(Type type) where T : class, IAdapter
         {
             return (T)Activator.CreateInstance(type);
         }
