@@ -11,6 +11,7 @@ namespace UnityWeld.Binding
     /// the parameter changes).
     /// </summary>
     [RequireComponent(typeof(Animator))]
+    [AddComponentMenu("Unity Weld/Animator Parameter Binding")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class AnimatorParameterBinding : AbstractMemberBinding
     {
