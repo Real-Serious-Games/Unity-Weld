@@ -7,6 +7,7 @@ namespace UnityWeld.Binding
     /// Bind to a boolean property on the view model and turn all child objects on
     /// or off based on its value.
     /// </summary>
+    [AddComponentMenu("Unity Weld/ToggleActive Binding")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class ToggleActiveBinding : AbstractMemberBinding
     {

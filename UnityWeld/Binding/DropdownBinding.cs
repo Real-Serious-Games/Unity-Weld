@@ -7,6 +7,7 @@ using UnityWeld.Binding.Internal;
 namespace UnityWeld.Binding
 {
     [RequireComponent(typeof(Dropdown))]
+    [AddComponentMenu("Unity Weld/Dropdown Binding")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class DropdownBinding : AbstractMemberBinding
     {

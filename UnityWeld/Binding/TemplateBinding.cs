@@ -8,6 +8,7 @@ namespace UnityWeld.Binding
     /// <summary>
     /// Binds to a view and instantiates a template based on the view type.
     /// </summary>
+    [AddComponentMenu("Unity Weld/Template Binding")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class TemplateBinding : AbstractTemplateSelector
     {

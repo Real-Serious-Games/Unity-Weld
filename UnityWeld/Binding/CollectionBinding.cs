@@ -14,6 +14,7 @@ namespace UnityWeld.Binding
     /// Creates and destroys child objects when items are added and removed from a 
     /// collection that implements INotifyCollectionChanged, like ObservableList.
     /// </summary>
+    [AddComponentMenu("Unity Weld/Collection Binding")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class CollectionBinding : AbstractTemplateSelector
     {
