@@ -34,7 +34,26 @@ namespace UnityWeld.Binding.Internal
         /// </summary>
         private readonly AdapterOptions adapterOptions;
 
-        public PropertyEndPoint(object propertyOwner, string propertyName, IAdapter adapter, AdapterOptions options, string endPointType, Component context)
+        /// <summary>
+        /// Create a new property end point.
+        /// </summary>
+        /// <param name="propertyOwner">The object owning the bound property.</param>
+        /// <param name="propertyName">The string name of the property.</param>
+        /// <param name="adapter">Adapter (can be null for no adapter).</param>
+        /// <param name="options">Adapter options (can be null for adapters that do not
+        /// require options or if there is no adapter).</param>
+        /// <param name="endPointType">The string name of the type of the object
+        /// containing the bound property.</param>
+        /// <param name="context">Unity component that the property is connected to, used
+        /// so that clicking an error message in the log will highlight the relevant
+        /// component in the scene.</param>
+        public PropertyEndPoint(
+            object propertyOwner, 
+            string propertyName, 
+            IAdapter adapter, 
+            AdapterOptions options, 
+            string endPointType, 
+            Component context)
         {
             this.propertyOwner = propertyOwner;
             this.adapter = adapter;
@@ -43,7 +62,9 @@ namespace UnityWeld.Binding.Internal
 
             if (string.IsNullOrEmpty(propertyName))
             {
-                Debug.LogError("Property not specified for type '" + type + "'.", context);
+                Debug.LogError(
+                    "Property not specified for type '" + type + "'.", context
+                );
                 return;
             }
 
@@ -52,7 +73,10 @@ namespace UnityWeld.Binding.Internal
 
             if (this.property == null)
             {
-                Debug.LogError("Property '" + propertyName + "' not found on " + endPointType  + " '" + type + "'.", context);
+                Debug.LogError(
+                    "Property '" + propertyName + "' not found on " + endPointType  
+                    + " '" + type + "'.", context
+                );
             }
         }
 
@@ -82,6 +106,11 @@ namespace UnityWeld.Binding.Internal
             property.SetValue(propertyOwner, input, null);
         }
 
+        /// <summary>
+        /// Get a string representation of this property end point.
+        /// </summary>
+        /// <returns>String in the following format: "PropertyOwner.PropertyName
+        /// (PropertyType)", or an error message if the property was not found.</returns>
         public override string ToString()
         {
             if (property == null)
@@ -89,7 +118,14 @@ namespace UnityWeld.Binding.Internal
                 return "!! property not found !!";
             }
 
-            return string.Concat(propertyOwner.GetType(), ".", property.Name, " (", property.PropertyType.Name, ")");
+            return string.Concat(
+                propertyOwner.GetType(), 
+                ".", 
+                property.Name, 
+                " (", 
+                property.PropertyType.Name, 
+                ")"
+            );
         }
 
         /// <summary>

@@ -50,8 +50,7 @@ namespace UnityWeld_Editor
             var viewPropertyType = typeof(bool);
 
             var viewAdapterTypeNames = GetAdapterTypeNames(
-                type => viewPropertyType == null ||
-                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
+                type => TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
             );
 
             EditorStyles.label.fontStyle = viewAdapterPrefabModified

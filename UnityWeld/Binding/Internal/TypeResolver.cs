@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,12 @@ namespace UnityWeld.Binding.Internal
     {
         private static Type[] typesWithBindingAttribute;
 
+        /// <summary>
+        /// Find all types with the binding attribute. This uses reflection to find all
+        /// types the first time it runs and caches it for every other time. We can
+        /// safely cache this data because it will only change if the loaded assemblies
+        /// change, in which case everthing in managed memory will be throw out anyway.
+        /// </summary>
         public static IEnumerable<Type> TypesWithBindingAttribute
         {
             get
@@ -31,6 +37,12 @@ namespace UnityWeld.Binding.Internal
 
         private static Type[] typesWithAdapterAttribute;
 
+        /// <summary>
+        /// Find all types with the binding attribute. This uses reflection to find all
+        /// types the first time it runs and caches it for every other time. We can
+        /// safely cache this data because it will only change if the loaded assemblies
+        /// change, in which case everthing in managed memory will be throw out anyway.
+        /// </summary>
         public static IEnumerable<Type> TypesWithAdapterAttribute
         {
             get
@@ -45,6 +57,12 @@ namespace UnityWeld.Binding.Internal
         }
 
         private static Type[] typesWithWeldContainerAttribute;
+
+        /// <summary>
+        /// Find all types with WeldContainerAttribute. This works in the same way as
+        /// TypesWithAdapterAttribute and TypesWithBindingAttribute in that it finds it
+        /// using reflection the first time and then caches for performance.
+        /// </summary>
         public static IEnumerable<Type> TypesWithWeldContainerAttribute
         {
             get
