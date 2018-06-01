@@ -50,9 +50,8 @@ namespace UnityWeld_Editor
             var viewPropertyType = typeof(bool);
 
             var viewAdapterTypeNames = GetAdapterTypeNames(
-                type => TypeResolver.IsTypeCastableTo(
-                    TypeResolver.FindAdapterAttribute(type).OutputType, viewPropertyType
-                )
+                type => viewPropertyType == null ||
+                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
             );
 
             EditorStyles.label.fontStyle = viewAdapterPrefabModified
@@ -120,7 +119,7 @@ namespace UnityWeld_Editor
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
-                property => TypeResolver.IsTypeCastableTo(property.PropertyType, adaptedViewPropertyType) 
+                property => property.PropertyType == adaptedViewPropertyType
             );
 
             EditorStyles.label.fontStyle = defaultLabelStyle;

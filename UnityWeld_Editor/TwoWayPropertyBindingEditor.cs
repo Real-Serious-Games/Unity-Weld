@@ -111,7 +111,7 @@ namespace UnityWeld_Editor
 
             var viewAdapterTypeNames = GetAdapterTypeNames(
                 type => viewPropertyType == null ||
-                    TypeResolver.IsTypeCastableTo(TypeResolver.FindAdapterAttribute(type).OutputType, viewPropertyType)
+                    TypeResolver.FindAdapterAttribute(type).OutputType == viewPropertyType
             );
 
             EditorStyles.label.fontStyle = viewAdapterPrefabModified 
@@ -178,12 +178,12 @@ namespace UnityWeld_Editor
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
-                prop => TypeResolver.IsTypeCastableTo(prop.PropertyType, adaptedViewPropertyType)
+                prop => prop.PropertyType == adaptedViewPropertyType
             );
 
             var viewModelAdapterTypeNames = GetAdapterTypeNames(
                 type => adaptedViewPropertyType == null ||
-                    TypeResolver.IsTypeCastableTo(adaptedViewPropertyType, TypeResolver.FindAdapterAttribute(type).OutputType)
+                    TypeResolver.FindAdapterAttribute(type).OutputType == adaptedViewPropertyType
             );
 
             EditorStyles.label.fontStyle = viewModelAdapterPrefabModified 
@@ -234,7 +234,7 @@ namespace UnityWeld_Editor
             EditorGUILayout.Space();
 
             var expectionAdapterTypeNames = GetAdapterTypeNames(
-                type => TypeResolver.IsTypeCastableTo(TypeResolver.FindAdapterAttribute(type).InputType, typeof(Exception))
+                type => TypeResolver.FindAdapterAttribute(type).InputType == typeof(Exception)
             );
 
             EditorStyles.label.fontStyle = exceptionPropertyPrefabModified 
@@ -253,7 +253,7 @@ namespace UnityWeld_Editor
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ExceptionPropertyName = updatedValue,
                 targetScript.ExceptionPropertyName,
-                prop => TypeResolver.IsTypeCastableTo(prop.PropertyType, adaptedExceptionPropertyType)
+                prop => prop.PropertyType == adaptedExceptionPropertyType
             );
 
             EditorStyles.label.fontStyle = exceptionAdapterPrefabModified 

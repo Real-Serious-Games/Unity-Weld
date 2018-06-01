@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -291,48 +291,6 @@ namespace UnityWeld.Binding.Internal
                 .Where(p => typeof(IEnumerable).IsAssignableFrom(p.Member.PropertyType))
                 .Where(p => !typeof(string).IsAssignableFrom(p.Member.PropertyType))
                 .ToArray();
-        }
-
-        /// <summary>
-        /// Returns whether the Type from is castable to Type to
-        /// 
-        /// Found on: https://stackoverflow.com/questions/2119441/check-if-types-are-castable-subclasses
-        /// </summary>
-        public static bool IsTypeCastableTo(Type from, Type to)
-        {
-            return from == to || to.IsAssignableFrom(from) || HasCastDefined(from, to);
-        }
-
-        private static bool HasCastDefined(Type from, Type to)
-        {
-            if ((from.IsPrimitive || from.IsEnum) && (to.IsPrimitive || to.IsEnum))
-            {
-                Type[][] typeHierarchy = {
-                    new [] { typeof(Byte),  typeof(SByte), typeof(Char) },
-                    new [] { typeof(Int16), typeof(UInt16) },
-                    new [] { typeof(Int32), typeof(UInt32) },
-                    new [] { typeof(Int64), typeof(UInt64) },
-                    new [] { typeof(Single) },
-                    new [] { typeof(Double) }
-                };
-
-                return typeHierarchy.Any(types => types.Contains(to)) &&
-                    typeHierarchy
-                    .TakeWhile(types => !types.Contains(to))
-                    .Any(types => types.Contains(from));
-            }
-            return IsCastDefined(to, m => m.GetParameters()[0].ParameterType, _ => from, false)
-                || IsCastDefined(from, _ => to, m => m.ReturnType, true);
-        }
-
-        private static bool IsCastDefined(Type type, Func<MethodInfo, Type> baseType,
-                                Func<MethodInfo, Type> derivedType, bool lookInBase)
-        {
-            var bindingFlags = BindingFlags.Public | BindingFlags.Static
-                            | (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
-            return type.GetMethods(bindingFlags).Any(
-                m => (m.Name == "op_Implicit")
-                    && baseType(m).IsAssignableFrom(derivedType(m)));
         }
     }
 }
