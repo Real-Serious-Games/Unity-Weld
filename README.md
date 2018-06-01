@@ -26,4 +26,6 @@ Alternatively, just copy the `UnityWeld/Binding` and `UnityWeld/Widgets` folders
 
 Check out the [Unity-Weld-Examples](https://github.com/Real-Serious-Games/Unity-Weld-Examples) repository for some examples of how to use Unity-Weld.
 
-If you're interested in getting involved feel free to check out the [roadmap on Trello](https://trello.com/b/KVFUvGR0), or submit a pull request.
+[API docmentation](https://github.com/Real-Serious-Games/Unity-Weld/wiki) is on our wiki.
+
+If you're interested in getting involved feel free to check out the [roadmap on Trello](https://trello.com/b/KVFUvGR0), or submit a pull request. Make sure to read our [contributing guide](CONTRIBUTING) first.
