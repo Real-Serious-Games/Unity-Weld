@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using UnityWeld.Binding.Exceptions;
@@ -172,6 +171,10 @@ namespace UnityWeld.Binding
         /// </summary>
         public abstract void Disconnect();
 
+        /// <summary>
+        /// Standard MonoBehaviour awake message, do not call this explicitly.
+        /// Initialises the binding.
+        /// </summary>
         protected void Awake()
         {
             Init();
