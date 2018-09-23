@@ -16,6 +16,12 @@ namespace UnityWeld.Binding.Internal
     {
         private static Type[] typesWithBindingAttribute;
 
+        /// <summary>
+        /// Find all types with the binding attribute. This uses reflection to find all
+        /// types the first time it runs and caches it for every other time. We can
+        /// safely cache this data because it will only change if the loaded assemblies
+        /// change, in which case everthing in managed memory will be throw out anyway.
+        /// </summary>
         public static IEnumerable<Type> TypesWithBindingAttribute
         {
             get
@@ -31,6 +37,12 @@ namespace UnityWeld.Binding.Internal
 
         private static Type[] typesWithAdapterAttribute;
 
+        /// <summary>
+        /// Find all types with the binding attribute. This uses reflection to find all
+        /// types the first time it runs and caches it for every other time. We can
+        /// safely cache this data because it will only change if the loaded assemblies
+        /// change, in which case everthing in managed memory will be throw out anyway.
+        /// </summary>
         public static IEnumerable<Type> TypesWithAdapterAttribute
         {
             get
@@ -45,6 +57,12 @@ namespace UnityWeld.Binding.Internal
         }
 
         private static Type[] typesWithWeldContainerAttribute;
+
+        /// <summary>
+        /// Find all types with WeldContainerAttribute. This works in the same way as
+        /// TypesWithAdapterAttribute and TypesWithBindingAttribute in that it finds it
+        /// using reflection the first time and then caches for performance.
+        /// </summary>
         public static IEnumerable<Type> TypesWithWeldContainerAttribute
         {
             get
@@ -291,48 +309,6 @@ namespace UnityWeld.Binding.Internal
                 .Where(p => typeof(IEnumerable).IsAssignableFrom(p.Member.PropertyType))
                 .Where(p => !typeof(string).IsAssignableFrom(p.Member.PropertyType))
                 .ToArray();
-        }
-
-        /// <summary>
-        /// Returns whether the Type from is castable to Type to
-        /// 
-        /// Found on: https://stackoverflow.com/questions/2119441/check-if-types-are-castable-subclasses
-        /// </summary>
-        public static bool IsTypeCastableTo(Type from, Type to)
-        {
-            return from == to || to.IsAssignableFrom(from) || HasCastDefined(from, to);
-        }
-
-        private static bool HasCastDefined(Type from, Type to)
-        {
-            if ((from.IsPrimitive || from.IsEnum) && (to.IsPrimitive || to.IsEnum))
-            {
-                Type[][] typeHierarchy = {
-                    new [] { typeof(Byte),  typeof(SByte), typeof(Char) },
-                    new [] { typeof(Int16), typeof(UInt16) },
-                    new [] { typeof(Int32), typeof(UInt32) },
-                    new [] { typeof(Int64), typeof(UInt64) },
-                    new [] { typeof(Single) },
-                    new [] { typeof(Double) }
-                };
-
-                return typeHierarchy.Any(types => types.Contains(to)) &&
-                    typeHierarchy
-                    .TakeWhile(types => !types.Contains(to))
-                    .Any(types => types.Contains(from));
-            }
-            return IsCastDefined(to, m => m.GetParameters()[0].ParameterType, _ => from, false)
-                || IsCastDefined(from, _ => to, m => m.ReturnType, true);
-        }
-
-        private static bool IsCastDefined(Type type, Func<MethodInfo, Type> baseType,
-                                Func<MethodInfo, Type> derivedType, bool lookInBase)
-        {
-            var bindingFlags = BindingFlags.Public | BindingFlags.Static
-                            | (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
-            return type.GetMethods(bindingFlags).Any(
-                m => (m.Name == "op_Implicit")
-                    && baseType(m).IsAssignableFrom(derivedType(m)));
         }
     }
 }

@@ -9,6 +9,7 @@ namespace UnityWeld.Binding
     /// and updating the UI accordingly. Also bind to a UnityEvent in the UI and update the
     /// view model when the event is triggered.
     /// </summary>
+    [AddComponentMenu("Unity Weld/TwoWay Property Binding")]
     [HelpURL("https://github.com/Real-Serious-Games/Unity-Weld")]
     public class TwoWayPropertyBinding : AbstractMemberBinding
     {
