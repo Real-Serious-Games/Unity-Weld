@@ -175,10 +175,10 @@ namespace UnityWeld.Binding
         /// Standard MonoBehaviour awake message, do not call this explicitly.
         /// Initialises the binding.
         /// </summary>
-        protected void Awake()
-        {
-            Init();
-        }
+        //protected void Awake()
+        //{
+        //    Init();
+        //}
 
         /// <summary>
         /// Clean up when the game object is destroyed.
