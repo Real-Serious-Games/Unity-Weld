@@ -108,6 +108,7 @@
     <Compile Include="Binding\SubViewModelBinding.cs" />
     <Compile Include="Binding\TemplateBinding.cs" />
     <Compile Include="Binding\ToggleActiveBinding.cs" />
+    <Compile Include="Binding\ToggleSelfBinding.cs" />
     <Compile Include="Binding\TwoWayPropertyBinding.cs" />
     <Compile Include="Binding\AbstractMemberBinding.cs" />
     <Compile Include="Binding\Internal\UnityEventBinder.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Ioc\WeldContainerAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Binding\AbstractTemplateSelector.cs" />
+    <Compile Include="WeldContext.cs" />
     <Compile Include="Widgets\DropdownAdapter.cs" />
   </ItemGroup>
   <ItemGroup>

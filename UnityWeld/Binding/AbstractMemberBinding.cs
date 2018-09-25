@@ -28,11 +28,13 @@ namespace UnityWeld.Binding
         private object FindViewModel(string viewModelName)
         {
             var trans = transform;
+
             while (trans != null)
             {
                 var components = trans.GetComponents<MonoBehaviour>();
                 var monoBehaviourViewModel = components
                     .FirstOrDefault(component => component.GetType().ToString() == viewModelName);
+
                 if (monoBehaviourViewModel != null)
                 {
                     return monoBehaviourViewModel;
@@ -42,8 +44,8 @@ namespace UnityWeld.Binding
                     .Select(component => component as IViewModelProvider)
                     .Where(component => component != null)
                     .FirstOrDefault(
-                        viewModelBinding => viewModelBinding.GetViewModelTypeName() == viewModelName && 
-#pragma warning disable 252,253 // Warning says unintended reference comparison, but we do want to compare references
+                        viewModelBinding => viewModelBinding.GetViewModelTypeName() == viewModelName &&
+#pragma warning disable 252, 253 // Warning says unintended reference comparison, but we do want to compare references
                         (object)viewModelBinding != this
 #pragma warning restore 252,253
                     );
@@ -73,6 +75,7 @@ namespace UnityWeld.Binding
             }
 
             var adapterType = TypeResolver.FindAdapterType(adapterTypeName);
+
             if (adapterType == null)
             {
                 throw new NoSuchAdapterException(adapterTypeName);
@@ -106,6 +109,7 @@ namespace UnityWeld.Binding
         protected static void ParseEndPointReference(string endPointReference, out string memberName, out string typeName)
         {
             var lastPeriodIndex = endPointReference.LastIndexOf('.');
+
             if (lastPeriodIndex == -1)
             {
                 throw new InvalidEndPointException(
@@ -170,15 +174,6 @@ namespace UnityWeld.Binding
         /// Disconnect from all attached view models.
         /// </summary>
         public abstract void Disconnect();
-
-        /// <summary>
-        /// Standard MonoBehaviour awake message, do not call this explicitly.
-        /// Initialises the binding.
-        /// </summary>
-        protected void Awake()
-        {
-            Init();
-        }
 
         /// <summary>
         /// Clean up when the game object is destroyed.
