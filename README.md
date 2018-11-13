@@ -1,7 +1,7 @@
 # Unity-Weld
 [![NuGet](https://img.shields.io/nuget/dt/RSG.UnityWeld.svg)](https://www.nuget.org/packages/RSG.UnityWeld/)
 [![NuGet](https://img.shields.io/nuget/v/RSG.UnityWeld.svg)](https://www.nuget.org/packages/RSG.UnityWeld/)
-[![Build Status](https://travis-ci.org/Real-Serious-Games/Unity-Weld.svg)](https://travis-ci.org/Real-Serious-Games/Unity-Weld)
+[![Build Status](https://travis-ci.org/Real-Serious-Games/Unity-Weld.svg?branch=master)](https://travis-ci.org/Real-Serious-Games/Unity-Weld)
 
 
 *[MVVM-style](https://msdn.microsoft.com/en-us/library/hh848246.aspx) data-binding system for Unity.*
