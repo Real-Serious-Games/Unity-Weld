@@ -1,137 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1DD36B8-97AC-44A1-B98A-A6CF6B1B7459}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnityWeld</RootNamespace>
-    <AssemblyName>UnityWeld</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\dll\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>4</LangVersion>
-    <DocumentationFile>..\dll\UnityWeld.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\dll\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\dll\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\dll\UnityEngine.UI.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AOTOptimisationHelper.cs" />
-    <Compile Include="Binding\AdapterAttribute.cs" />
-    <Compile Include="Binding\AdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\BoolInversionAdapter.cs" />
-    <Compile Include="Binding\Adapters\BoolToColorAdapter.cs" />
-    <Compile Include="Binding\Adapters\BoolToColorAdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\BoolToColorBlockAdapter.cs" />
-    <Compile Include="Binding\Adapters\BoolToColorBlockAdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\ColorToColorBlockAdapter.cs" />
-    <Compile Include="Binding\Adapters\ColorToColorBlockAdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\DateTimeToFloatAdapter.cs" />
-    <Compile Include="Binding\Adapters\DateTimeToStringAdapter.cs" />
-    <Compile Include="Binding\Adapters\DateTimeToStringAdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\FloatToStringAdapter.cs" />
-    <Compile Include="Binding\Adapters\FloatToStringAdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\IntToStringAdapter.cs" />
-    <Compile Include="Binding\Adapters\FloatToDateTimeAdapter.cs" />
-    <Compile Include="Binding\Adapters\StringCultureToDateTimeAdapter.cs" />
-    <Compile Include="Binding\Adapters\StringCultureToDateTimeAdapterOptions.cs" />
-    <Compile Include="Binding\Adapters\StringEmptyToBoolAdapter.cs" />
-    <Compile Include="Binding\Adapters\StringToFloatAdapter.cs" />
-    <Compile Include="Binding\Adapters\StringToIntAdapter.cs" />
-    <Compile Include="Binding\AnimatorParameterBinding.cs" />
-    <Compile Include="Binding\AnimatorParameterTrigger.cs" />
-    <Compile Include="Binding\BindingAttribute.cs" />
-    <Compile Include="Binding\BoundObservableList.cs" />
-    <Compile Include="Binding\CollectionBinding.cs" />
-    <Compile Include="Binding\DropdownBinding.cs" />
-    <Compile Include="Binding\Exceptions\AmbiguousTypeException.cs" />
-    <Compile Include="Binding\Exceptions\ComponentNotFoundException.cs" />
-    <Compile Include="Binding\Exceptions\InvalidAdapterException.cs" />
-    <Compile Include="Binding\Exceptions\InvalidEndPointException.cs" />
-    <Compile Include="Binding\Exceptions\InvalidEventException.cs" />
-    <Compile Include="Binding\Exceptions\InvalidTypeException.cs" />
-    <Compile Include="Binding\Exceptions\MemberNotFoundException.cs" />
-    <Compile Include="Binding\Exceptions\NoSuchAdapterException.cs" />
-    <Compile Include="Binding\Exceptions\PropertyNullException.cs" />
-    <Compile Include="Binding\Exceptions\TemplateNotFoundException.cs" />
-    <Compile Include="Binding\Exceptions\ViewModelNotFoundException.cs" />
-    <Compile Include="Binding\IAdapter.cs" />
-    <Compile Include="Binding\IMemberBinding.cs" />
-    <Compile Include="Binding\INotifyCollectionChanged.cs" />
-    <Compile Include="Binding\Internal\AdapterResolver.cs" />
-    <Compile Include="Binding\Internal\BindableMember.cs" />
-    <Compile Include="Binding\Internal\PropertyEndPoint.cs" />
-    <Compile Include="Binding\Internal\PropertyFinder.cs" />
-    <Compile Include="Binding\Internal\PropertySync.cs" />
-    <Compile Include="Binding\Internal\PropertyWatcher.cs" />
-    <Compile Include="Binding\Internal\TypeResolver.cs" />
-    <Compile Include="Binding\Internal\UnityEventWatcher.cs" />
-    <Compile Include="Binding\ITypedList.cs" />
-    <Compile Include="Binding\IViewModelProvider.cs" />
-    <Compile Include="Binding\NotifyCollectionChangedEventArgs.cs" />
-    <Compile Include="Binding\ObservableList.cs" />
-    <Compile Include="Binding\OneWayPropertyBinding.cs" />
-    <Compile Include="Binding\SubViewModelBinding.cs" />
-    <Compile Include="Binding\TemplateBinding.cs" />
-    <Compile Include="Binding\ToggleActiveBinding.cs" />
-    <Compile Include="Binding\TwoWayPropertyBinding.cs" />
-    <Compile Include="Binding\AbstractMemberBinding.cs" />
-    <Compile Include="Binding\Internal\UnityEventBinder.cs" />
-    <Compile Include="Binding\EventBinding.cs" />
-    <Compile Include="Binding\Template.cs" />
-    <Compile Include="Binding\Adapters\BoolToStringAdapter.cs" />
-    <Compile Include="Binding\Adapters\BoolToStringAdapterOptions.cs" />
-    <Compile Include="Ioc\DefaultWeldContainer.cs" />
-    <Compile Include="Ioc\IWeldContainerIoc.cs" />
-    <Compile Include="Ioc\WeldContainerAttribute.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Binding\AbstractTemplateSelector.cs" />
-    <Compile Include="Widgets\DropdownAdapter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net35;netstandard2.0</TargetFrameworks>
+        <Version>0.7.2</Version>
+        <Authors>Real Serious Games</Authors>
+        <Description>MVVM-style data-binding system for Unity.</Description>
+        <Copyright>Copyright © Real Serious Games 2018</Copyright>
+        <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/Real-Serious-Games/Unity-Weld</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Real-Serious-Games/Unity-Weld</RepositoryUrl>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <SignAssembly>false</SignAssembly>
+        <LangVersion>4</LangVersion>
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+    <ItemGroup>
+      <Reference Include="UnityEngine">
+        <HintPath>..\dll\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>..\dll\UnityEngine.UI.dll</HintPath>
+      </Reference>
+    </ItemGroup>
 </Project>
