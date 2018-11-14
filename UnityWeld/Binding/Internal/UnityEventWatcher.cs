@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -128,7 +128,7 @@ namespace UnityWeld.Binding.Internal
 
             var componentType = component.GetType();
             var boundEvent = GetBindableEvents(component)
-                .FirstOrDefault();
+                .FirstOrDefault(e => e.Name.Equals(boundEventName));
 
             if (boundEvent == null)
             {

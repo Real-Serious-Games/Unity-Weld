@@ -2,4 +2,4 @@ language: csharp
 solution: Unity-Weld.sln
 
 script:
-  - xbuild /p:Configuration=Debug Unity-Weld.sln
+  - msbuild /p:Configuration=Debug Unity-Weld.sln
