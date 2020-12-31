@@ -160,7 +160,7 @@ namespace UnityWeld_Editor
                 option => UpdateProperty(
                     propertyValueSetter,
                     curPropertyValue,
-                    option.Property == null ? string.Empty : option.ToString(),
+                    option.Property == null ? string.Empty : option.Property.ToString(),
                     "Set view-model property"
                 ),
                 new[] { noneOption }
