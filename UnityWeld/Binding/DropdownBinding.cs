@@ -14,12 +14,14 @@ namespace UnityWeld.Binding
         /// <summary>
         /// Name of the property in the view model to bind for the current selection.
         /// </summary>
-        public string viewModelSelectionPropertyName;
+         [SerializeField]
+        private string viewModelSelectionPropertyName;
 
         /// <summary>
         /// Name of the property in the view model to bind for the list of options.
         /// </summary>
-        public string viewModelOptionsPropertyName;
+         [SerializeField]
+        private string viewModelOptionsPropertyName;
 
         /// <summary>
         /// The name of the property to assign an exception to when adapter/validation fails.
@@ -57,7 +59,14 @@ namespace UnityWeld.Binding
         /// Adapter for converting the options list in the view model 
         /// to the correct format to display in the UI.
         /// </summary>
-        public string optionsAdapter;
+        [SerializeField]
+        public string optionsViewAdapterTypeName;
+
+        /// <summary>
+        /// Option data to use for the options adapter
+        /// </summary>
+        [SerializeField]
+        public AdapterOptions optionsViewAdapterOptions;
 
         /// <summary>
         /// Cached drop down component.
@@ -68,8 +77,8 @@ namespace UnityWeld.Binding
         {
             dropdown = GetComponent<Dropdown>();
 
-            var selectionPropertyEndPoint = MakeViewModelEndPoint(viewModelSelectionPropertyName, selectionUIToViewModelAdapter, null);
-
+            var selectionPropertyEndPoint = MakeViewModelEndPoint(ViewModelSelectionPropertyName, selectionUIToViewModelAdapter, null);
+            
             var selectionPropertySync = new PropertySync(
                 // Source
                 selectionPropertyEndPoint,
@@ -101,20 +110,20 @@ namespace UnityWeld.Binding
                 "onValueChanged",
                 () =>
                 {
-                    selectedOption = Options[dropdown.value]; // Copy value back from dropdown.
+                    selectedOption = Options.Length > 0 ? Options[dropdown.value] : null; // Copy value back from dropdown.
                     selectionPropertySync.SyncFromDest();
                 }
             );
 
             var optionsPropertySync = new PropertySync(
                 // Source
-                MakeViewModelEndPoint(viewModelOptionsPropertyName, null, null),
+                MakeViewModelEndPoint(ViewModelOptionsPropertyName, null, null),
 
                 // Dest
                 new PropertyEndPoint(
                     this,
                     "Options",
-                    CreateAdapter(optionsAdapter),
+                    CreateAdapter(optionsViewAdapterTypeName),
                     null,
                     "view",
                     this
@@ -201,6 +210,24 @@ namespace UnityWeld.Binding
             }
         }
 
+        public string ViewModelOptionsPropertyName
+        {
+            get { return viewModelOptionsPropertyName; }
+            set
+            {
+                viewModelOptionsPropertyName = value;
+            }
+        }
+
+        public string ViewModelSelectionPropertyName
+        {
+            get { return viewModelSelectionPropertyName; } 
+            set
+            {
+                viewModelSelectionPropertyName = value;
+            }
+        }
+
         /// <summary>
         /// Update the options.
         /// </summary>
@@ -209,6 +236,8 @@ namespace UnityWeld.Binding
             dropdown.options = options
                 .Select(option => new Dropdown.OptionData(option))
                 .ToList();
+
+            UpdateSelectedOption();
         }
 
         /// <summary>
