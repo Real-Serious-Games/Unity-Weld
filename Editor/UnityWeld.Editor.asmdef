@@ -1,0 +1,18 @@
+{
+    "name": "UnityWeld.Editor",
+    "rootNamespace": "UnityWeld_Editor",
+    "references": [
+        "GUID:af0045edb0742c34c9f8aefb8323e52c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
