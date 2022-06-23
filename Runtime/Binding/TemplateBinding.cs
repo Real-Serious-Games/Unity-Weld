@@ -73,6 +73,12 @@ namespace UnityWeld.Binding
         /// </summary>
         private void InitializeTemplate()
         {
+            if (this == null)
+            {
+                //to avoid useless logic during gameobject disposing (scene closing etc.)
+                return;
+            }
+
             DestroyAllTemplates();
 
             // Get value from view model.

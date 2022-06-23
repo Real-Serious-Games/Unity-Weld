@@ -1,7 +1,7 @@
 {
   "name": "com.realseriousgames.unityweld",
   "displayName": "Unity Weld",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "homepage": "https://github.com/TimGameDev/Unity-Weld",
   "description": "Unity-Weld is a library for Unity 2019+ that enables two-way data binding between Unity UI widgets and game/business logic code",
   "author": {
