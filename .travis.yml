@@ -1,5 +1,0 @@
-language: csharp
-solution: Unity-Weld.sln
-
-script:
-  - msbuild /p:Configuration=Debug Unity-Weld.sln
